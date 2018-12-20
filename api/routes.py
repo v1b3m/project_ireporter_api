@@ -47,3 +47,23 @@ def get_specific_redflag(id):
         return jsonify({'message': "The redflag doesn't exist"}), 404    
     return jsonify({"status": 200,
                     "data": redflag})
+
+@app.route('/api/v1/red-flags', methods=['POST'])
+def add_redflag_record():
+    data = request.get_json()
+    print(data)
+
+    try:
+        if data is None:
+            raise TypeError('Data cannot be empty')
+        if type(data['id']) is not int:
+            raise ValueError('id should be an integer')
+        redflags.append(data)
+    except ValueError as e:
+        print(e)
+        return jsonify({'message': 'Id should be an integer'}), 400
+    return jsonify({"status": 201,
+                    "data": [{
+                        "id" : data['id'],
+                        "message": 'Created redflag record'
+                    }]})
