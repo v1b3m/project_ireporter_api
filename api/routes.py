@@ -67,3 +67,14 @@ def add_redflag_record():
                         "id" : data['id'],
                         "message": 'Created redflag record'
                     }]})
+
+@app.route('/api/v1/red-flags/<int:id>', methods=['DELETE'])
+def delete_red_flag(id):
+    for item in redflags:
+        if item["id"] == id:
+            redflags.remove(item)
+    return jsonify({"status": 204,
+                    "data": [{
+                        "id" : id,
+                        "message": 'redflag record has been deleted'
+                    }]})
