@@ -95,13 +95,12 @@ def edit_red_flag_location(id):
                     }]})
 
 @app.route('/api/v1/red-flags/<int:id>/comment', methods=['PATCH'])
-def edit_red_flag_comment(id):
-    data = request.get_json()
-    print(data)
+def patch_red_flag_comment(id):
+    response = request.get_json()
 
     for item in redflags:
         if item['id'] == id:
-            item['comment'] = data['comment']
+            item['comment'] = response['comment']
     
     return jsonify({"status": 204,
                     "data": [{
