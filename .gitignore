@@ -25,7 +25,6 @@ pip-log.txt
 nosetests.xml
 
 venv
-app.db
 ireporter.log*
 
 .vscode
