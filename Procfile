@@ -1,1 +1,1 @@
-web: gunicorn ireporter:api
+web: gunicorn ireporter:app
