@@ -2,12 +2,12 @@ language: python
 python:
   - "3.6"
 
-before install:
-  - export PYTHONPATH=.
-
-install:
+before_script:
   - pip install -r requirements.txt
 
 script:
-  - pytest
+  - python -m pytest --cov
+
+after_success:
+  - coveralls
 
