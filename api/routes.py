@@ -84,9 +84,9 @@ def edit_red_flag_location(id):
     data = request.get_json()
     print(data)
     
-    for item in redflags:
-        if item['id'] == id:
-            item['location'] = data['location']
+    for flag in redflags:
+        if flag['id'] == id:
+            flag['location'] = data['location']
     
     return jsonify({"status": 204,
                     "data": [{
