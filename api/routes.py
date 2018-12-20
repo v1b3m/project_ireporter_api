@@ -78,3 +78,18 @@ def delete_red_flag(id):
                         "id" : id,
                         "message": 'redflag record has been deleted'
                     }]})
+
+@app.route('/api/v1/red-flags/<int:id>/location', methods=['PATCH'])
+def edit_red_flag_location(id):
+    data = request.get_json()
+    print(data)
+    
+    for item in redflags:
+        if item['id'] == id:
+            item['location'] = data['location']
+    
+    return jsonify({"status": 204,
+                    "data": [{
+                        "id" : id,
+                        "message": "Updated red-flag record's location"
+                    }]})
