@@ -96,9 +96,11 @@ def edit_red_flag_location(id):
 
 @app.route('/api/v1/red-flags/<int:id>/comment', methods=['PATCH'])
 def patch_red_flag_comment(id):
+
+    reds = redflags
     response = request.get_json()
 
-    for item in redflags:
+    for item in reds:
         if item['id'] == id:
             item['comment'] = response['comment']
     
