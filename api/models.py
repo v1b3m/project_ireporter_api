@@ -23,6 +23,9 @@ class User:
                 'username': self.phone_number, 'registered': self.registered, 
                 'is_admin': self.is_admin
                 }
+    
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
 
 class Incident:
@@ -46,5 +49,7 @@ class Incident:
                 'Images': self.Images, 'Videos': self.Videos, 
                 'comment': self.comment
                 }
+    def __repr__(self):
+        return '<Incident {}>'.format(self._id)
 
 
