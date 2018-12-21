@@ -5,7 +5,6 @@ from api.models import User, Incident
 redflags = []
 
 @app.route('/')
-@app.route('/index')
 def index():
     return "Hello, World!"
 
@@ -13,10 +12,10 @@ def index():
 def get_all_redflags():
     red_flags_as_dicts = [redflag.to_dict() for redflag in redflags]
 
-    if len(red_flags_as_dicts) < 1:
+    if not red_flags_as_dicts:
         return jsonify({
-                        'message': 'There are no redflags',
-                        'status': 400
+                        'error': 'There are no redflags',
+                        'status': 404
                         })
     return jsonify({
                     "status": 200,
@@ -26,25 +25,27 @@ def get_all_redflags():
 @app.route('/api/v1/red-flags/<int:id>')
 def get_specific_redflag(id):
     redflag = None
+    
     for item in redflags:
         if item._id == id:
             redflag = item.to_dict()
     if redflag is None: 
         return jsonify({
-                        'message': "The redflag doesn't exist",
+                        'error': "The redflag doesn't exist",
                         'status': 404
                         })   
     return jsonify({
                     "status": 200,
-                    "data": redflag
+                    "data": [redflag]
                     })
 
 @app.route('/api/v1/red-flags', methods=['POST'])
 def add_redflag_record():
     if not request.is_json:
         return jsonify({
-                        'error': 'Request Cannot Be Empty'
-                        }), 404
+                        'error': 'Request Cannot Be Empty',
+                        'status': 400
+                        }), 400
 
     data = request.get_json()
     print(data)
@@ -58,12 +59,12 @@ def add_redflag_record():
     incident = Incident(data['createdBy'], data['type'], data['location'], 
                         data['status'], data['comment'])
     redflags.append(incident)
-    return jsonify({"status": 200, 
+    return jsonify({"status": 201, 
                     "data": [{
                             "id": incident._id, 
                             "message": "Created red-flag record"
                             }]
-                    }), 200
+                    }), 201
 
 @app.route('/api/v1/red-flags/<int:id>', methods=['DELETE'])
 def delete_red_flag(id):
@@ -89,7 +90,8 @@ def edit_red_flag_location(id):
     x = None
     if not request.is_json:
         return jsonify({
-                        "error": 'Please provide a location'
+                        "error": 'Please provide a location',
+                        "status": 400
                         })
     data = request.get_json()
     print(data)
@@ -100,12 +102,12 @@ def edit_red_flag_location(id):
             flag.location = data['location']
     if x is None:
         return jsonify({
-                        "status": 400,
+                        "error": 400,
                         "message": 
                         "Are you are magician? Cause the record just disappeared from our database."
                         })
     return jsonify({
-                    "status": 204,
+                    "status": 201,
                     "data": [{"id" : id,
                             "message": "Updated red-flag record's location"
                             }]
@@ -113,6 +115,11 @@ def edit_red_flag_location(id):
 
 @app.route('/api/v1/red-flags/<int:id>/comment', methods=['PATCH'])
 def patch_red_flag_comment(id):
+    if not request.is_json:
+        return jsonify({
+                        "error": 'Please provide a comment',
+                        "status": 400
+                        })
     x = None
     reds = redflags
     response = request.get_json()
@@ -124,7 +131,7 @@ def patch_red_flag_comment(id):
     
     if x is None:
         return jsonify({
-                        "Status": 400,
+                        "error": 400,
                         "message": "Sorry, the record doesn't exist"
                         })
     
