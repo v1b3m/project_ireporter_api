@@ -28,9 +28,13 @@ class TestRedflags(unittest.TestCase):
 
 
     def test_add_redflag_record(self):
-        input_data = {"status": "Approved", 
-            "location": {"lat": "0.96", "long": "1.23"}, "createdBy": "Benjamin",
-             "type": "red-flag", "comment": "I am the greatest"}
+        input_data = {
+                    "status": "Approved", 
+                    "location": {"lat": "0.96", "long": "1.23"}, 
+                    "createdBy": "Benjamin", 
+                    "type": "red-flag", 
+                    "comment": "I am the greatest"
+                    }
 
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         print(response)
@@ -50,21 +54,20 @@ class TestRedflags(unittest.TestCase):
 
 
     def test_patch_redflag_location(self):
-        input_data = {
-            "location": "2375812",
-        }
-        response = self.app_tester.patch('/api/v1/red-flags/1/location', json=input_data)
+        input_data = {"location": "2375812"}
+        response = self.app_tester.patch('/api/v1/red-flags/1/location', 
+                                        json=input_data)
         print(response)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(data['message']), 74)
         self.assertEqual(data['status'], 400)
-        self.assertEqual(data['message'],"Are you are magician? Cause the record just disappeared from our database.")
+        self.assertEqual(data['message'],
+                        "Are you are magician? Cause the record just disappeared from our database."
+                        )
 
     def test_patch_redflag_comment(self):
-        input_data = {
-            "comment": "I am sick",
-        }
+        input_data = {"comment": "I am sick"}
         response = self.app_tester.patch('/api/v1/red-flags/1/comment', json=input_data)
         print(response)
         data = json.loads(response.data)
