@@ -101,8 +101,8 @@ def edit_red_flag_location(id):
     if x is None:
         return jsonify({
                         "status": 400,
-                        "message": "Are you are magician? Cause the record\
-                        just disappeared from our database."
+                        "message": 
+                        "Are you are magician? Cause the record just disappeared from our database."
                         })
     return jsonify({
                     "status": 204,

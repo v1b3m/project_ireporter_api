@@ -15,7 +15,6 @@ class TestRedflags(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['data'][0]['createdBy'],'Benjamin')
 
-
     def test_get_specific_redflag(self):
         response = self.app_tester.get('/api/v1/red-flags/1')
         print(response)
@@ -25,8 +24,6 @@ class TestRedflags(unittest.TestCase):
         self.assertEqual(len(data['message']), 25)
         self.assertEqual(data['message'],"The redflag doesn't exist")
 
-
-
     def test_add_redflag_record(self):
         input_data = {
                     "status": "Approved", 
@@ -35,7 +32,6 @@ class TestRedflags(unittest.TestCase):
                     "type": "red-flag", 
                     "comment": "I am the greatest"
                     }
-
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         print(response)
         data = json.loads(response.data)
@@ -52,7 +48,6 @@ class TestRedflags(unittest.TestCase):
         self.assertEqual(len(data['message']), 42)
         self.assertEqual(data['status'], 204)
 
-
     def test_patch_redflag_location(self):
         input_data = {"location": "2375812"}
         response = self.app_tester.patch('/api/v1/red-flags/1/location', 
@@ -62,7 +57,7 @@ class TestRedflags(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(data['message']), 74)
         self.assertEqual(data['status'], 400)
-        self.assertEqual(data['message'],
+        self.assertEqual(data['message'], 
                         "Are you are magician? Cause the record just disappeared from our database."
                         )
 
