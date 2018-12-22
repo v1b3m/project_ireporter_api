@@ -56,8 +56,8 @@ def add_redflag_record():
                         'status': 400, 
                         'error': 'Some Information is missing from the request'
                         }), 400
-    incident = Incident(data['createdBy'], data['type'], data['location'], 
-                        data['status'], data['comment'])
+    incident = Incident(createdBy = data['createdBy'], _type = data['type'], location = data['location'], 
+                        status = data['status'], comment = data['comment'])
     redflags.append(incident)
     return jsonify({"status": 201, 
                     "data": [{
