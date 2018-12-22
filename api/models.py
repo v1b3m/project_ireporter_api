@@ -14,7 +14,7 @@ class User:
         self.registered = kwargs['registered']
         self.is_admin = kwargs['is_admin']
 
-    def to_dict(self):
+    def to_dictionary(self):
         return {
                 'id': self._id, 'firstname': self.firstname, 
                 'lastname': self.lastname, 'othername': self.othernames, 
@@ -39,15 +39,17 @@ class Incident:
         self.Videos = None
         self.comment = kwargs['comment']
 
-    def to_dict(self):
-        return {
-                'id': self._id, 'createdOn': self.createdOn, 
-                'createdBy': self.createdBy, 'type': self.type, 
-                'location': self.location, 'status': self.status, 
-                'Images': self.Images, 'Videos': self.Videos, 
-                'comment': self.comment
-                }
+    
     def __repr__(self):
         return '<Incident {}>'.format(self._id)
 
-
+    def __iter__(self):
+        yield 'id', self._id
+        yield 'createdOn', self.createdOn
+        yield 'createdBy', self.createdBy
+        yield 'type', self.type
+        yield 'location', self.location
+        yield 'status', self.status
+        yield 'Images', self.Images
+        yield 'Videos', self.Videos
+        yield 'comment', self.comment
