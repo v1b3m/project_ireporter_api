@@ -14,7 +14,7 @@ class User:
         self.registered = kwargs['registered']
         self.is_admin = kwargs['is_admin']
 
-    def to_dict(self):
+    def to_dictionary(self):
         return {
                 'id': self._id, 'firstname': self.firstname, 
                 'lastname': self.lastname, 'othername': self.othernames, 
