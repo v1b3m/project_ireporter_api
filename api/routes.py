@@ -10,7 +10,7 @@ def index():
 
 @app.route('/api/v1/red-flags',)
 def get_all_redflags():
-    red_flags_as_dicts = [redflag.to_dict() for redflag in redflags]
+    red_flags_as_dicts = [dict(redflag) for redflag in redflags]
 
     if not red_flags_as_dicts:
         return jsonify({
@@ -28,7 +28,7 @@ def get_specific_redflag(id):
     
     for item in redflags:
         if item._id == id:
-            redflag = item.to_dict()
+            redflag = dict(item)
     if redflag is None: 
         return jsonify({
                         'error': "The redflag doesn't exist",
