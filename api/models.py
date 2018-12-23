@@ -16,7 +16,7 @@ class User:
 
     def to_dictionary(self):
         return {
-                'id': self._id, 'firstname': self.firstname, 
+                '_id': self._id, 'firstname': self.firstname, 
                 'lastname': self.lastname, 'othername': self.othernames, 
                 'email': self.email, 'phone_number': self.phone_number, 
                 'username': self.phone_number, 'registered': self.registered, 
@@ -44,7 +44,7 @@ class Incident:
         return '<Incident {}>'.format(self._id)
 
     def __iter__(self):
-        yield 'id', self._id
+        yield '_id', self._id
         yield 'createdOn', self.createdOn
         yield 'createdBy', self.createdBy
         yield 'type', self.type
