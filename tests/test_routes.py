@@ -33,7 +33,7 @@ class TestRedflags(unittest.TestCase):
         response = self.app_tester.get('/api/v1/red-flags/1')
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 404)
-        self.assertIn("doesn't exist", data['message'])
+        self.assertIn("doesn't exist", data['error'])
 
     def test_get_specific_redflag_when_data_exists(self):
         input_data = {
@@ -51,7 +51,7 @@ class TestRedflags(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data["data"])
-        self.assertFalse(data['data']['type'] == 'intervention')
+        self.assertFalse(data['data'][0]['type'] == 'intervention')
 
     def test_add_redflag_record(self):
         input_data = {
@@ -63,7 +63,7 @@ class TestRedflags(unittest.TestCase):
                     }
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(len(data['data']), 1)
         self.assertIn('Created red-flag', data['data'][0]['message'])
         self.assertFalse(data['status'] == 404)
@@ -118,7 +118,7 @@ class TestRedflags(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(data['message']) == 74)
-        self.assertEqual(data['status'], 400)
+        self.assertEqual(data['error'], 400)
         self.assertIn("Are you are magician?", data['message'])
 
     def test_patch_redflag_when_request_has_no_data(self):
@@ -141,7 +141,7 @@ class TestRedflags(unittest.TestCase):
         input_location = {"location": "fhkdd"}
         response = self.app_tester.patch('/api/v1/red-flags/{}/location'.format(id), json=input_location)
         data = json.loads(response.data)
-        self.assertEqual(data['status'], 204)
+        self.assertEqual(data['status'], 201)
         self.assertIn("Updated", data['data'][0]['message'])
 
     def test_patch_redflag_comment_when_record_is_none_existent(self):
@@ -150,13 +150,13 @@ class TestRedflags(unittest.TestCase):
         print(response)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['Status'], 400)
+        self.assertEqual(data['error'], 400)
         self.assertTrue(data['message'] == "Sorry, the record doesn't exist")
 
     def test_patch_redflag_when_there_is_no_data_in_request(self):
         response = self.app_tester.patch('/api/v1/red-flags/1/comment')
         data = json.loads(response.data)
-        self.assertIn('Sorry',data['message'])
+        self.assertIn('provide a comment',data['error'])
 
     def test_patch_redflag_when_it_exists(self):
         input_data = {
