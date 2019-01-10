@@ -12,7 +12,7 @@ can also report on things that needs government intervention.
 The Api servers to create, edit, patch, retrive and delete redflag records
 
 # Heroku
-An online version of the api is available at https://andelaireporterapp.herokuapp.com/
+An online version of the api is available at https://andelaireporterapp.herokuapp.com/  
 Feel free to check it out at your own convenience
 
 # Endpoints description
