@@ -2,26 +2,23 @@ import unittest
 from api import app
 import json
 from api.models import User, Incident
+from helpers import input_data
 
 class TestRedflags(unittest.TestCase):
     def setUp(self):
         self.app_tester = app.test_client()
         self.redflags = []
+        self.input_data = input_data
 
-    def test_get_all_redflags(self): 
+    def test_get_all_redflags(self):
+        """ Test for getting all red-flags """
         response = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data['status'] == 200)
 
     def test_get_all_redflags_when_there_is_data(self):
-        input_data = {
-                    "status": "Approved", 
-                    "location": {"lat": "0.96", "long": "1.23"}, 
-                    "createdBy": "Benjamin", 
-                    "type": "red-flag", 
-                    "comment": "I am the greatest"
-                    }
+        input_data = self.input_data
         self.app_tester.post('/api/v1/red-flags', json=input_data)
         response1 = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response1.data)
@@ -30,19 +27,15 @@ class TestRedflags(unittest.TestCase):
         self.assertTrue(len(data) == 2)
 
     def test_get_specific_redflag_when_list_empty(self):
+        """ Test for getting non-existent red-flag """
         response = self.app_tester.get('/api/v1/red-flags/1')
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 404)
         self.assertIn("doesn't exist", data['error'])
 
     def test_get_specific_redflag_when_data_exists(self):
-        input_data = {
-                    "status": "Approved", 
-                    "location": {"lat": "0.96", "long": "1.23"}, 
-                    "createdBy": "Benjamin", 
-                    "type": "red-flag", 
-                    "comment": "I am the greatest"
-                    }
+        """ Test for getting existent red-flags """
+        input_data = self.input_data
         self.app_tester.post('/api/v1/red-flags', json=input_data)
         response = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response.data)
@@ -54,13 +47,8 @@ class TestRedflags(unittest.TestCase):
         self.assertFalse(data['data'][0]['type'] == 'intervention')
 
     def test_add_redflag_record(self):
-        input_data = {
-                    "status": "Approved", 
-                    "location": {"lat": "0.96", "long": "1.23"}, 
-                    "createdBy": "Benjamin", 
-                    "type": "red-flag", 
-                    "comment": "I am the greatest"
-                    }
+        """ Test for adding a red-flag """
+        input_data = self.input_data
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
@@ -69,18 +57,19 @@ class TestRedflags(unittest.TestCase):
         self.assertFalse(data['status'] == 404)
         
     def test_add_redflag_record_when_request_has_missing_data(self):
+        """ Test for adding a red-flag when the request has missing data """
         input_data = {
-                    "status": "Approved", 
-                    "location": {"lat": "0.96", "long": "1.23"}, 
-                    "createdBy": "Benjamin", 
-                    "type": "red-flag", 
-                    }
+            "status": "Approved", 
+            "location": {"lat": "0.96", "long": "1.23"}, 
+            "createdBy": "Benjamin" 
+        }
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
         self.assertIn('Information is missing', data['error'])
         self.assertTrue(len(data) == 2)
 
     def test_add_redflag_when_request_has_no_data(self):
+        """ Test for adding a red-flag when the request has no data """
         response = self.app_tester.post('/api/v1/red-flags')
         data = json.loads(response.data)
         self.assertIn('Empty',data['error'])
@@ -88,6 +77,7 @@ class TestRedflags(unittest.TestCase):
 
 
     def test_delete_redflag_when_record_is_not_there(self):
+        """ Test for deleting a non-existent red-flag """
         response = self.app_tester.delete('/api/v1/red-flags/2')
         data = json.loads(response.data)
         self.assertTrue(response.status_code == 200)
@@ -95,13 +85,8 @@ class TestRedflags(unittest.TestCase):
         self.assertEqual(data['status'], 204)
 
     def test_delete_redflag_when_record_exists(self):
-        input_data = {
-                    "status": "Approved", 
-                    "location": {"lat": "0.96", "long": "1.23"}, 
-                    "createdBy": "Benjamin", 
-                    "type": "red-flag", 
-                    "comment": "I am the greatest"
-                    }
+        """ Test for deleting existent red-flag """
+        input_data = self.input_data
         self.app_tester.post('/api/v1/red-flags', json=input_data)
         response = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response.data)
@@ -127,13 +112,7 @@ class TestRedflags(unittest.TestCase):
         self.assertEqual(data['error'], 'Please provide a location')
 
     def test_patch_redflag_record_when_it_exists(self):
-        input_data = {
-                    "status": "Approved", 
-                    "location": {"lat": "0.96", "long": "1.23"}, 
-                    "createdBy": "Benjamin", 
-                    "type": "red-flag", 
-                    "comment": "I am the greatest"
-                    }
+        input_data = self.input_data
         self.app_tester.post('/api/v1/red-flags', json=input_data)
         response = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response.data)
@@ -159,13 +138,7 @@ class TestRedflags(unittest.TestCase):
         self.assertIn('provide a comment',data['error'])
 
     def test_patch_redflag_when_it_exists(self):
-        input_data = {
-                    "status": "Approved", 
-                    "location": {"lat": "0.96", "long": "1.23"}, 
-                    "createdBy": "Benjamin", 
-                    "type": "red-flag", 
-                    "comment": "I am the greatest"
-                    }
+        input_data = self.input_data
         self.app_tester.post('/api/v1/red-flags', json=input_data)
         response = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response.data)
@@ -173,7 +146,6 @@ class TestRedflags(unittest.TestCase):
         input_location = {"comment": "fhkdd"}
         response = self.app_tester.patch('/api/v1/red-flags/{}/comment'.format(id), json=input_location)
         data = json.loads(response.data)
-    #     self.assertIn("Updated",data['data'][0]['message'])
 
     def test_hello_world(self):
         response = self.app_tester.get('/')
