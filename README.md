@@ -67,7 +67,6 @@ $ flask run
 ```
 * Play around with the API
 
-
 ## Running the tests
 The api tests are run with `pytest`
 To run the tests simply run the following commands while in the project root
