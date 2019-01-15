@@ -126,7 +126,6 @@ class TestRedflags(unittest.TestCase):
     def test_patch_redflag_comment_when_record_is_none_existent(self):
         input_data = {"comment": "I am sick"}
         response = self.app_tester.patch('/api/v1/red-flags/1/comment', json=input_data)
-        print(response)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['error'], 400)

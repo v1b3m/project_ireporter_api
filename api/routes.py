@@ -27,7 +27,7 @@ def get_specific_redflag(id):
     redflag = None
     
     for item in redflags:
-        if item._id == id:
+        if item.id == id:
             redflag = dict(item)
     if redflag is None: 
         return jsonify({
@@ -61,7 +61,7 @@ def add_redflag_record():
     redflags.append(incident)
     return jsonify({"status": 201, 
                     "data": [{
-                            "id": incident._id, 
+                            "id": incident.id, 
                             "message": "Created red-flag record"
                             }]
                     }), 201
@@ -70,7 +70,7 @@ def add_redflag_record():
 def delete_red_flag(id):
     x = None
     for item in redflags:
-        if item._id == id:
+        if item.id == id:
             x = item
             redflags.remove(item)
     if x is None:
@@ -97,7 +97,7 @@ def edit_red_flag_location(id):
     print(data)
     
     for flag in redflags:
-        if flag._id == id:
+        if flag.id == id:
             x = flag
             flag.location = data['location']
     if x is None:
@@ -125,7 +125,7 @@ def patch_red_flag_comment(id):
     response = request.get_json()
 
     for item in reds:
-        if item._id == id:
+        if item.id == id:
             x = item
             item.comment = response['comment']
     

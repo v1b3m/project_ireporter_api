@@ -20,10 +20,10 @@ Feel free to check it out at your own convenience
 |----------------------------------------------|------------------------------------------------
 |GET /api/v1/red-flags                         | Retrieves all red-flag records in the database
 |GET /api/v1/red-flags/<red_flag_id>           | Retrieves a red-flag specified by its id
-|POST /api/v1/red-flag                         | Adds a red-flag to the database
-|PATCH /api/v1/red-flag/<red_flag_id>/location | Edits the location of a specified red-flag
-|PATCH /api/v1/red-flag/<red_flag_id>/comment  | Edits a the comment of a specific red-flag
-|DELETE /api/v1/red-flag/<red_flag_id>         | Deletes a red-flag specified by Id
+|POST /api/v1/red-flags                        | Adds a red-flag to the database
+|PATCH /api/v1/red-flags/<red_flag_id>/location | Edits the location of a specified red-flag
+|PATCH /api/v1/red-flags/<red_flag_id>/comment  | Edits a the comment of a specific red-flag
+|DELETE /api/v1/red-flags/<red_flag_id>         | Deletes a red-flag specified by Id
 
 Note that all API endpoints use json formatted data. An example is given below for the POST endpoint:
 ```javascript
@@ -66,6 +66,17 @@ $ pip install -r requirements.txt
 $ flask run
 ```
 * Play around with the API
+
+# Running the tests
+The api tests are run with `pytest`
+To run the tests simply run the following commands while in the project root
+```
+$ python -m pytest
+```
+To run the tests with coverage, run:
+```
+$ python -m pytest --cov
+```
 
 # Contributors
 * v1b3m - *vibenjamin6@gmail.com*
