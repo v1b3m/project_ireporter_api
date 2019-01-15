@@ -69,9 +69,9 @@ class TestRedflags(unittest.TestCase):
         """ Test for adding a red-flag when the request has missing data """
         # create input_data with missing data
         input_data = {
-            "status": "Approved", 
-            "location": {"lat": "0.96", "long": "1.23"}, 
-            "createdBy": "Benjamin" 
+            "status": "Approved",
+            "location": {"lat": "0.96", "long": "1.23"},
+            "createdBy": "Benjamin"
         }
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
@@ -85,7 +85,6 @@ class TestRedflags(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('Empty',data['error'])
         self.assertIsNot(response.status_code, 404)
-
 
     def test_delete_redflag_when_record_is_not_there(self):
         """ Test for deleting a non-existent red-flag """
@@ -113,7 +112,7 @@ class TestRedflags(unittest.TestCase):
 
     def test_patch_redflag_location_when_record_is_not_existent(self):
         input_data = {"location": "2375812"}
-        response = self.app_tester.patch('/api/v1/red-flags/1/location', 
+        response = self.app_tester.patch('/api/v1/red-flags/1/location',
                                         json=input_data)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
@@ -139,7 +138,8 @@ class TestRedflags(unittest.TestCase):
 
         # patch red-flag whose id has been returned
         input_location = {"location": "fhkdd"}
-        response = self.app_tester.patch('/api/v1/red-flags/{}/location'.format(id), json=input_location)
+        response = self.app_tester.patch('/api/v1/red-flags/{}/location'.format(id),
+                                        json=input_location)
         data = json.loads(response.data)
         self.assertEqual(data['status'], 201)
         self.assertIn("Updated", data['data'][0]['message'])
@@ -170,7 +170,8 @@ class TestRedflags(unittest.TestCase):
 
         # patch red-flag record whose id has been returned
         input_location = {"comment": "fhkdd"}
-        response = self.app_tester.patch('/api/v1/red-flags/{}/comment'.format(id), json=input_location)
+        response = self.app_tester.patch('/api/v1/red-flags/{}/comment'.format(id),
+                                        json=input_location)
         data = json.loads(response.data)
 
     def test_hello_world(self):
