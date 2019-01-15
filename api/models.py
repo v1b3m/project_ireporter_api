@@ -40,7 +40,7 @@ class Incident:
 
     
     def __repr__(self):
-        return '<Incident {}>'.format(self.id)
+        return '<Incident {}>'.format(self.type)
 
     def __iter__(self):
         yield 'id', self.id

@@ -12,11 +12,13 @@ def index():
 def get_all_redflags():
     red_flags_as_dicts = [dict(redflag) for redflag in redflags.values()]
 
+	# check if the list is empty
     if not red_flags_as_dicts:
         return jsonify({
                         'error': 'There are no redflags',
                         'status': 404
                         })
+	# if list isn't empty, this code will run
     return jsonify({
                     "status": 200,
                     "data": red_flags_as_dicts
@@ -24,16 +26,18 @@ def get_all_redflags():
 
 @app.route('/api/v1/red-flags/<int:id>')
 def get_specific_redflag(id):
+	# first check if it exists and then return it
 	if id in redflags:
 		return jsonify({
                     "status": 200,
                     "data": [dict(redflags[id])]
                     })
-	else:
-		return jsonify({
-                        'error': "The redflag doesn't exist",
-                        'status': 404
-                        })   
+
+	# this code will run if the red-flag doesn't exist					
+	return jsonify({
+                    'error': "The redflag doesn't exist",
+                    'status': 404
+                    })   
 
 @app.route('/api/v1/red-flags', methods=['POST'])
 def add_redflag_record():
@@ -84,6 +88,7 @@ def delete_red_flag(id):
 
 @app.route('/api/v1/red-flags/<int:id>/location', methods=['PATCH'])
 def edit_red_flag_location(id):
+	# check if request has no json data in its body
 	if not request.is_json:
 		return jsonify({
 			"error": 'Please provide a location',
@@ -91,6 +96,7 @@ def edit_red_flag_location(id):
 			})
 	data = request.get_json()
 	
+	# check if record exists
 	if id in redflags:
 		redflags[id].location = data['location']
 		return jsonify({
