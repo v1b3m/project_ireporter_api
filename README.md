@@ -3,7 +3,7 @@ A simple api endpoints to the Andela iReporter
 
 [![Coverage Status](https://coveralls.io/repos/github/v1b3m/ireporter-challenge-2/badge.svg?branch=develop)](https://coveralls.io/github/v1b3m/ireporter-challenge-2?branch=develop) [![Build Status](https://travis-ci.org/v1b3m/ireporter-challenge-2.svg?branch=Add-travis)](https://travis-ci.org/v1b3m/ireporter-challenge-2) [![Maintainability](https://api.codeclimate.com/v1/badges/b926e59a913d6c5e1f43/maintainability)](https://codeclimate.com/github/v1b3m/ireporter-challenge-2/maintainability)
 
-# Overview
+## Overview
 Corruption is a huge bane to Africa’s development. African countries must develop novel and localised 
 solutions that will curb this menace, hence the birth of iReporter. iReporter enables any/every citizen 
 to bring any form of corruption to the notice of appropriate authorities and the general public. Users 
@@ -11,11 +11,11 @@ can also report on things that needs government intervention.
 
 The Api servers to create, edit, patch, retrive and delete redflag records
 
-# Heroku
+## Heroku
 An online version of the api is available at https://andelaireporterapp.herokuapp.com/  
 Feel free to check it out at your own convenience
 
-# Endpoints description
+## Endpoints description
 |Endpoint                                      | Role
 |----------------------------------------------|------------------------------------------------
 |GET /api/v1/red-flags                         | Retrieves all red-flag records in the database
@@ -47,7 +47,7 @@ The request above will return the following json data:
     "status": 201
 }
 ```
-# Installation guidelines
+## Installation guidelines
 (I've not seen an installation this easy)
 * Clone this repo onto your machine
 * Make sure to install python3 and postman(to test the endpoints)
@@ -67,7 +67,7 @@ $ flask run
 ```
 * Play around with the API
 
-# Running the tests
+## Running the tests
 The api tests are run with `pytest`
 To run the tests simply run the following commands while in the project root
 ```
@@ -78,5 +78,5 @@ To run the tests with coverage, run:
 $ python -m pytest --cov
 ```
 
-# Contributors
+## Contributors
 * v1b3m - *vibenjamin6@gmail.com*

@@ -96,7 +96,7 @@ def edit_red_flag_location(id):
 			})
 	data = request.get_json()
 	
-	# check if record exists
+	# check if record exists	
 	if id in redflags:
 		redflags[id].location = data['location']
 		return jsonify({

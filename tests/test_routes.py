@@ -15,6 +15,7 @@ class TestRedflags(unittest.TestCase):
 
     def test_get_all_redflags_when_dict_empty(self):
         """ Test for getting all red-flags when list is empty"""
+        self.redflags.clear()
         response = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
