@@ -30,7 +30,7 @@ class TestModels(unittest.TestCase):
         # create an incident
         incident = Incident(
                             createdBy = 1, 
-                            _type = 'red-flag', 
+                            type = 'red-flag', 
                             location = {
                                 "location": {
                                             "lat": "1.45",

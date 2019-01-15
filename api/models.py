@@ -28,10 +28,10 @@ class User:
 
 class Incident:
     def __init__(self, **kwargs):
-        self.id = int(uuid.uuid4())
+        self.id = int(str(int(uuid.uuid4()))[:10])
         self.createdOn = datetime.now()
         self.createdBy = kwargs['createdBy']
-        self.type = kwargs['_type']
+        self.type = kwargs['type']
         self.location = kwargs['location']
         self.status = kwargs['status']
         self.Images = None

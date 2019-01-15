@@ -10,8 +10,11 @@ class TestRedflags(unittest.TestCase):
         self.redflags = {}
         self.input_data = input_data
 
-    def test_get_all_redflags(self):
-        """ Test for getting all red-flags """
+    def tearDown(self):
+        self.redflags.clear()
+
+    def test_get_all_redflags_when_dict_empty(self):
+        """ Test for getting all red-flags when list is empty"""
         response = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
