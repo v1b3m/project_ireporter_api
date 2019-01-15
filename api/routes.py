@@ -1,6 +1,6 @@
 from api import app
 from flask import jsonify, request, json
-from api.models import User, Incident
+from api.models import Incident
 
 redflags = {}
 
@@ -33,11 +33,11 @@ def get_specific_redflag(id):
                     "data": [dict(redflags[id])]
                     })
 
-	# this code will run if the red-flag doesn't exist					
+	# this code will run if the red-flag doesn't exist
 	return jsonify({
                     'error': "The redflag doesn't exist",
                     'status': 404
-                    })   
+                    })
 
 @app.route('/api/v1/red-flags', methods=['POST'])
 def add_redflag_record():
@@ -51,20 +51,20 @@ def add_redflag_record():
     data = request.get_json()
 
     # check for missing data in request
-    if ('createdBy' not in data or 'type' not in data or 'comment' not in data or 
+    if ('createdBy' not in data or 'type' not in data or 'comment' not in data or
         'location' not in data or 'status' not in data):
         return jsonify({
-                        'status': 400, 
+                        'status': 400,
                         'error': 'Some Information is missing from the request'
                         }), 400
 
 	# return if request has no missing data
-    incident = Incident(createdBy = data['createdBy'], type = data['type'], location = data['location'], 
+    incident = Incident(createdBy = data['createdBy'], type = data['type'], location = data['location'],
                         status = data['status'], comment = data['comment'])
     redflags[incident.id] = incident
-    return jsonify({"status": 201, 
+    return jsonify({"status": 201,
                     "data": [{
-                            "id": incident.id, 
+                            "id": incident.id,
                             "message": "Created red-flag record"
                             }]
                     }), 201
@@ -96,7 +96,7 @@ def edit_red_flag_location(id):
 			})
 	data = request.get_json()
 	
-	# check if record exists	
+	# check if record exists
 	if id in redflags:
 		redflags[id].location = data['location']
 		return jsonify({
@@ -110,7 +110,7 @@ def edit_red_flag_location(id):
 	# this code will run if the red-flag doesn't exist
 	return jsonify({
                     "error": 400,
-                    "message": 
+                    "message":
                     "Are you are magician? Cause the record just disappeared from our database."
                     })
 

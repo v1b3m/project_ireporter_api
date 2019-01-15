@@ -15,10 +15,10 @@ class User:
 
     def to_dictionary(self):
         return {
-                'id': self.id, 'firstname': self.firstname, 
-                'lastname': self.lastname, 'othername': self.othernames, 
-                'email': self.email, 'phone_number': self.phone_number, 
-                'username': self.phone_number, 'registered': self.registered, 
+                'id': self.id, 'firstname': self.firstname,
+                'lastname': self.lastname, 'othername': self.othernames,
+                'email': self.email, 'phone_number': self.phone_number,
+                'username': self.phone_number, 'registered': self.registered,
                 'is_admin': self.is_admin
                 }
     
