@@ -40,7 +40,7 @@ class TestModels(unittest.TestCase):
                             comment = "I have no idea"
                             )
 
-        # return an incident  
+        # return an incident
         print(incident)
 
         # Add incident to array

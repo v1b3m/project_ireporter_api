@@ -16,14 +16,14 @@ An online version of the api is available at https://andelaireporterapp.herokuap
 Feel free to check it out at your own convenience
 
 ## Endpoints description
-|Endpoint                                       | Role
+|Endpoint                                       |Role
 |-----------------------------------------------|------------------------------------------------
-|GET /api/v1/red-flags                          | Retrieves all red-flag records in the database
-|GET /api/v1/red-flags/<red_flag_id>            | Retrieves a red-flag specified by its id
-|POST /api/v1/red-flags                         | Adds a red-flag to the database
-|PATCH /api/v1/red-flags/<red_flag_id>/location | Edits the location of a specified red-flag
-|PATCH /api/v1/red-flags/<red_flag_id>/comment  | Edits a the comment of a specific red-flag
-|DELETE /api/v1/red-flags/<red_flag_id>         | Deletes a red-flag specified by Id
+|GET /api/v1/red-flags                          |Retrieves all red-flag records in the database
+|GET /api/v1/red-flags/<red_flag_id>            |Retrieves a red-flag specified by its id
+|POST /api/v1/red-flags                         |Adds a red-flag to the database
+|PATCH /api/v1/red-flags/<red_flag_id>/location |Edits the location of a specified red-flag
+|PATCH /api/v1/red-flags/<red_flag_id>/comment  |Edits a the comment of a specific red-flag
+|DELETE /api/v1/red-flags/<red_flag_id>         |Deletes a red-flag specified by Id
 
 Note that all API endpoints use json formatted data. An example is given below for the POST endpoint:
 ```javascript
