@@ -29,3 +29,4 @@ app.db
 ireporter.log*
 
 .vscode
+htmlcov
