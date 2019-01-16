@@ -28,7 +28,7 @@ class TestModels(unittest.TestCase):
     def test_create_Incident(self):
         # create an incident
         incident = Incident(
-                            createdBy = 1,
+                            created_by = 1,
                             type = 'red-flag',
                             location = {
                                 "location": {
@@ -44,4 +44,4 @@ class TestModels(unittest.TestCase):
         print(incident)
 
         # Add incident to array
-        self.redflags[incident.id] = incident
+        self.redflags[incident.flag_id] = incident

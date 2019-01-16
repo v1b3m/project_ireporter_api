@@ -71,7 +71,7 @@ class TestRedflags(unittest.TestCase):
         input_data = {
             "status": "Approved",
             "location": {"lat": "0.96", "long": "1.23"},
-            "createdBy": "Benjamin"
+            "created_by": "Benjamin"
         }
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
@@ -116,9 +116,9 @@ class TestRedflags(unittest.TestCase):
                                         json=input_data)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(len(data['message']) == 74)
+        self.assertTrue(len(data['message']) == 41)
         self.assertEqual(data['error'], 400)
-        self.assertIn("Are you are magician?", data['message'])
+        self.assertIn("doesn't exist", data['message'])
 
     def test_patch_redflag_when_request_has_no_data(self):
         # send empty patch request to server
