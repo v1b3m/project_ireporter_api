@@ -28,5 +28,4 @@ venv
 ireporter.log*
 
 .vscode
-
 htmlcov

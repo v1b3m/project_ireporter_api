@@ -1,104 +1,190 @@
-from api import app
-from flask import jsonify, request, json
-from api.models import User, Incident
+""" All the routes that will be required by the api will
+    be defined in this script """
 
-redflags = []
+from flask import jsonify, request
+from api import app
+from api.models import Incident
+from api.helpers import (validate_add_redflag_data,
+                         validate_edit_comment_data,
+                         validate_edit_location_data)
+
+RED_FLAGS = {}
+
 
 @app.route('/')
-@app.route('/index')
 def index():
+    """ This route will return the message "Hello, World" """
     return "Hello, World!"
 
-@app.route('/api/v1/red-flags',)
+
+@app.route('/api/v1/red-flags')
 def get_all_redflags():
-    red_flags_as_dicts = [redflag.to_dict() for redflag in redflags]
+    """ This will return all available red-flags """
+    red_flags_as_dicts = [dict(redflag) for redflag in RED_FLAGS.values()]
 
-    if len(red_flags_as_dicts) < 1:
-        return jsonify({'message': 'There are no redflags',
-                        'status': 400})
-    return jsonify({"status": 200,
-                    "data": red_flags_as_dicts})
+    # check if the list is empty
+    if not red_flags_as_dicts:
+        return jsonify({
+            'error': 'There are no redflags',
+            'status': 404
+        })
+        # if list isn't empty, this code will run
+    return jsonify({
+        "status": 200,
+        "data": red_flags_as_dicts
+    })
 
-@app.route('/api/v1/red-flags/<int:id>')
-def get_specific_redflag(id):
-    redflag = None
-    for item in redflags:
-        if item._id == id:
-            redflag = item.to_dict()
-    if redflag is None: 
-        return jsonify({'message': "The redflag doesn't exist",
-                        'status': 404})   
-    return jsonify({"status": 200,
-                    "data": redflag})
+
+@app.route('/api/v1/red-flags/<int:flag_id>')
+def get_specific_redflag(flag_id):
+    """ This will return a red-flag specified by id """
+    # first check if it exists and then return it
+    if flag_id in RED_FLAGS:
+        return jsonify({
+            "status": 200,
+            "data": [dict(RED_FLAGS[flag_id])]
+        })
+
+    # this code will run if the red-flag doesn't exist
+    return jsonify({
+        'error': "The redflag doesn't exist",
+        'status': 404
+    })
+
 
 @app.route('/api/v1/red-flags', methods=['POST'])
 def add_redflag_record():
+    """ This will add a red-flag to the database """
+    # check for empty request
     if not request.is_json:
-        return jsonify({'error': 'Request Cannot Be Empty'}), 404
+        return jsonify({
+            'error': 'Request Cannot Be Empty',
+            'status': 400
+        }), 400
 
     data = request.get_json()
-    print(data)
 
-    if 'createdBy' not in data or 'type' not in data or 'comment' not in data or 'location' not in data or 'status' not in data:
-        return jsonify({'status': 400, 'error': 'Some Information is missing from the request'}), 400
-    incident = Incident(data['createdBy'], data['type'], data['location'], data['status'], data['comment'])
-    redflags.append(incident)
-    return jsonify({"status": 200, "data": [{"id": incident._id, "message": "Created red-flag record"}]}), 200
+    # check for missing data in request
+    if ('created_by' not in data or 'type' not in data or
+            'comment' not in data or 'location' not in data):
+        return jsonify({
+            'status': 400,
+            'error': 'Some Information is missing from the request'
+        }), 400
 
-@app.route('/api/v1/red-flags/<int:id>', methods=['DELETE'])
-def delete_red_flag(id):
-    x = None
-    for item in redflags:
-        if item._id == id:
-            x = item
-            redflags.remove(item)
-    if x is None:
+    # validate the input data
+    if validate_add_redflag_data(data):
+        return jsonify({"error": 400,
+                        "message": validate_add_redflag_data(data)
+                        }), 400
+
+    # return if request has no missing data
+    incident = Incident(created_by=data['created_by'], type=data['type'],
+                        location=data['location'], comment=data['comment'])
+    RED_FLAGS[incident.flag_id] = incident
+    return jsonify({"status": 201,
+                    "data": [{
+                        "id": incident.flag_id,
+                        "message": "Created red-flag record"
+                    }]
+                    }), 201
+
+
+@app.route('/api/v1/red-flags/<int:flag_id>', methods=['DELETE'])
+def delete_red_flag(flag_id):
+    """ This will delete a red-flag specified by id """
+    # check if the record exists and delete the record
+    if flag_id in RED_FLAGS:
+        del RED_FLAGS[flag_id]
         return jsonify({"status": 204,
-                        "message": "Oops, looks like the record doesn't exist."})
-    return jsonify({"status": 204,
-                    "data": [{
-                        "id" : id,
-                        "message": 'redflag record has been deleted'
-                    }]})
+                        "data": [{
+                            "id": flag_id,
+                            "message": 'redflag record has been deleted'
+                        }]
+                        })
+    # will run if the record doesn't exist
+    return jsonify({
+        "status": 204,
+        "message": "Oops, looks like the record doesn't exist."
+    })
 
-@app.route('/api/v1/red-flags/<int:id>/location', methods=['PATCH'])
-def edit_red_flag_location(id):
-    x = None
+
+@app.route('/api/v1/red-flags/<int:flag_id>/location', methods=['PATCH'])
+def edit_red_flag_location(flag_id):
+    """ This will edit the location of a red-flag given its id """
+    # check if request has no json data in its body
     if not request.is_json:
-        return jsonify({"error": 'Please provide a location'})
+        return jsonify({
+            "error": 'Please provide a location',
+            "status": 400
+        })
     data = request.get_json()
-    print(data)
-    
-    for flag in redflags:
-        if flag._id == id:
-            x = flag
-            flag.location = data['location']
-    if x is None:
-        return jsonify({"status": 400,
-                        "message": "Are you are magician? Cause the record just disappeared from our database."})
-    return jsonify({"status": 204,
-                    "data": [{
-                        "id" : id,
-                        "message": "Updated red-flag record's location"
-                    }]})
 
-@app.route('/api/v1/red-flags/<int:id>/comment', methods=['PATCH'])
-def patch_red_flag_comment(id):
-    x = None
-    reds = redflags
+    # check for location in missing data
+    if 'location' not in data:
+        return jsonify({
+            'error': "Location data not found",
+            "status": 400
+        }), 400
+
+    # validate the data
+    if validate_edit_location_data(data):
+        return jsonify({"error": 400,
+                        "message": validate_edit_location_data(data)
+                        }), 400
+
+    # check if record exists
+    if flag_id in RED_FLAGS:
+        RED_FLAGS[flag_id].location = data['location']
+        return jsonify({
+            "status": 201,
+            "data": [{
+                "id": flag_id,
+                "message": "Updated red-flag record's location"
+            }]
+        })
+
+    # this code will run if the red-flag doesn't exist
+    return jsonify({
+        "error": 400,
+        "message": "Sorry, the red-flag record doesn't exist."
+    })
+
+
+@app.route('/api/v1/red-flags/<int:flag_id>/comment', methods=['PATCH'])
+def patch_red_flag_comment(flag_id):
+    """ This will edit the comment of a red-flag given the id """
+    if not request.is_json:
+        return jsonify({
+            "error": 'Please provide a comment.',
+            "status": 400
+        })
     response = request.get_json()
 
-    for item in reds:
-        if item._id == id:
-            x = item
-            item.comment = response['comment']
-    
-    if x is None:
-        return jsonify({"Status": 400,
-                        "message": "Sorry, the record doesn't exist"})
-    
-    return jsonify({"status": 204,
-                    "data": [{
-                        "id" : id,
-                        "message": "Updated red-flag record's comment"
-                    }]})
+    # check for location in missing data
+    if 'comment' not in response:
+        return jsonify({
+            'error': "Comment data not found",
+            "status": 400
+        }), 400
+
+    # validate the data
+    if validate_edit_comment_data(response):
+        return jsonify({"error": 400,
+                        "message": validate_edit_comment_data(response)
+                        }), 400
+
+    # check if record exists and patch it
+    if flag_id in RED_FLAGS:
+        RED_FLAGS[flag_id].comment = response['comment']
+        return jsonify({"status": 204,
+                        "data": [{
+                            "id": flag_id,
+                            "message": "Updated red-flag record's comment"
+                        }]
+                        })
+    # this code will run if red-flag doesn't exist
+    return jsonify({
+        "error": 400,
+        "message": "Sorry, the record doesn't exist"
+    })
