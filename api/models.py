@@ -6,6 +6,7 @@ import uuid
 
 class User:
     """ This class is what will define any given user """
+
     def __init__(self, **kwargs):
         self.id = int(uuid.uuid4())
         self.firstname = kwargs['firstname']
@@ -35,13 +36,14 @@ class User:
 class Incident:
     """ Both red-flag and intervention records will be
         created using this class """
+
     def __init__(self, **kwargs):
         self.flag_id = int(str(int(uuid.uuid4()))[:10])
         self.created_on = datetime.now()
         self.created_by = kwargs['created_by']
         self.type = kwargs['type']
         self.location = kwargs['location']
-        self.status = kwargs['status']
+        self.status = "Pending"
         self.images = None
         self.videos = None
         self.comment = kwargs['comment']

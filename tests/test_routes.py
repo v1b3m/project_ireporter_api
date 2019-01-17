@@ -11,15 +11,10 @@ class TestRedflags(unittest.TestCase):
         """ Set Up all the variables we'll need for the tests """
         self.app_tester = app.test_client()
         self.redflags = {}
-        self.input_data = {"status": "Approved",
-                           "location": {"lat": "0.96", "long": "1.23"},
-                           "created_by": "Benjamin", "type": "red-flag",
+        self.input_data = {"location": "0.96, 1.23",
+                           "created_by": 12, "type": "red-flag",
                            "comment": "I am the greatest"
                            }
-
-    def tearDown(self):
-        """ This will run after every test """
-        self.redflags.clear()
 
     def test_get_all_redflags_when_dict_empty(self):
         """ Test for getting all red-flags when list is empty"""
@@ -78,7 +73,6 @@ class TestRedflags(unittest.TestCase):
         """ Test for adding a red-flag when the request has missing data """
         # create input_data with missing data
         input_data = {
-            "status": "Approved",
             "location": {"lat": "0.96", "long": "1.23"},
             "created_by": "Benjamin"
         }
@@ -94,6 +88,53 @@ class TestRedflags(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('Empty', data['error'])
         self.assertIsNot(response.status_code, 404)
+
+    def test_add_redflag_with_integer_wrong_data(self):
+        """ Test for adding a red-flag with
+            wrong request data """
+        # integer location
+        input_data = {
+            "location": 3,
+            "created_by": 12, "type": "red-flag",
+            "comment": "I am the greatest"
+        }
+        response = self.app_tester.post('/api/v1/red-flags', json=input_data)
+        data = json.loads(response.data)
+        self.assertIn('location must be', data['message'])
+        self.assertTrue(len(data) == 2)
+
+        # integer redflag type
+        input_data = {
+            "location": "0.12, 3.44",
+            "created_by": 12, "type": 4,
+            "comment": "I am the greatest"
+        }
+        response = self.app_tester.post('/api/v1/red-flags', json=input_data)
+        data = json.loads(response.data)
+        self.assertIn('type must be', data['message'])
+        self.assertTrue(len(data) == 2)
+
+        # integer comment in request
+        input_data = {
+            "location": "0.12, 3.44",
+            "created_by": 12, "type": "red-flag",
+            "comment": 34
+        }
+        response = self.app_tester.post('/api/v1/red-flags', json=input_data)
+        data = json.loads(response.data)
+        self.assertIn('comment must be', data['message'])
+        self.assertTrue(len(data) == 2)
+
+        # request containing created_by as a string
+        input_data = {
+            "location": "0.12, 3.44",
+            "created_by": "me", "type": "red-flag",
+            "comment": "This is a new comment"
+        }
+        response = self.app_tester.post('/api/v1/red-flags', json=input_data)
+        data = json.loads(response.data)
+        self.assertIn('created_by must be', data['message'])
+        self.assertTrue(len(data) == 2)
 
     def test_delete_redflag_when_record_is_not_there(self):
         """ Test for deleting a non-existent red-flag """
@@ -158,6 +199,34 @@ class TestRedflags(unittest.TestCase):
         self.assertEqual(data['status'], 201)
         self.assertIn("Updated", data['data'][0]['message'])
 
+    def test_patch_redflag_with_wrong_location_data(self):
+        """ Test for patching a redflag location with
+            an integer location """
+        # create red-flag record
+        input_data = self.input_data
+        self.app_tester.post('/api/v1/red-flags', json=input_data)
+
+        # get red-flag record flag_id
+        response = self.app_tester.get('/api/v1/red-flags')
+        data = json.loads(response.data)
+        flag_id = data['data'][0]['id']
+
+        # patch red-flag whose id has been returned
+        input_location = {"location": 21}
+        response = self.app_tester.patch('/api/v1/red-flags/{}/location'.format(flag_id),
+                                         json=input_location)
+        data = json.loads(response.data)
+        self.assertEqual(len(data), 2)
+        self.assertIn("location must be", data['message'])
+
+        # patch red-flag without location data in request
+        input_location = {"locatio": "0.12, 3.22"}
+        response = self.app_tester.patch('/api/v1/red-flags/{}/location'.format(flag_id),
+                                         json=input_location)
+        data = json.loads(response.data)
+        self.assertEqual(len(data), 2)
+        self.assertIn("Location data", data['error'])
+
     def test_patch_redflag_comment_when_record_is_non_existent(self):
         """ This will test patching a non existent red-flag comment """
         input_data = {"comment": "I am sick"}
@@ -192,6 +261,35 @@ class TestRedflags(unittest.TestCase):
         response = self.app_tester.patch('/api/v1/red-flags/{}/comment'.format(flag_id),
                                          json=input_location)
         data = json.loads(response.data)
+
+    def test_patch_redflag_with_wrong_comment_data(self):
+        """ Test for patching a redflag location with
+            an integer comment """
+
+        # create red-flag record
+        input_data = self.input_data
+        self.app_tester.post('/api/v1/red-flags', json=input_data)
+
+        # get red-flag record flag_id
+        response = self.app_tester.get('/api/v1/red-flags')
+        data = json.loads(response.data)
+        flag_id = data['data'][0]['id']
+
+        # patch red-flag with an integer comment
+        input_location = {"comment": 21}
+        response = self.app_tester.patch('/api/v1/red-flags/{}/comment'.format(flag_id),
+                                         json=input_location)
+        data = json.loads(response.data)
+        self.assertEqual(len(data), 2)
+        self.assertIn("comment must be", data['message'])
+
+        # patch red-flag without comment data
+        input_location = {"sdfjdk": "This is a new comment"}
+        response = self.app_tester.patch('/api/v1/red-flags/{}/comment'.format(flag_id),
+                                         json=input_location)
+        data = json.loads(response.data)
+        self.assertEqual(len(data), 2)
+        self.assertIn("Comment data", data['error'])
 
     def test_hello_world(self):
         """ Test for the index page """

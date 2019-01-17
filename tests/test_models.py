@@ -21,7 +21,7 @@ class TestModels(unittest.TestCase):
             phone_number="0819823089",
             username='v1b3m'
         )
-        
+
         # add user to dictionary
         self.users[user.id] = user
 
@@ -31,7 +31,7 @@ class TestModels(unittest.TestCase):
     def return_user(self):
         """ this function will return users """
         return self.users.values()[0]
-        
+
     def test_create_incident(self):
         """ This test will emulate creation of an incident """
         # create an incident
@@ -49,9 +49,7 @@ class TestModels(unittest.TestCase):
         )
         self.redflags[incident.flag_id] = incident
 
-    def return_an_incident(self):    
+    def return_an_incident(self):
         """ This function will return an incident """
         red_flag = self.redflags.values()[0]
         self.assertIn('User', red_flag)
-
-        

@@ -4,8 +4,12 @@
 from flask import jsonify, request
 from api import app
 from api.models import Incident
+from api.helpers import (validate_add_redflag_data,
+                         validate_edit_comment_data,
+                         validate_edit_location_data)
 
 RED_FLAGS = {}
+
 
 @app.route('/')
 def index():
@@ -62,17 +66,21 @@ def add_redflag_record():
 
     # check for missing data in request
     if ('created_by' not in data or 'type' not in data or
-            'comment' not in data or 'location' not in data or
-            'status' not in data):
+            'comment' not in data or 'location' not in data):
         return jsonify({
             'status': 400,
             'error': 'Some Information is missing from the request'
         }), 400
 
+    # validate the input data
+    if validate_add_redflag_data(data):
+        return jsonify({"error": 400,
+                        "message": validate_add_redflag_data(data)
+                        }), 400
+
     # return if request has no missing data
     incident = Incident(created_by=data['created_by'], type=data['type'],
-                        location=data['location'], status=data['status'],
-                        comment=data['comment'])
+                        location=data['location'], comment=data['comment'])
     RED_FLAGS[incident.flag_id] = incident
     return jsonify({"status": 201,
                     "data": [{
@@ -112,6 +120,19 @@ def edit_red_flag_location(flag_id):
         })
     data = request.get_json()
 
+    # check for location in missing data
+    if 'location' not in data:
+        return jsonify({
+            'error': "Location data not found",
+            "status": 400
+        }), 400
+
+    # validate the data
+    if validate_edit_location_data(data):
+        return jsonify({"error": 400,
+                        "message": validate_edit_location_data(data)
+                        }), 400
+
     # check if record exists
     if flag_id in RED_FLAGS:
         RED_FLAGS[flag_id].location = data['location']
@@ -139,6 +160,19 @@ def patch_red_flag_comment(flag_id):
             "status": 400
         })
     response = request.get_json()
+
+    # check for location in missing data
+    if 'comment' not in response:
+        return jsonify({
+            'error': "Comment data not found",
+            "status": 400
+        }), 400
+
+    # validate the data
+    if validate_edit_comment_data(response):
+        return jsonify({"error": 400,
+                        "message": validate_edit_comment_data(response)
+                        }), 400
 
     # check if record exists and patch it
     if flag_id in RED_FLAGS:
