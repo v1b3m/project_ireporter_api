@@ -9,7 +9,7 @@ class TestModels(unittest.TestCase):
     def setUp(self):
         """ Set up all variables required for the tests """
         self.redflags = {}
-        self.users = []
+        self.users = {}
 
     def test_create_user(self):
         """ This test will emulate user creation """
@@ -21,16 +21,17 @@ class TestModels(unittest.TestCase):
             phone_number="0819823089",
             username='v1b3m'
         )
-
-        # return user
-        print(user)
+        
+        # add user to dictionary
+        self.users[user.id] = user
 
         # convert user to dictionary
         user.to_dictionary()
 
-        # add user to list
-        self.users.append(user)
-
+    def return_user(self):
+        """ this function will return users """
+        return self.users.values()[0]
+        
     def test_create_incident(self):
         """ This test will emulate creation of an incident """
         # create an incident
@@ -46,9 +47,11 @@ class TestModels(unittest.TestCase):
             status="Pending",
             comment="I have no idea"
         )
-
-        # return an incident
-        print(incident)
-
-        # Add incident to array
         self.redflags[incident.flag_id] = incident
+
+    def return_an_incident(self):    
+        """ This function will return an incident """
+        red_flag = self.redflags.values()[0]
+        self.assertIn('User', red_flag)
+
+        
