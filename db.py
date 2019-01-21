@@ -80,10 +80,13 @@ class DatabaseConnection:
             query = """
                     INSERT INTO incidents (created_by, type, location,
                     images, videos, comment) VALUES (%s, %s, %s, %s, %s, %s)
+                    RETURNING incident_id
                     """
             self.cursor.execute(query, (kwargs['created_by'], kwargs['type'],
-                            kwargs['location'], kwargs['images'],
-                            kwargs['videos'], kwargs['comment']))
+                kwargs['location'], kwargs['images'],
+                kwargs['videos'], kwargs['comment']))
+            incident_id = dict(self.cursor.fetchone())['incident_id']
+            return incident_id
         except Exception as e:
             pprint(e)
 
@@ -98,14 +101,23 @@ class DatabaseConnection:
         try:
             query = "SELECT * FROM incidents WHERE incident_id = %d" % id
             self.cursor.execute(query)
-            incident = self.cursor.fetchone()
-            return incident.type
+            incident = dict(self.cursor.fetchone())
+            return incident
         except Exception as e:
             pprint(e)
 
     def get_incidents(self):
         try:
             query = "SELECT * FROM incidents"
+            self.cursor.execute(query)
+            incidents = self.cursor.fetchall()
+            return incidents
+        except Exception as e:
+            pprint(e)
+    
+    def get_redflags(self):
+        try:
+            query = "SELECT * FROM incidents WHERE type = 'red-flag'"
             self.cursor.execute(query)
             incidents = self.cursor.fetchall()
             return incidents
@@ -134,7 +146,39 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+    def delete_all_users(self):
+        try:
+            query = "DELETE FROM  users"
+            self.cursor.execute(query)
+        except Exception as e:
+            pprint(e)
+
+    def delete_all_incidents(self):
+        try:
+            query = 'DELETE FROM incidents'
+            self.cursor.execute(query)
+        except Exception as e:
+            pprint(e)
+    
+    def drop_user_table(self):
+        try:
+            query = 'DROP TABLE users'
+            self.cursor.execute(query)
+        except Exception as e:
+            pprint(e)
+
+    def drop_incident_table(self):
+        try:
+            query = 'DROP TABLE incidents'
+            self.cursor.execute(query)
+        except Exception as e:
+            pprint(e)
 
 if __name__ == '__main__':
     db_name = DatabaseConnection()
+    # db_name.delete_all_incidents()
+    db_name.create_incident(created_by=3, type='kjshkj',
+                            location='skljlk', comment='sjkjljks',
+                            videos="a.mp4", images="a.jpg")
+    db_name.get_incident(8)
     
