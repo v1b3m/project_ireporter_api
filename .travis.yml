@@ -2,11 +2,23 @@ language: python
 python:
   - "3.6"
 
+service:
+  - postgresql
+
+before install:
+  - export APP_SETTINGS="api.server.config.TestingConfig"
+  - export SECRET_KEY='skdfjkljelrkjljer'
+
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
+
+before script:
+  - psql -c 'create database ireporter_db_test;' -U postgres
+  - python manage.py create_db
 
 script:
-  - python -m pytest --cov
+  - python manage.py cov
 
 after_success:
   - coveralls
