@@ -1,6 +1,6 @@
 """ This script will test the user and incident models """
 import unittest
-from api.models import User, Incident
+from project.server.models import User, Incident
 
 
 class TestModels(unittest.TestCase):

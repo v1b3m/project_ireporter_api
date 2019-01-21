@@ -5,4 +5,5 @@ from config import DevelopmentConfig, TestingConfig, ProductionConfig
 app = Flask(__name__)
 app.config.from_object(TestingConfig)
 
-from api import routes, models
+from project.server.incidents import views
+from project.server import models

@@ -1,7 +1,7 @@
 """ This script will test all the api endpoints """
 import unittest
 import json
-from api import app
+from project.server import app
 
 
 class TestRedflags(unittest.TestCase):
