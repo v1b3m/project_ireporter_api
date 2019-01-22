@@ -70,7 +70,7 @@ class TestAuthBlueprint(BaseTestCase):
         with self.client:
             # user registration
             response = register_user(self)
-            data = json.loads(response.data.decode())
+            data = json.loads(response.data)
             self.assertEqual(int(data['status']), 200)
             self.assertTrue(data['data'][0]['user'])
             self.assertTrue(data['data'][0]['token'])
@@ -79,7 +79,7 @@ class TestAuthBlueprint(BaseTestCase):
 
             # user login
             response = login_user(self, 'test@test.com', '123456')
-            data = json.loads(response.data.decode())
+            data = json.loads(response.data)
             self.assertTrue(data['status'] == 200)
             self.assertTrue(data['data'][0]['user'])
             self.assertTrue(data['data'][0]['token'])
@@ -91,11 +91,11 @@ class TestAuthBlueprint(BaseTestCase):
                 '/auth/logout',
                 headers=dict(
                     Authorization='Bearer '+json.loads(
-                        response.data.decode()
+                        response.data
                     )['data'][0]['token']
                 )
             )
-            data = json.loads(response.data.decode())
+            data = json.loads(response.data)
             self.assertTrue(data['status'] == 'success')
             self.assertTrue(data['message'] == 'Successfully logged out.')
             self.assertEqual(response.status_code, 200)
