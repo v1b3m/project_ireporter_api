@@ -23,6 +23,10 @@ class BaseTestCase(TestCase):
                            "created_by": user_id, "type": "red-flag",
                            "comment": "I am the greatest"
                            }
+        self.intervention_data = {"location": "0.96, 1.23",
+                           "created_by": user_id, "type": "intervention",
+                           "comment": "I am the greatest"
+                           }
 
     def tearDown(self):
         db_name.delete_all_incidents()
