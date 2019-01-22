@@ -221,12 +221,9 @@ class TestRedflags(BaseTestCase):
     def test_patch_redflag_comment_when_record_is_non_existent(self):
         """ This will test patching a non existent red-flag comment """
         input_data = {"comment": "I am sick"}
-        print("1")
         response = self.client.patch(
             '/api/v1/red-flags/1/comment', json=input_data)
-        print("2")
         data = json.loads(response.data)
-        print("3")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['error'], 400)
         self.assertTrue(data['message'] == "Sorry, the red-flag record doesn't exist.")

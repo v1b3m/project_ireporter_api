@@ -110,9 +110,9 @@ class DatabaseConnection:
         try:
             query = "SELECT * FROM users WHERE email = '%s'" % email
             self.cursor.execute(query)
-            user = dict(self.cursor.fetchone())
+            user = self.cursor.fetchone()
             if user:
-                return user
+                return dict(user)
             return None
         except Exception as e:
             pprint(e)
@@ -128,8 +128,9 @@ class DatabaseConnection:
             self.cursor.execute(query, (kwargs['created_by'], kwargs['type'],
                 kwargs['location'], kwargs['images'],
                 kwargs['videos'], kwargs['comment']))
-            incident_id = dict(self.cursor.fetchone())['incident_id']
-            return incident_id
+            incident_id = self.cursor.fetchone()
+            if incident_id:
+                return dict(incident_id)['incident_id']
         except Exception as e:
             pprint(e)
 
@@ -143,9 +144,10 @@ class DatabaseConnection:
     def get_incident(self, id):
         try:
             query = "SELECT * FROM incidents WHERE incident_id = %d" % id
-            if self.cursor.execute(query):
-                incident = dict(self.cursor.fetchone())
-                return incident
+            self.cursor.execute(query)
+            incident = self.cursor.fetchone()
+            if incident:
+                return dict(incident)
             return None
         except Exception as e:
             pprint(e)
@@ -174,7 +176,9 @@ class DatabaseConnection:
             query = "SELECT * FROM incidents"
             self.cursor.execute(query)
             incidents = self.cursor.fetchall()
-            return incidents
+            if incidents:
+                return incidents
+            return None
         except Exception as e:
             pprint(e)
     
@@ -183,7 +187,9 @@ class DatabaseConnection:
             query = "SELECT * FROM incidents WHERE type = 'red-flag'"
             self.cursor.execute(query)
             incidents = self.cursor.fetchall()
-            return incidents
+            if incidents:
+                return incidents
+            return None
         except Exception as e:
             pprint(e)
     
@@ -207,7 +213,9 @@ class DatabaseConnection:
             query = "SELECT * FROM blacklist WHERE token = '%s'" % auth_token
             self.cursor.execute(query)
             token = self.cursor.fetchone()
-            return token
+            if token:
+                return token
+            return None
         except Exception as e:
             pprint(e)
 
@@ -278,6 +286,6 @@ if __name__ == '__main__':
     #                         videos="a.mp4", images="a.jpg")
     # db_name.get_incident(id)
     user = db_name.check_user('v122e@gmi.com')
-    print(user['userid'])
+    print(user)
     # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgxNTU0NzUsImlhdCI6MTU0ODE1NTQxNSwic3ViIjo1Mjl9.tLhW_ifyTGRnMMbiJ3F6NOChHGt4U1ajWu_AOZuleMo")
     

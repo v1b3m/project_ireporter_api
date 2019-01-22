@@ -26,7 +26,6 @@ class TestAuthBlueprint(BaseTestCase):
         with self.client:
             response = register_user(self)
         data = json.loads(response.data.decode())
-        print(data['status'])
         self.assertTrue(data['status'] == 'fail')
         self.assertTrue(
             data['message'] == 'User already exists. Please Log in.'
