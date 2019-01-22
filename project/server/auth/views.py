@@ -5,7 +5,7 @@ from project.server import bcrypt, app
 from db import DatabaseConnection
 
 auth_blueprint = Blueprint('auth', __name__)
-from manage import db_name
+db_name = DatabaseConnection()
 import jwt
 class RegisterAPI(MethodView):
     """

@@ -5,7 +5,8 @@ import time
 from project.tests.base import BaseTestCase
 from project.tests.helpers import register_user, login_user
 
-from manage import db_name
+from db import DatabaseConnection
+db_name = DatabaseConnection()
 
 class TestAuthBlueprint(BaseTestCase):
     def test_registration(self):
