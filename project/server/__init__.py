@@ -17,6 +17,8 @@ bcrypt = Bcrypt(app)
 
 from project.server.redflags.views import redflags_blueprint
 from project.server.auth.views import auth_blueprint
+from project.server.interventions.views import interventions_blueprint
 
 app.register_blueprint(redflags_blueprint)
 app.register_blueprint(auth_blueprint)
+app.register_blueprint(interventions_blueprint)

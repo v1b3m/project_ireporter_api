@@ -175,9 +175,9 @@ class DatabaseConnection:
             return e
 
 
-    def get_incidents(self):
+    def get_interventions(self):
         try:
-            query = "SELECT * FROM incidents"
+            query = "SELECT * FROM incidents WHERE type = 'intervention'"
             self.cursor.execute(query)
             incidents = self.cursor.fetchall()
             if incidents:
