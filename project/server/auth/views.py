@@ -48,13 +48,56 @@ class RegisterAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 202
 
+class LoginAPI(MethodView):
+    """
+    User Login Resource
+    """
+
+    def post(self):
+        # get the post data
+        post_data = request.get_json()
+        try:
+            # fetch the user data
+            user = db_name.check_user(email=post_data.get('email'))
+            if user and bcrypt.check_password_hash(
+                user['password'], post_data.get('password')
+            ):
+                auth_token = db_name.generate_auth_token(user['userid'])
+                if auth_token:
+                    responseObject = {
+                        'status': 200,
+                        'data': [{
+                            "token": auth_token.decode(),
+                            "user": user
+                        }]
+                    }
+                    return make_response(jsonify(responseObject)), 200
+            else:
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'User does not exist.'
+                }
+                return make_response(jsonify(responseObject)), 404
+        except:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Try again'
+            }
+            return make_response(jsonify(responseObject)), 500
+
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
+login_view = LoginAPI.as_view('login_api')
 
 
 # add Rules for API Endpoints
 auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=registration_view,
+    methods=['POST']
+)
+auth_blueprint.add_url_rule(
+    '/auth/login',
+    view_func=login_view,
     methods=['POST']
 )

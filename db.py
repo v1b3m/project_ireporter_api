@@ -222,4 +222,6 @@ if __name__ == '__main__':
     # user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
     #                         othernames='', username='v1b3m', email='v122e@gmi.com',
     #                         password='1234', phone_number='2309908' )
+    user = db_name.check_user('v122e@gmi.com')
+    print(user['userid'])
     
