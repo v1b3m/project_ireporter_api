@@ -126,3 +126,28 @@ class TestRedflags(BaseTestCase):
         data = json.loads(response.data)
         self.assertIn('created_by must be', data['message'])
         self.assertTrue(len(data) == 2)
+    
+    def test_delete_intervention_when_record_is_not_there(self):
+        """ Test for deleting a non-existent intervention """
+        response = self.client.delete('/api/v1/interventions/2')
+        data = json.loads(response.data)
+        self.assertTrue(response.status_code == 200)
+        self.assertIn("Oops", data['message'])
+        self.assertEqual(data['status'], 204)
+
+    def test_delete_intervention_when_record_exists(self):
+        """ Test for deleting existent red-flag """
+        # create an intervention
+        input_data = self.intervention_data
+        self.client.post('/api/v1/interventions', json=input_data)
+
+        # get red-flag record id
+        response = self.client.get('/api/v1/interventions')
+        data = json.loads(response.data)
+        intervention_id = data['data'][0]['incident_id']
+
+        # delete red-flag whose id has been returned
+        response = self.client.delete(
+            '/api/v1/interventions/{}'.format(intervention_id))
+        data = json.loads(response.data)
+        self.assertIn('deleted', data['data'][0]['message'])

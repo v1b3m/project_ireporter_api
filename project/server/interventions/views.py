@@ -93,10 +93,34 @@ class CreateInterventionsAPI(MethodView):
                         }]
                         }), 201
 
+class DeleteInterventionsAPI(MethodView):
+    """
+    Delete a redflag
+    """
+    def delete(self, intervention_id):
+        """ This will delete a red-flag specified by id """
+        # check if the record exists and delete the record
+        red_flag = db_name.get_incident(intervention_id)
+        if red_flag:
+            db_name.delete_incident(intervention_id)
+            return jsonify({"status": 204,
+                            "data": [{
+                                "id": intervention_id,
+                                "message": 'intervention record has been deleted'
+                            }]
+                            })
+        # will run if the record doesn't exist
+        return jsonify({
+            "status": 204,
+            "message": "Oops, looks like the record doesn't exist."
+        })
+
+
 # define the API resources
 get_interventions_view = GetInterventionsAPI.as_view('get_interventions_api')
 get_specific_intervention_view = GetSpecificInterventionAPI.as_view('get_specific_intervention_api')
 add_interventions_view = CreateInterventionsAPI.as_view('create_interventions_api')
+delete_interventions_view = DeleteInterventionsAPI.as_view('delete_interventions_api')
 
 # add rules for API endpoints
 interventions_blueprint.add_url_rule(
@@ -113,4 +137,9 @@ interventions_blueprint.add_url_rule(
     '/api/v1/interventions',
     view_func=add_interventions_view,
     methods=['POST']
+)
+interventions_blueprint.add_url_rule(
+    '/api/v1/interventions/<int:intervention_id>',
+    view_func=delete_interventions_view,
+    methods=['DELETE']
 )
