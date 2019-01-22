@@ -2,6 +2,8 @@ import psycopg2
 import psycopg2.extras
 from pprint import pprint
 import os
+from project.server import bcrypt, app
+import datetime, jwt
 
 class DatabaseConnection:
     def __init__(self):
@@ -68,12 +70,28 @@ class DatabaseConnection:
                     INSERT INTO users (firstname, lastname, othernames, username,
                     email, password, phone_number)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    RETURNING userid
                     """
+            password = bcrypt.generate_password_hash(
+                kwargs['password'], app.config.get('BCRYPT_LOG_ROUNDS')
+            ).decode()
             self.cursor.execute(query, (kwargs['firstname'], kwargs['lastname'],
                             kwargs['othernames'], kwargs['username'], kwargs['email'],
-                            kwargs['password'], kwargs['phone_number']))
+                            password, kwargs['phone_number']))
+            user_id = (self.cursor.fetchone())['userid']
+            return user_id
         except Exception as e:
             pprint(e)
+
+    def  check_user(self, email):
+        try:
+            query = "SELECT * FROM users WHERE email = '%s'" % email
+            self.cursor.execute(query)
+            user = dict(self.cursor.fetchone())
+            return user
+        except Exception as e:
+            pprint(e)
+            return None
 
     def create_incident(self, **kwargs):
         try:
@@ -105,6 +123,25 @@ class DatabaseConnection:
             return incident
         except Exception as e:
             pprint(e)
+
+    def generate_auth_token(self, user_id):
+        """
+        Generates the auth token string
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=10),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
+
 
     def get_incidents(self):
         try:
@@ -177,8 +214,12 @@ class DatabaseConnection:
 if __name__ == '__main__':
     db_name = DatabaseConnection()
     # db_name.delete_all_incidents()
-    db_name.create_incident(created_by=3, type='kjshkj',
-                            location='skljlk', comment='sjkjljks',
-                            videos="a.mp4", images="a.jpg")
-    db_name.get_incident(8)
+    # db_name.create_incident(created_by=3, type='kjshkj',
+                            # location='skljlk', comment='sjkjljks',
+                            # videos="a.mp4", images="a.jpg")
+    # db_name.get_incident(8)
+    # print('Create a user')
+    # user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
+    #                         othernames='', username='v1b3m', email='v122e@gmi.com',
+    #                         password='1234', phone_number='2309908' )
     

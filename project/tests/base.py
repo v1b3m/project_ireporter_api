@@ -13,11 +13,15 @@ class BaseTestCase(TestCase):
         return app
 
     def setUp(self):
+        user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
+                            othernames='', username='v1b3m', email='v122e@gmi.com',
+                            password='1234', phone_number='2309908' )
         self.input_data = {"location": "0.96, 1.23",
-                           "created_by": 1, "type": "red-flag",
+                           "created_by": user_id, "type": "red-flag",
                            "comment": "I am the greatest"
                            }
         db_name.create_incidents_table()
 
     def tearDown(self):
         db_name.delete_all_incidents()
+        db_name.delete_all_users()

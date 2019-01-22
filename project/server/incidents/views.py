@@ -8,7 +8,7 @@ from project.server.incidents.helpers import (validate_add_redflag_data,
                                             validate_edit_location_data)
 
 incident_blueprint = Blueprint('incident', __name__)
-db_name = DatabaseConnection()
+from manage import db_name
 
 class GetRedflagsAPI(MethodView):
     """
