@@ -11,8 +11,8 @@ class DatabaseConnection:
             self.db_name = 'ireporter_db_test'
             self.password = '2SweijecIf'
         elif os.getenv('APP_SETTINGS') == 'project.server.config.TravisConfig':
-            self.db_name = ''
-            self.password = ''travis_ci_test
+            self.db_name = 'travis_ci_test'
+            self.password = ''
         else:
             self.db_name = 'ireporter_db'
 
