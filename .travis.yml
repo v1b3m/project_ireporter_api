@@ -6,7 +6,7 @@ service:
   - postgresql
 
 before install:
-  - export APP_SETTINGS="api.server.config.TestingConfig"
+  - export APP_SETTINGS="project.server.config.TravisConfig"
   - export SECRET_KEY='skdfjkljelrkjljer'
 
 install:
@@ -14,12 +14,10 @@ install:
   - pip install coveralls
 
 before script:
-  - psql -c 'create database ireporter_db_test;' -U postgres
-  - psql -c 'alter user postgres with password '2SweijecIf'; -U postgres
-  - python manage.py create_db
+  - psql -c 'create database travis_ci_test;' -U postgres
 
 script:
-  - python manage.py cov
+  - python -m pytest --cov
 
 after_success:
   - coveralls

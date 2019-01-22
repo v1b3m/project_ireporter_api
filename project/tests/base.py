@@ -13,6 +13,9 @@ class BaseTestCase(TestCase):
         return app
 
     def setUp(self):
+        db_name.create_blacklist_table()
+        db_name.create_incidents_table()
+        db_name.create_user_table()
         user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
                             othernames='', username='v1b3m', email='v122e@gmi.com',
                             password='1234', phone_number='2309908' )

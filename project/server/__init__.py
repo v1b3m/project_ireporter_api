@@ -15,7 +15,6 @@ app.config.from_object(app_settings)
 
 bcrypt = Bcrypt(app)
 
-from project.server.redflags import views
 from project.server.redflags.views import redflags_blueprint
 from project.server.auth.views import auth_blueprint
 
