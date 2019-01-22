@@ -1,13 +1,12 @@
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from project.server import bcrypt
+from project.server import bcrypt, app
 from db import DatabaseConnection
 
 auth_blueprint = Blueprint('auth', __name__)
 from manage import db_name
-
-
+import jwt
 class RegisterAPI(MethodView):
     """
     User Registration Resource
@@ -98,14 +97,12 @@ class LogoutAPI(MethodView):
         else:
             auth_token = ''
         if auth_token:
-            resp = User.decode_auth_token(auth_token)
+            resp = decode_auth_token(auth_token)
             if not isinstance(resp, str):
                 # mark the token as blacklisted
-                blasklist_token = BlacklistToken(token=auth_token)
+                
                 try:
-                    # insert the token
-                    db.session.add(blasklist_token)
-                    db.session.commit()
+                    db_name.blacklist_token(auth_token)
                     responseObject = {
                         'status': 'success',
                         'message': 'Successfully logged out.'
@@ -128,11 +125,30 @@ class LogoutAPI(MethodView):
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 403            
+            return make_response(jsonify(responseObject)), 403
+
+def decode_auth_token(auth_token):
+    """
+    Decodes the auth token
+    :param auth_token:
+    :return: integer|string
+    """
+    try:
+        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+        is_blacklisted = db_name.check_blacklist(auth_token)
+        if is_blacklisted:
+            return 'Token blacklisted. Please log in again.'
+        else:
+            return payload['sub']
+    except jwt.ExpiredSignatureError:
+        return 'Signature expired. Please log in again.'
+    except jwt.InvalidTokenError:
+        return 'Invalid token. Please log in again.'        
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
 login_view = LoginAPI.as_view('login_api')
+logout_view = LogoutAPI.as_view('logout_api')
 
 
 # add Rules for API Endpoints
@@ -144,5 +160,10 @@ auth_blueprint.add_url_rule(
 auth_blueprint.add_url_rule(
     '/auth/login',
     view_func=login_view,
+    methods=['POST']
+)
+auth_blueprint.add_url_rule(
+    '/auth/logout',
+    view_func=logout_view,
     methods=['POST']
 )
