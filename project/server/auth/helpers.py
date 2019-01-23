@@ -83,13 +83,47 @@ def token_required(func):
             return make_response(jsonify(responseObject)), 403
     return decorated_function
 
+def admin_required(func):
+    @wraps(func)
+    def decorate(*args, **kwargs):
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            auth_token = auth_header.split(" ")[1]
+        else:
+            auth_token = ''
+        if auth_token:
+            resp = decode_auth_token(auth_token)
+            if not isinstance(resp, str):
+                if db_name.is_admin(resp):
+                    return func(*args, **kwargs)
+                else:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': "You need to be an admin to access this route"
+                    }
+                    return make_response(jsonify(responseObject)), 401
+            else:
+                responseObject = {
+                    'status': 'fail',
+                    'message': resp
+                }
+                return make_response(jsonify(responseObject)), 401
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Provide a valid auth token.'
+            }
+            return make_response(jsonify(responseObject)), 403
+    return decorate
+
+
 def generate_auth_token(user_id):
         """
         Generates the auth token string
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=240),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }

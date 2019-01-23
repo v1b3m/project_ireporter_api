@@ -3,7 +3,7 @@ from db import DatabaseConnection
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from project.server.auth.helpers import token_required
+from project.server.auth.helpers import token_required, admin_required
 from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_comment_data,
                                              validate_edit_location_data,
@@ -231,7 +231,7 @@ class UpdateStatusAPI(MethodView):
     """
     Patch a redflag status
     """
-
+    @admin_required
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
