@@ -74,8 +74,8 @@ def add_redflag_record():
 
     # validate the input data
     if validate_add_redflag_data(data):
-        return jsonify({"error": 400,
-                        "message": validate_add_redflag_data(data)
+        return jsonify({"status": 400,
+                        "error": validate_add_redflag_data(data)
                         }), 400
 
     # return if request has no missing data
@@ -99,13 +99,13 @@ def delete_red_flag(flag_id):
         return jsonify({"status": 204,
                         "data": [{
                             "id": flag_id,
-                            "message": 'redflag record has been deleted'
+                            "message": "redflag record has been deleted"
                         }]
                         })
     # will run if the record doesn't exist
     return jsonify({
         "status": 204,
-        "message": "Oops, looks like the record doesn't exist."
+        "error": "Oops, looks like the record doesn't exist."
     })
 
 
@@ -129,8 +129,8 @@ def edit_red_flag_location(flag_id):
 
     # validate the data
     if validate_edit_location_data(data):
-        return jsonify({"error": 400,
-                        "message": validate_edit_location_data(data)
+        return jsonify({"status": 400,
+                        "error": validate_edit_location_data(data)
                         }), 400
 
     # check if record exists
@@ -142,49 +142,52 @@ def edit_red_flag_location(flag_id):
                 "id": flag_id,
                 "message": "Updated red-flag record's location"
             }]
-        })
+        }), 201
 
     # this code will run if the red-flag doesn't exist
     return jsonify({
-        "error": 400,
-        "message": "Sorry, the red-flag record doesn't exist."
-    })
+        "status": 400,
+        "error": "Sorry, the red-flag record doesn't exist."
+    }), 400
 
 
 @app.route('/api/v1/red-flags/<int:flag_id>/comment', methods=['PATCH'])
 def patch_red_flag_comment(flag_id):
     """ This will edit the comment of a red-flag given the id """
+    # check if request has no json data in its body
     if not request.is_json:
         return jsonify({
-            "error": 'Please provide a comment.',
+            "error": 'Please provide a comment',
             "status": 400
         })
-    response = request.get_json()
+    data = request.get_json()
 
     # check for location in missing data
-    if 'comment' not in response:
+    if 'comment' not in data:
         return jsonify({
             'error': "Comment data not found",
             "status": 400
         }), 400
 
     # validate the data
-    if validate_edit_comment_data(response):
-        return jsonify({"error": 400,
-                        "message": validate_edit_comment_data(response)
+    if validate_edit_comment_data(data):
+        return jsonify({"status": 400,
+                        "error": validate_edit_comment_data(data)
                         }), 400
 
-    # check if record exists and patch it
+    # check if record exists
     if flag_id in RED_FLAGS:
-        RED_FLAGS[flag_id].comment = response['comment']
-        return jsonify({"status": 204,
-                        "data": [{
-                            "id": flag_id,
-                            "message": "Updated red-flag record's comment"
-                        }]
-                        })
-    # this code will run if red-flag doesn't exist
+        RED_FLAGS[flag_id].comment = data['comment']
+        return jsonify({
+            "status": 201,
+            "data": [{
+                "id": flag_id,
+                "message": "Updated red-flag record's comment"
+            }]
+        }), 201
+
+    # this code will run if the red-flag doesn't exist
     return jsonify({
-        "error": 400,
-        "message": "Sorry, the record doesn't exist"
-    })
+        "status": 400,
+        "error": "Sorry, the record doesn't exist."
+    }), 400
