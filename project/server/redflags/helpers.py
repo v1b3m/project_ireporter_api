@@ -13,7 +13,9 @@ def validate_add_redflag_data(data):
             raise TypeError("comment must be a string")
         if not isinstance(data['created_by'], int):
             raise TypeError("created_by must be an integer")
-    except TypeError as error:
+        if data['type'] not in ['red-flag', 'intervention']:
+            raise ValueError("types can only be `red-flag` or `intervention`")
+    except (TypeError, ValueError) as error:
         return str(error)
     return None
 
