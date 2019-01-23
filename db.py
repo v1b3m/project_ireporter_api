@@ -9,16 +9,14 @@ class DatabaseConnection:
     def __init__(self):
         if os.getenv('APP_SETTINGS') == 'project.server.config.DevelopmentConfig':
             self.db_name = 'ireporter_db_test'
-            self.password = '2SweijecIf'
         elif os.getenv('APP_SETTINGS') == 'project.server.config.TravisConfig':
             self.db_name = 'travis_ci_test'
-            self.password = ''
         else:
             self.db_name = 'ireporter_db'
 
         try:
             self.connection = psycopg2.connect(
-                dbname=self.db_name, user='postgres', host='localhost', password=self.password, port=5432
+                dbname=self.db_name, user='postgres', host='localhost', password='2SweijecIf'
             )
             self.connection.autocommit = True
             self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
