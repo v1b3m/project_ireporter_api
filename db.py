@@ -61,16 +61,6 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def create_blacklist_table(self):
-        try:
-            query = """
-                    CREATE TABLE IF NOT EXISTS blacklist (
-                        token_id SERIAL PRIMARY KEY,
-                        token varchar(500) NOT NULL UNIQUE,
-                        blacklisted_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-                    )
-                    """
-
     def create_user(self, **kwargs):
         try:
             query = """
