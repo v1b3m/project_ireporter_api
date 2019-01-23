@@ -3,12 +3,17 @@ from db import DatabaseConnection
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from project.server.incidents.helpers import (validate_add_redflag_data,
+from project.server.redflags.helpers import (validate_add_redflag_data,
                                             validate_edit_comment_data,
                                             validate_edit_location_data)
 
+<<<<<<< HEAD:project/server/redflags/views.py
+redflags_blueprint = Blueprint('redflags', __name__)
+
+=======
 incident_blueprint = Blueprint('incident', __name__)
 from db import DatabaseConnection
+>>>>>>> develop:project/server/incidents/views.py
 db_name = DatabaseConnection()
 
 class GetRedflagsAPI(MethodView):
@@ -224,37 +229,37 @@ edit_redflag_comment_view = PatchRedflagCommentAPI.as_view('patch_redflag_commen
 welome_view = WelcomeAPI.as_view('welcome_api')
 
 # add rules for API endpoints
-incident_blueprint.add_url_rule(
+redflags_blueprint.add_url_rule(
     '/',
     view_func=welome_view,
     methods=['GET']
 )
-incident_blueprint.add_url_rule(
+redflags_blueprint.add_url_rule(
     '/api/v1/red-flags',
     view_func=get_redflags_view,
     methods=['GET']
 )
-incident_blueprint.add_url_rule(
+redflags_blueprint.add_url_rule(
     '/api/v1/red-flags/<int:flag_id>',
     view_func=get_specific_redflag_view,
     methods=['GET']
 )
-incident_blueprint.add_url_rule(
+redflags_blueprint.add_url_rule(
     '/api/v1/red-flags',
     view_func=add_redflags_view,
     methods=['POST']
 )
-incident_blueprint.add_url_rule(
+redflags_blueprint.add_url_rule(
     '/api/v1/red-flags/<int:flag_id>',
     view_func=delete_redflags_view,
     methods=['DELETE']
 )
-incident_blueprint.add_url_rule(
+redflags_blueprint.add_url_rule(
     '/api/v1/red-flags/<int:flag_id>/location',
     view_func=edit_redflag_location_view,
     methods=['PATCH']
 )
-incident_blueprint.add_url_rule(
+redflags_blueprint.add_url_rule(
     '/api/v1/red-flags/<int:flag_id>/comment',
     view_func=edit_redflag_comment_view,
     methods=['PATCH']
