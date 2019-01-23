@@ -6,7 +6,7 @@ service:
   - postgresql
 
 before_install:
-  - export APP_SETTINGS="api.server.config.TestingConfig"
+  - export APP_SETTINGS="project.server.config.TestingConfig"
   - export SECRET_KEY='skdfjkljelrkjljer'
 
 install:
