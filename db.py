@@ -20,6 +20,7 @@ class DatabaseConnection:
             )
             self.connection.autocommit = True
             self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            pprint("Connected to database")
 
         except:
             pprint('Failed to connect to the database.')
