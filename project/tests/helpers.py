@@ -37,19 +37,17 @@ def logout_user(self, login_response):
                 )
             )
 
-def get_flags(self, login_response):
-    return self.client.get(
-            '/api/v1/red-flags',
-            headers=dict(
-                    Authorization='Bearer '+json.loads(
-                        login_response.data
-                    )['data'][0]['token']
-                )
-            )
-
 def add_redflag(self, headers, input_data):
     return self.client.post(
             '/api/v1/red-flags',
+            content_type='application/json',
+            data=json.dumps(input_data),
+            headers=headers
+            )
+            
+def add_intervention(self, headers, input_data):
+    return self.client.post(
+            '/api/v1/interventions',
             content_type='application/json',
             data=json.dumps(input_data),
             headers=headers

@@ -18,7 +18,7 @@ class GetInterventionsAPI(MethodView):
     """
     Intervention resource
     """
-
+    @token_required
     def get(self):
         """
         get red-flags
@@ -40,7 +40,7 @@ class GetSpecificInterventionAPI(MethodView):
     """
     Get a specific intervention
     """
-
+    @token_required
     def get(self, intervention_id):
         intervention = db_name.get_incident(intervention_id)
         if intervention:
@@ -60,7 +60,7 @@ class CreateInterventionsAPI(MethodView):
     """
     Create interventions here
     """
-
+    @token_required
     def post(self):
         """
         add an intervention
@@ -103,7 +103,7 @@ class UpdateStatusAPI(MethodView):
     """
     Patch a redflag status
     """
-
+    @token_required
     def patch(self, intervention_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -150,7 +150,7 @@ class DeleteInterventionsAPI(MethodView):
     """
     Delete a redflag
     """
-
+    @token_required
     def delete(self, intervention_id):
         """ This will delete a red-flag specified by id """
         # check if the record exists and delete the record

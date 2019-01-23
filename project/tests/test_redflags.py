@@ -4,7 +4,7 @@ import json
 from project.server import app
 from project.tests.base import BaseTestCase
 from project.tests.helpers import (login_user, register_user,
-                get_flags, add_redflag)
+                                add_redflag)
 
 
 class TestRedflags(BaseTestCase):
@@ -16,7 +16,13 @@ class TestRedflags(BaseTestCase):
         register_user(self)
         response = login_user(self)
 
-        response = get_flags(self, response)
+        # get token
+        headers=dict(Authorization='Bearer '+
+                    json.loads(response.data
+                    )['data'][0]['token']
+                )
+
+        response = self.client.get('/api/v1/red-flags', headers=headers)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data['status'] == 404)
@@ -35,7 +41,7 @@ class TestRedflags(BaseTestCase):
 
         input_data = self.input_data
         add_redflag(self, headers, input_data)
-        response = get_flags(self, response)
+        response = self.client.get('/api/v1/red-flags', headers=headers)
         data = json.loads(response.data)
         self.assertEqual(data['status'], 200)
         self.assertIsNotNone(data['data'][0])
@@ -76,7 +82,7 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get the red-flag's id
-        response = get_flags(self, login_response)
+        response = self.client.get('/api/v1/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
@@ -249,7 +255,7 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record id
-        response = get_flags(self, login_response)
+        response = self.client.get('/api/v1/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
@@ -318,7 +324,7 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record flag_id
-        response = get_flags(self,login_response)
+        response = self.client.get('/api/v1/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
@@ -350,7 +356,7 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record flag_id
-        response = get_flags(self, login_response)
+        response = self.client.get('/api/v1/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
@@ -433,7 +439,7 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record id
-        response = get_flags(self, login_response)
+        response = self.client.get('/api/v1/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
@@ -463,7 +469,7 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record flag_id
-        response = get_flags(self, login_response)
+        response = self.client.get('/api/v1/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
