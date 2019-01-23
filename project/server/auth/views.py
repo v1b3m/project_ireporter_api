@@ -2,16 +2,16 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server import bcrypt, app
+from project.server.auth.helpers import token_required
 from db import DatabaseConnection
 
 auth_blueprint = Blueprint('auth', __name__)
 db_name = DatabaseConnection()
-import jwt
+
 class RegisterAPI(MethodView):
     """
     User Registration Resource
     """
-
     def post(self):
         # get the post data
         post_data = request.get_json()
@@ -51,7 +51,6 @@ class LoginAPI(MethodView):
     """
     User Login Resource
     """
-
     def post(self):
         # get the post data
         post_data = request.get_json()
@@ -88,62 +87,23 @@ class LogoutAPI(MethodView):
     """
     Logout Resource
     """
-
+    @token_required  
     def post(self):
-        # get auth token
-        auth_header = request.headers.get('Authorization')
-        if auth_header:
-            auth_token = auth_header.split(" ")[1]
-        else:
-            auth_token = ''
-        if auth_token:
-            resp = decode_auth_token(auth_token)
-            if not isinstance(resp, str):
-                # mark the token as blacklisted
-                
-                try:
-                    db_name.blacklist_token(auth_token)
-                    responseObject = {
-                        'status': 'success',
-                        'message': 'Successfully logged out.'
-                    }
-                    return make_response(jsonify(responseObject)), 200
-                except Exception as e:
-                    responseObject = {
-                        'status': 'fail',
-                        'message': e
-                    }
-                    return make_response(jsonify(responseObject)), 200
-            else:
-                responseObject = {
-                    'status': 'fail',
-                    'message': resp
-                }
-                return make_response(jsonify(responseObject)), 401
-        else:
+        # mark the token as blacklisted
+        auth_token = request.headers.get('Authorization').split(" ")[1]
+        try:
+            db_name.blacklist_token(auth_token)
+            responseObject = {
+                'status': 'success',
+                'message': 'Successfully logged out.'
+            }
+            return make_response(jsonify(responseObject)), 200
+        except Exception as e:
             responseObject = {
                 'status': 'fail',
-                'message': 'Provide a valid auth token.'
+                'message': e
             }
-            return make_response(jsonify(responseObject)), 403
-
-def decode_auth_token(auth_token):
-    """
-    Decodes the auth token
-    :param auth_token:
-    :return: integer|string
-    """
-    try:
-        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-        is_blacklisted = db_name.check_blacklist(auth_token)
-        if is_blacklisted:
-            return 'Token blacklisted. Please log in again.'
-        else:
-            return payload['sub']
-    except jwt.ExpiredSignatureError:
-        return 'Signature expired. Please log in again.'
-    except jwt.InvalidTokenError:
-        return 'Invalid token. Please log in again.'        
+            return make_response(jsonify(responseObject)), 200
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')

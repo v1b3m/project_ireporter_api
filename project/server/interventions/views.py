@@ -23,19 +23,17 @@ class GetInterventionsAPI(MethodView):
         get red-flags
         """
         interventions = db_name.get_interventions()
-
         if not interventions:
-            return jsonify({
-                'error': 'There are no interventions',
-                'status': 404
-            })
+                return jsonify({
+                    'error': 'There are no interventions',
+                    'status': 404
+                })
 
         responseObject = ({
             "status": 200,
             "data": [dict(intervention) for intervention in interventions]
         })
-        return jsonify(responseObject), 200
-
+        return jsonify(responseObject), 20
 
 class GetSpecificInterventionAPI(MethodView):
     """
