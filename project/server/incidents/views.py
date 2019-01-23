@@ -2,9 +2,9 @@
     be defined in this script """
 
 from flask import jsonify, request
-from api import app
-from api.models import Incident
-from api.helpers import (validate_add_redflag_data,
+from project.server import app
+from project.server.models import Incident
+from project.server.incidents.helpers import (validate_add_redflag_data,
                          validate_edit_comment_data,
                          validate_edit_location_data)
 
