@@ -4,6 +4,8 @@ from flask.views import MethodView
 from project.server import bcrypt, app
 from db import DatabaseConnection
 
+from project.server.auth.helpers import validate_registration_input
+
 auth_blueprint = Blueprint('auth', __name__)
 db_name = DatabaseConnection()
 import jwt
@@ -13,8 +15,33 @@ class RegisterAPI(MethodView):
     """
 
     def post(self):
+
+        # check for empty request
+        if not request.is_json:
+            return jsonify({
+                'error': 'Request Cannot Be Empty',
+                'status': 400
+            }), 400
+
         # get the post data
         post_data = request.get_json()
+
+        # check for missing data in request
+        if ('firstname' not in post_data or 'lastname' not in post_data or
+            'username' not in post_data or 'othernames' not in post_data or
+            'email' not in post_data or 'password' not in post_data or
+            'phone_number' not in post_data or 'othernames' not in post_data):
+            return jsonify({
+                'status': 400,
+                'error': 'Some Information is missing from the request'
+            }), 400
+
+        # validate the input data
+        if validate_registration_input(post_data):
+            return jsonify({"error":400,
+                            "message": validate_registration_input(post_data)
+                            }), 400
+
         # check if user already exists
         user = db_name.check_user(email=post_data.get('email'))
         if not user:
