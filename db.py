@@ -3,7 +3,6 @@ import psycopg2.extras
 from pprint import pprint
 import os
 from project.server import bcrypt, app
-import datetime, jwt
 
 class DatabaseConnection:
     def __init__(self):
@@ -155,24 +154,6 @@ class DatabaseConnection:
             return None
         except Exception as e:
             pprint(e)
-
-    def generate_auth_token(self, user_id):
-        """
-        Generates the auth token string
-        """
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
-            }
-            return jwt.encode(
-                payload,
-                app.config.get('SECRET_KEY'),
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
 
     def get_incidents(self):
         try:

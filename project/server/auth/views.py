@@ -2,7 +2,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server import bcrypt, app
-from project.server.auth.helpers import token_required
+from project.server.auth.helpers import token_required, generate_auth_token
 from db import DatabaseConnection
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -25,7 +25,7 @@ class RegisterAPI(MethodView):
                     password=post_data.get('password'), phone_number=post_data.get('phone_number'))
                 user = db_name.check_user(email=post_data.get('email'))
                 # generate auth token
-                auth_token = db_name.generate_auth_token(user_id)
+                auth_token = generate_auth_token(user_id)
                 responseObject = {
                     'status': '200',
                     'data': [{
@@ -60,7 +60,7 @@ class LoginAPI(MethodView):
             if user and bcrypt.check_password_hash(
                 user['password'], post_data.get('password')
             ):
-                auth_token = db_name.generate_auth_token(user['userid'])
+                auth_token = generate_auth_token(user['userid'])
                 if auth_token:
                     responseObject = {
                         'status': 200,

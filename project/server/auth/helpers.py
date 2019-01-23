@@ -1,4 +1,4 @@
-import re, jwt
+import re, jwt, datetime
 from db import DatabaseConnection
 from project.server import app
 from functools import wraps
@@ -82,3 +82,21 @@ def token_required(func):
             }
             return make_response(jsonify(responseObject)), 403
     return decorated_function
+
+def generate_auth_token(user_id):
+        """
+        Generates the auth token string
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
