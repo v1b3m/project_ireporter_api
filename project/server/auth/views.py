@@ -5,8 +5,10 @@ from project.server import bcrypt, app
 from db import DatabaseConnection
 
 auth_blueprint = Blueprint('auth', __name__)
-from manage import db_name
+from db import DatabaseConnection
 import jwt
+
+db_name = DatabaseConnection()
 class RegisterAPI(MethodView):
     """
     User Registration Resource
