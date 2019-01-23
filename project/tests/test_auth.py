@@ -122,7 +122,7 @@ class TestAuthBlueprint(BaseTestCase):
             self.assertEqual(response.status_code, 200)
 
             # invalid token logout
-            time.sleep(6)
+            time.sleep(61)
             response = self.client.post(
                 '/auth/logout',
                 headers=dict(
