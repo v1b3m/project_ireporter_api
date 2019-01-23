@@ -7,14 +7,18 @@ import datetime, jwt
 
 class DatabaseConnection:
     def __init__(self):
-        if os.getenv('DB_NAME') == 'ireporter_db_test':
+        if os.getenv('APP_SETTINGS') == 'project.server.config.DevelopmentConfig':
             self.db_name = 'ireporter_db_test'
+            self.password = '2SweijecIf'
+        elif os.getenv('APP_SETTINGS') == 'project.server.config.TravisConfig':
+            self.db_name = 'travis_ci_test'
+            self.password = ''
         else:
             self.db_name = 'ireporter_db'
 
         try:
             self.connection = psycopg2.connect(
-                dbname='ireporter_db_test', user='postgres', host='localhost', password='2SweijecIf', port=5432
+                dbname=self.db_name, user='postgres', host='localhost', password=self.password, port=5432
             )
             self.connection.autocommit = True
             self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -61,6 +65,7 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+<<<<<<< HEAD
     def create_blacklist_table(self):
         try:
             query = """
@@ -87,6 +92,8 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+=======
+>>>>>>> develop
     def create_user(self, **kwargs):
         try:
             query = """
@@ -158,7 +165,7 @@ class DatabaseConnection:
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=10),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
@@ -171,9 +178,9 @@ class DatabaseConnection:
             return e
 
 
-    def get_incidents(self):
+    def get_interventions(self):
         try:
-            query = "SELECT * FROM incidents"
+            query = "SELECT * FROM incidents WHERE type = 'intervention'"
             self.cursor.execute(query)
             incidents = self.cursor.fetchall()
             if incidents:
