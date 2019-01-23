@@ -21,3 +21,14 @@ def validate_registration_input(data):
             raise ValueError("Phone Number is invalid")
     except (TypeError, ValueError) as e:
         return str(e)
+
+def validate_login_input(data):
+    try:
+        if not re.match("[^@]+@[^@]+\.[^@]+", data.get('email')):
+            raise ValueError("This email is not valid.")
+        if not isinstance(data.get('password'), str):
+            if not isinstance(data.get('password'), int):
+                raise TypeError("Password should be a string or an integer")
+    except (TypeError, ValueError) as e:
+        return str(e)
+        
