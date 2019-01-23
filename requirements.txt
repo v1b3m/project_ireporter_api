@@ -14,8 +14,12 @@ Flask==1.0.2
 Flask-Bcrypt==0.7.1
 Flask-JWT==0.3.2
 <<<<<<< HEAD
+Flask-JWT-Extended==3.16.0
+=======
+<<<<<<< HEAD
 =======
 Flask-JWT-Extended==3.16.0
+>>>>>>> develop
 >>>>>>> develop
 Flask-Testing==0.7.1
 gunicorn==19.9.0

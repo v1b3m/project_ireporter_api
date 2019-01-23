@@ -7,8 +7,8 @@ def register_user(self):
         data=json.dumps(dict(
             firstname="Benjamin",
             lastname="Mayanja",
-            othernames=None,
-            phone_number="0703-755-919",
+            othernames="",
+            phone_number="070-755-9192",
             username='v1b3m',
             email="test@test.com",
             password='123456'
