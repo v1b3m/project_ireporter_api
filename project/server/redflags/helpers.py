@@ -1,5 +1,6 @@
 """ This script will contain all helper functions """
 
+
 def validate_add_redflag_data(data):
     """ This function will be used to
         validate input_data """

@@ -4,12 +4,13 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server.redflags.helpers import (validate_add_redflag_data,
-                                            validate_edit_comment_data,
-                                            validate_edit_location_data)
+                                             validate_edit_comment_data,
+                                             validate_edit_location_data)
 
 redflags_blueprint = Blueprint('redflags', __name__)
 
 db_name = DatabaseConnection()
+
 
 class GetRedflagsAPI(MethodView):
     """
@@ -24,9 +25,9 @@ class GetRedflagsAPI(MethodView):
 
         if not red_flags:
             return jsonify({
-            'error': 'There are no redflags',
-            'status': 404
-        })
+                'error': 'There are no redflags',
+                'status': 404
+            })
 
         responseObject = ({
             "status": 200,
@@ -34,10 +35,12 @@ class GetRedflagsAPI(MethodView):
         })
         return jsonify(responseObject), 200
 
+
 class GetSpecificRedflagAPI(MethodView):
     """
     Get a specific red-flag
     """
+
     def get(self, flag_id):
         redflag = db_name.get_incident(flag_id)
         if redflag:
@@ -45,14 +48,14 @@ class GetSpecificRedflagAPI(MethodView):
                 "status": 200,
                 "data": [dict(redflag)]
             })
-        
+
         # this code will run if the red-flag doesn't exist
         return jsonify({
             'error': "The redflag doesn't exist",
             'status': 404
         })
 
-          
+
 class CreateRedflagsAPI(MethodView):
     """
     Create redflags here
@@ -87,8 +90,8 @@ class CreateRedflagsAPI(MethodView):
 
         # return if request has no missing data
         incident_id = db_name.create_incident(created_by=data['created_by'], type=data['type'],
-                            location=data['location'], comment=data['comment'],
-                            videos="a.mp4", images="a.jpg")
+                                              location=data['location'], comment=data['comment'],
+                                              videos="a.mp4", images="a.jpg")
         return jsonify({"status": 201,
                         "data": [{
                             "id": incident_id,
@@ -96,10 +99,12 @@ class CreateRedflagsAPI(MethodView):
                         }]
                         }), 201
 
+
 class DeleteRedflagsAPI(MethodView):
     """
     Delete a redflag
     """
+
     def delete(self, flag_id):
         """ This will delete a red-flag specified by id """
         # check if the record exists and delete the record
@@ -118,10 +123,12 @@ class DeleteRedflagsAPI(MethodView):
             "message": "Oops, looks like the record doesn't exist."
         })
 
+
 class PatchRedflagLocationAPI(MethodView):
     """
     Patch a redflag location
     """
+
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -160,12 +167,14 @@ class PatchRedflagLocationAPI(MethodView):
         return jsonify({
             "error": 400,
             "message": "Sorry, the red-flag record doesn't exist."
-        })        
+        })
+
 
 class PatchRedflagCommentAPI(MethodView):
     """
     Patch a redflag location
     """
+
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -206,21 +215,27 @@ class PatchRedflagCommentAPI(MethodView):
             "message": "Sorry, the red-flag record doesn't exist."
         })
 
+
 class WelcomeAPI(MethodView):
     """
     Welcome API
     """
+
     def get(self):
         """ This route will return the message "Hello, World" """
         return "Hello, World!"
 
+
 # define the API resources
 get_redflags_view = GetRedflagsAPI.as_view('get_redflags_api')
-get_specific_redflag_view = GetSpecificRedflagAPI.as_view('get_specific_redflag_api')
+get_specific_redflag_view = GetSpecificRedflagAPI.as_view(
+    'get_specific_redflag_api')
 add_redflags_view = CreateRedflagsAPI.as_view('create_redflags_api')
 delete_redflags_view = DeleteRedflagsAPI.as_view('delete_redflags_api')
-edit_redflag_location_view = PatchRedflagLocationAPI.as_view('patch_redflag_location_api')
-edit_redflag_comment_view = PatchRedflagCommentAPI.as_view('patch_redflag_comment_api')
+edit_redflag_location_view = PatchRedflagLocationAPI.as_view(
+    'patch_redflag_location_api')
+edit_redflag_comment_view = PatchRedflagCommentAPI.as_view(
+    'patch_redflag_comment_api')
 welome_view = WelcomeAPI.as_view('welcome_api')
 
 # add rules for API endpoints
@@ -259,4 +274,3 @@ redflags_blueprint.add_url_rule(
     view_func=edit_redflag_comment_view,
     methods=['PATCH']
 )
-

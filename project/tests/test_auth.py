@@ -8,6 +8,7 @@ from project.tests.helpers import register_user, login_user
 from db import DatabaseConnection
 db_name = DatabaseConnection()
 
+
 class TestAuthBlueprint(BaseTestCase):
     def test_registration(self):
         response = register_user(self)

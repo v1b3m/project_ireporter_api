@@ -14,7 +14,7 @@ class TestRedflags(BaseTestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data['status'] == 404)
-    
+
     def test_get_all_interventions_when_there_is_data(self):
         """ This will test for getting all stored interventions """
         input_data = self.intervention_data
@@ -44,12 +44,13 @@ class TestRedflags(BaseTestCase):
         intervention_id = data['data'][0]['incident_id']
 
         # get the intervention with the returned id
-        response = self.client.get('/api/v1/interventions/{}'.format(intervention_id))
+        response = self.client.get(
+            '/api/v1/interventions/{}'.format(intervention_id))
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data["data"])
         self.assertFalse(data['data'][0]['type'] == 'red-flag')
-    
+
     def test_add_intervention_record(self):
         """ Test for adding a red-flag """
         input_data = self.intervention_data
@@ -126,7 +127,7 @@ class TestRedflags(BaseTestCase):
         data = json.loads(response.data)
         self.assertIn('created_by must be', data['message'])
         self.assertTrue(len(data) == 2)
-    
+
     def test_delete_intervention_when_record_is_not_there(self):
         """ Test for deleting a non-existent intervention """
         response = self.client.delete('/api/v1/interventions/2')

@@ -3,11 +3,13 @@ from db import DatabaseConnection
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from project.server.interventions.helpers import (validate_add_intervention_data)
+from project.server.interventions.helpers import (
+    validate_add_intervention_data)
 
 interventions_blueprint = Blueprint('interventions', __name__)
 
 db_name = DatabaseConnection()
+
 
 class GetInterventionsAPI(MethodView):
     """
@@ -22,9 +24,9 @@ class GetInterventionsAPI(MethodView):
 
         if not interventions:
             return jsonify({
-            'error': 'There are no interventions',
-            'status': 404
-        })
+                'error': 'There are no interventions',
+                'status': 404
+            })
 
         responseObject = ({
             "status": 200,
@@ -32,10 +34,12 @@ class GetInterventionsAPI(MethodView):
         })
         return jsonify(responseObject), 200
 
+
 class GetSpecificInterventionAPI(MethodView):
     """
     Get a specific intervention
     """
+
     def get(self, intervention_id):
         intervention = db_name.get_incident(intervention_id)
         if intervention:
@@ -43,12 +47,13 @@ class GetSpecificInterventionAPI(MethodView):
                 "status": 200,
                 "data": [dict(intervention)]
             })
-        
+
         # this code will run if the red-flag doesn't exist
         return jsonify({
             'error': "The intervention doesn't exist",
             'status': 404
         })
+
 
 class CreateInterventionsAPI(MethodView):
     """
@@ -84,8 +89,8 @@ class CreateInterventionsAPI(MethodView):
 
         # return if request has no missing data
         incident_id = db_name.create_incident(created_by=data['created_by'], type=data['type'],
-                            location=data['location'], comment=data['comment'],
-                            videos="a.mp4", images="a.jpg")
+                                              location=data['location'], comment=data['comment'],
+                                              videos="a.mp4", images="a.jpg")
         return jsonify({"status": 201,
                         "data": [{
                             "id": incident_id,
@@ -93,10 +98,12 @@ class CreateInterventionsAPI(MethodView):
                         }]
                         }), 201
 
+
 class DeleteInterventionsAPI(MethodView):
     """
     Delete a redflag
     """
+
     def delete(self, intervention_id):
         """ This will delete a red-flag specified by id """
         # check if the record exists and delete the record
@@ -118,9 +125,12 @@ class DeleteInterventionsAPI(MethodView):
 
 # define the API resources
 get_interventions_view = GetInterventionsAPI.as_view('get_interventions_api')
-get_specific_intervention_view = GetSpecificInterventionAPI.as_view('get_specific_intervention_api')
-add_interventions_view = CreateInterventionsAPI.as_view('create_interventions_api')
-delete_interventions_view = DeleteInterventionsAPI.as_view('delete_interventions_api')
+get_specific_intervention_view = GetSpecificInterventionAPI.as_view(
+    'get_specific_intervention_api')
+add_interventions_view = CreateInterventionsAPI.as_view(
+    'create_interventions_api')
+delete_interventions_view = DeleteInterventionsAPI.as_view(
+    'delete_interventions_api')
 
 # add rules for API endpoints
 interventions_blueprint.add_url_rule(

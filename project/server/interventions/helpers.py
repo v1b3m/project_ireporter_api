@@ -1,5 +1,6 @@
 """ This script will contain all helper functions for interventions"""
 
+
 def validate_add_intervention_data(data):
     """ This function will be used to
         validate input_data """
