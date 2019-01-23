@@ -29,3 +29,5 @@ ireporter.log*
 
 .vscode
 htmlcov
+
+tmp
