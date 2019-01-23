@@ -7,13 +7,8 @@ from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_comment_data,
                                              validate_edit_location_data)
 
-<<<<<<< HEAD:project/server/redflags/views.py
 redflags_blueprint = Blueprint('redflags', __name__)
 
-=======
-incident_blueprint = Blueprint('incident', __name__)
-from db import DatabaseConnection
->>>>>>> develop:project/server/incidents/views.py
 db_name = DatabaseConnection()
 
 

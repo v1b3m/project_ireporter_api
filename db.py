@@ -65,7 +65,6 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-<<<<<<< HEAD
     def create_blacklist_table(self):
         try:
             query = """
@@ -92,8 +91,6 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-=======
->>>>>>> develop
     def create_user(self, **kwargs):
         try:
             query = """

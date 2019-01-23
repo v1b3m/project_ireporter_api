@@ -11,19 +11,9 @@ from flask_jwt_extended import (
     create_access_token, create_refresh_token, jwt_required)
 
 auth_blueprint = Blueprint('auth', __name__)
-<<<<<<< HEAD
 db_name = DatabaseConnection()
-<<<<<<< HEAD
 
 
-=======
-=======
-from db import DatabaseConnection
->>>>>>> develop
-import jwt
-
-db_name = DatabaseConnection()
->>>>>>> develop
 class RegisterAPI(MethodView):
     """
     User Registration Resource
