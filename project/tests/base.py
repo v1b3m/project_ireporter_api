@@ -13,7 +13,6 @@ class BaseTestCase(TestCase):
         return app
 
     def setUp(self):
-        db_name.create_blacklist_table()
         db_name.create_incidents_table()
         db_name.create_user_table()
         user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
@@ -31,4 +30,3 @@ class BaseTestCase(TestCase):
     def tearDown(self):
         db_name.delete_all_incidents()
         db_name.delete_all_users()
-        db_name.delete_all_tokens()

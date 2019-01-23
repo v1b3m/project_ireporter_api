@@ -78,18 +78,6 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def blacklist_token(self, token):
-        """
-        This module will blacklist a token
-        """
-        try:
-            query = """
-                    INSERT INTO blacklist (token) VALUES ('%s')
-                    """ % token
-            self.cursor.execute(query)
-            return True
-        except Exception as e:
-            pprint(e)
 
     def create_user(self, **kwargs):
         try:
@@ -156,24 +144,6 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def generate_auth_token(self, user_id):
-        """
-        Generates the auth token string
-        """
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
-            }
-            return jwt.encode(
-                payload,
-                app.config.get('SECRET_KEY'),
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
-
 
     def get_interventions(self):
         try:
@@ -209,20 +179,6 @@ class DatabaseConnection:
             pprint(e)
 
 
-    def check_blacklist(self, auth_token):
-        """
-        Checks the blacklist table for a token
-        """
-        try:
-            query = "SELECT * FROM blacklist WHERE token = '%s'" % auth_token
-            self.cursor.execute(query)
-            token = self.cursor.fetchone()
-            if token:
-                return token
-            return None
-        except Exception as e:
-            pprint(e)
-
     def edit_incident_comment(self, id, comment):
         try:
             query = """
@@ -254,13 +210,6 @@ class DatabaseConnection:
             self.cursor.execute(query)
         except Exception as e:
             pprint(e)
-    
-    def delete_all_tokens(self):
-        try:
-            query = 'DELETE FROM blacklist'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
 
     def drop_incident_table(self):
         try:
@@ -278,18 +227,3 @@ class DatabaseConnection:
 
 if __name__ == '__main__':
     db_name = DatabaseConnection()
-    # db_name.create_blacklist_table()
-    # db_name.delete_all_incidents()
-    
-    # print('Create a user')
-    # user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
-    #                         othernames='', username='v1b3m', email='v122e@gmi.com',
-    #                         password='1234', phone_number='2309908' )
-    # id = db_name.create_incident(created_by=user_id, type='kjshkj',
-    #                         location='skljlk', comment='sjkjljks',
-    #                         videos="a.mp4", images="a.jpg")
-    # db_name.get_incident(id)
-    user = db_name.check_user('v122e@gmi.com')
-    print(user)
-    # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgxNTU0NzUsImlhdCI6MTU0ODE1NTQxNSwic3ViIjo1Mjl9.tLhW_ifyTGRnMMbiJ3F6NOChHGt4U1ajWu_AOZuleMo")
-    
