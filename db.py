@@ -285,6 +285,7 @@ class DatabaseConnection:
             self.cursor.execute(query)
         except Exception as e:
             pprint(e)
+
     def update_incident_status(self, incident_id, status):
         try:
             query = """
@@ -313,5 +314,5 @@ if __name__ == '__main__':
     # print(user)
     # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgyNDk5MzIsImlhdCI6MTU0ODI0OTg3Miwic3ViIjo0MTUzfQ.aKmkd-6I97Qxg9S78DInYHtnuBE1APXWiV-uJdMrdZM")
     # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgxNTU0NzUsImlhdCI6MTU0ODE1NTQxNSwic3ViIjo1Mjl9.tLhW_ifyTGRnMMbiJ3F6NOChHGt4U1ajWu_AOZuleMo")
-    db_name.update_incident_status(1473, "Approved")
+    # db_name.update_incident_status(1473, "Approved")
     

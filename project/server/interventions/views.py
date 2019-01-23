@@ -3,8 +3,10 @@ from db import DatabaseConnection
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from project.server.interventions.helpers import (
-    validate_add_intervention_data)
+from project.server.redflags.helpers import (validate_add_redflag_data,
+                                             validate_edit_comment_data,
+                                             validate_edit_location_data,
+                                             validate_edit_status_data)
 
 interventions_blueprint = Blueprint('interventions', __name__)
 
@@ -82,9 +84,9 @@ class CreateInterventionsAPI(MethodView):
             }), 400
 
         # validate the input data
-        if validate_add_intervention_data(data):
+        if validate_add_redflag_data(data):
             return jsonify({"error": 400,
-                            "message": validate_add_intervention_data(data)
+                            "message": validate_add_redflag_data(data)
                             }), 400
 
         # return if request has no missing data
@@ -97,6 +99,52 @@ class CreateInterventionsAPI(MethodView):
                             "message": "Created intervention record"
                         }]
                         }), 201
+
+class UpdateStatusAPI(MethodView):
+    """
+    Patch a redflag status
+    """
+
+    def patch(self, intervention_id):
+        # check if request has no json data in its body
+        if not request.is_json:
+            return jsonify({
+                "error": 'Please provide a status',
+                "status": 400
+            })
+        data = request.get_json()
+
+        # check for location in missing data
+        if 'status' not in data:
+            return jsonify({
+                'error': "Status data not found",
+                "status": 400
+            }), 400
+
+        # validate the data
+        if validate_edit_status_data(data):
+            return jsonify({"error": 400,
+                            "message": validate_edit_status_data(data)
+                            }), 400
+
+        # check if record exists
+        red_flag = db_name.get_incident(intervention_id)
+        if red_flag:
+            db_name.update_incident_status(intervention_id, data['status'])
+            return jsonify({
+                "status": 201,
+                "data": [{
+                    "id": intervention_id,
+                    "message": "​Updated intervention record status"
+                }]
+            })
+        
+        # this code will run if the red-flag doesn't exist
+        return jsonify({
+            "error": 400,
+            "message": "Intervention record doesn't exist."
+        })
+
 
 
 class DeleteInterventionsAPI(MethodView):
@@ -131,6 +179,7 @@ add_interventions_view = CreateInterventionsAPI.as_view(
     'create_interventions_api')
 delete_interventions_view = DeleteInterventionsAPI.as_view(
     'delete_interventions_api')
+update_intervention_status = UpdateStatusAPI.as_view('update_status_api')
 
 # add rules for API endpoints
 interventions_blueprint.add_url_rule(
@@ -152,4 +201,9 @@ interventions_blueprint.add_url_rule(
     '/api/v1/interventions/<int:intervention_id>',
     view_func=delete_interventions_view,
     methods=['DELETE']
+)
+interventions_blueprint.add_url_rule(
+    '/api/v1/interventions/<int:intervention_id>/status',
+    view_func=update_intervention_status,
+    methods=['PATCH']
 )
