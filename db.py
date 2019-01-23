@@ -173,7 +173,17 @@ class DatabaseConnection:
             )
         except Exception as e:
             return e
-
+            
+    def get_incidents(self):
+        try:
+            query = "SELECT * FROM incidents"
+            self.cursor.execute(query)
+            incidents = self.cursor.fetchall()
+            if incidents:
+                return incidents
+            return None
+        except Exception as e:
+            pprint(e)
 
     def get_interventions(self):
         try:
