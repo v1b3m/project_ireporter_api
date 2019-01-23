@@ -3,6 +3,7 @@ from db import DatabaseConnection
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
+from project.server.auth.helpers import token_required
 from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_comment_data,
                                              validate_edit_location_data,
@@ -17,7 +18,7 @@ class GetRedflagsAPI(MethodView):
     """
     Redflag and Intervention resource
     """
-
+    @token_required
     def get(self):
         """
         get red-flags
@@ -41,7 +42,7 @@ class GetSpecificRedflagAPI(MethodView):
     """
     Get a specific red-flag
     """
-
+    @token_required
     def get(self, flag_id):
         redflag = db_name.get_incident(flag_id)
         if redflag:
@@ -61,7 +62,7 @@ class CreateRedflagsAPI(MethodView):
     """
     Create redflags here
     """
-
+    @token_required
     def post(self):
         """
         add a redflag
@@ -105,7 +106,7 @@ class DeleteRedflagsAPI(MethodView):
     """
     Delete a redflag
     """
-
+    @token_required
     def delete(self, flag_id):
         """ This will delete a red-flag specified by id """
         # check if the record exists and delete the record
@@ -129,7 +130,7 @@ class PatchRedflagLocationAPI(MethodView):
     """
     Patch a redflag location
     """
-
+    @token_required
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -175,7 +176,7 @@ class PatchRedflagCommentAPI(MethodView):
     """
     Patch a redflag location
     """
-
+    @token_required
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:

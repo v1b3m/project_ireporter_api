@@ -3,6 +3,7 @@ from db import DatabaseConnection
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
+from project.server.auth.helpers import token_required
 from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_comment_data,
                                              validate_edit_location_data,

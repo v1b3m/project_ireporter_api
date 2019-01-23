@@ -3,7 +3,7 @@ import json
 import time
 
 from project.tests.base import BaseTestCase
-from project.tests.helpers import register_user, login_user
+from project.tests.helpers import register_user, login_user, logout_user
 
 from db import DatabaseConnection
 db_name = DatabaseConnection()
@@ -47,7 +47,7 @@ class TestAuthBlueprint(BaseTestCase):
             self.assertEqual(response.status_code, 201)
 
             # registered user login
-            response = login_user(self, 'test@test.com', '123456')
+            response = login_user(self)
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 200)
             self.assertTrue(data['data'][0]['user'])
@@ -58,7 +58,7 @@ class TestAuthBlueprint(BaseTestCase):
     def test_non_registered_user_login(self):
         """ Test for login of non-registered user """
         with self.client:
-            response = login_user(self, 'test@test.com', '123456')
+            response = login_user(self)
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(data['message'] == "User does not exist.")
@@ -78,7 +78,7 @@ class TestAuthBlueprint(BaseTestCase):
             self.assertEqual(response.status_code, 201)
 
             # user login
-            response = login_user(self, 'test@test.com', '123456')
+            response = login_user(self)
             data = json.loads(response.data)
             self.assertTrue(data['status'] == 200)
             self.assertTrue(data['data'][0]['user'])
@@ -87,14 +87,7 @@ class TestAuthBlueprint(BaseTestCase):
             self.assertEqual(response.status_code, 200)
 
             # valid token logout
-            response = self.client.post(
-                '/auth/logout',
-                headers=dict(
-                    Authorization='Bearer '+json.loads(
-                        response.data
-                    )['data'][0]['token']
-                )
-            )
+            response = logout_user(self, response)
             data = json.loads(response.data)
             self.assertTrue(data['status'] == 'success')
             self.assertTrue(data['message'] == 'Successfully logged out.')
@@ -113,7 +106,7 @@ class TestAuthBlueprint(BaseTestCase):
             self.assertEqual(response.status_code, 201)
 
             # user login
-            response = login_user(self, 'test@test.com', '123456')
+            response = login_user(self)
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 200)
             self.assertTrue(data['data'][0]['user'])
@@ -123,14 +116,7 @@ class TestAuthBlueprint(BaseTestCase):
 
             # invalid token logout
             time.sleep(6)
-            response = self.client.post(
-                '/auth/logout',
-                headers=dict(
-                    Authorization='Bearer '+json.loads(
-                        response.data.decode()
-                    )['data'][0]['token']
-                )
-            )
+            response = logout_user(self, response)
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(
@@ -151,7 +137,7 @@ class TestAuthBlueprint(BaseTestCase):
             self.assertEqual(response.status_code, 201)
 
             # user login
-            response = login_user(self, 'test@test.com', '123456')
+            response = login_user(self)
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 200)
             self.assertTrue(data['data'][0]['user'])
@@ -165,14 +151,7 @@ class TestAuthBlueprint(BaseTestCase):
             )
 
             # blacklisted valid token logout
-            response = self.client.post(
-                '/auth/logout',
-                headers=dict(
-                    Authorization='Bearer '+json.loads(
-                        response.data.decode()
-                    )['data'][0]['token']
-                )
-            )
+            response = logout_user(self, response)
             data = json.loads(response.data.decode())
             # self.assertTrue(data['status'] == 'fail')
             # self.assertTrue(data['message'] ==
