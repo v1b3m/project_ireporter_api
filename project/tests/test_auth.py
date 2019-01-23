@@ -6,6 +6,10 @@ from project.tests.base import BaseTestCase
 from project.tests.helpers import register_user, login_user
 
 from db import DatabaseConnection
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
 db_name = DatabaseConnection()
 
 
