@@ -48,13 +48,101 @@ class RegisterAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 202
 
+class LoginAPI(MethodView):
+    """
+    User Login Resource
+    """
+
+    def post(self):
+        # get the post data
+        post_data = request.get_json()
+        try:
+            # fetch the user data
+            user = db_name.check_user(email=post_data.get('email'))
+            if user and bcrypt.check_password_hash(
+                user['password'], post_data.get('password')
+            ):
+                auth_token = db_name.generate_auth_token(user['userid'])
+                if auth_token:
+                    responseObject = {
+                        'status': 200,
+                        'data': [{
+                            "token": auth_token.decode(),
+                            "user": user
+                        }]
+                    }
+                    return make_response(jsonify(responseObject)), 200
+            else:
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'User does not exist.'
+                }
+                return make_response(jsonify(responseObject)), 404
+        except:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Try again'
+            }
+            return make_response(jsonify(responseObject)), 500
+
+class LogoutAPI(MethodView):
+    """
+    Logout Resource
+    """
+
+    def post(self):
+        # get auth token
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            auth_token = auth_header.split(" ")[1]
+        else:
+            auth_token = ''
+        if auth_token:
+            resp = User.decode_auth_token(auth_token)
+            if not isinstance(resp, str):
+                # mark the token as blacklisted
+                blasklist_token = BlacklistToken(token=auth_token)
+                try:
+                    # insert the token
+                    db.session.add(blasklist_token)
+                    db.session.commit()
+                    responseObject = {
+                        'status': 'success',
+                        'message': 'Successfully logged out.'
+                    }
+                    return make_response(jsonify(responseObject)), 200
+                except Exception as e:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': e
+                    }
+                    return make_response(jsonify(responseObject)), 200
+            else:
+                responseObject = {
+                    'status': 'fail',
+                    'message': resp
+                }
+                return make_response(jsonify(responseObject)), 401
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Provide a valid auth token.'
+            }
+            return make_response(jsonify(responseObject)), 403            
+
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
+login_view = LoginAPI.as_view('login_api')
 
 
 # add Rules for API Endpoints
 auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=registration_view,
+    methods=['POST']
+)
+auth_blueprint.add_url_rule(
+    '/auth/login',
+    view_func=login_view,
     methods=['POST']
 )
