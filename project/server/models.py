@@ -8,7 +8,7 @@ class User:
     """ This class is what will define any given user """
 
     def __init__(self, **kwargs):
-        self.id = int(uuid.uuid4())
+        self.user_id = int(uuid.uuid4())
         self.firstname = kwargs['firstname']
         self.lastname = kwargs['lastname']
         self.othernames = None
@@ -22,7 +22,7 @@ class User:
         """ this method will convert the user
             instance to a dictionary """
         return {
-            'id': self.id, 'firstname': self.firstname,
+            'id': self.user_id, 'firstname': self.firstname,
             'lastname': self.lastname, 'othername': self.othernames,
             'email': self.email, 'phone_number': self.phone_number,
             'username': self.phone_number, 'registered': self.registered,

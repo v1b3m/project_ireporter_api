@@ -89,18 +89,20 @@ class TestRedflags(unittest.TestCase):
         self.assertIn('Empty', data['error'])
         self.assertIsNot(response.status_code, 404)
 
-    def test_add_redflag_with_integer_wrong_data(self):
+    def test_add_redflag_with_wrong_data(self):
         """ Test for adding a red-flag with
             wrong request data """
         # integer location
         input_data = {
             "location": 3,
-            "created_by": 12, "type": "red-flag",
+            "created_by": 12,
+            "type": "red-flag",
             "comment": "I am the greatest"
         }
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
-        self.assertIn('location must be', data['message'])
+        self.assertIn('location must be', data['error'])
+        self.assertEqual(data['status'], 400)
         self.assertTrue(len(data) == 2)
 
         # integer redflag type
@@ -111,7 +113,8 @@ class TestRedflags(unittest.TestCase):
         }
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
-        self.assertIn('type must be', data['message'])
+        self.assertIn('type must be', data['error'])
+        self.assertEqual(data['status'], 400)
         self.assertTrue(len(data) == 2)
 
         # integer comment in request
@@ -122,7 +125,8 @@ class TestRedflags(unittest.TestCase):
         }
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
-        self.assertIn('comment must be', data['message'])
+        self.assertIn('comment must be', data['error'])
+        self.assertEqual(data['status'], 400)
         self.assertTrue(len(data) == 2)
 
         # request containing created_by as a string
@@ -133,7 +137,20 @@ class TestRedflags(unittest.TestCase):
         }
         response = self.app_tester.post('/api/v1/red-flags', json=input_data)
         data = json.loads(response.data)
-        self.assertIn('created_by must be', data['message'])
+        self.assertIn('created_by must be', data['error'])
+        self.assertEqual(data['status'], 400)
+        self.assertTrue(len(data) == 2)
+
+        # request with type not being red-flag or intervention
+        input_data = {
+            "location": "0.12, 3.44",
+            "created_by": 32, "type": "red-fag",
+            "comment": "This is a new comment"
+        }
+        response = self.app_tester.post('/api/v1/red-flags', json=input_data)
+        data = json.loads(response.data)
+        self.assertIn("types can only be", data['error'])
+        self.assertEqual(data['status'], 400)
         self.assertTrue(len(data) == 2)
 
     def test_delete_redflag_when_record_is_not_there(self):
@@ -141,7 +158,7 @@ class TestRedflags(unittest.TestCase):
         response = self.app_tester.delete('/api/v1/red-flags/2')
         data = json.loads(response.data)
         self.assertTrue(response.status_code == 200)
-        self.assertIn("Oops", data['message'])
+        self.assertIn("Oops", data['error'])
         self.assertEqual(data['status'], 204)
 
     def test_delete_redflag_when_record_exists(self):
@@ -167,10 +184,10 @@ class TestRedflags(unittest.TestCase):
         response = self.app_tester.patch('/api/v1/red-flags/1/location',
                                          json=input_data)
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(len(data['message']) == 41)
-        self.assertEqual(data['error'], 400)
-        self.assertIn("doesn't exist", data['message'])
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(len(data['error']) == 41)
+        self.assertEqual(data['status'], 400)
+        self.assertIn("doesn't exist", data['error'])
 
     def test_patch_redflag_when_request_has_no_data(self):
         """ This will test patching a red-flag when
@@ -217,7 +234,7 @@ class TestRedflags(unittest.TestCase):
                                          json=input_location)
         data = json.loads(response.data)
         self.assertEqual(len(data), 2)
-        self.assertIn("location must be", data['message'])
+        self.assertIn("location must be", data['error'])
 
         # patch red-flag without location data in request
         input_location = {"locatio": "0.12, 3.22"}
@@ -233,9 +250,9 @@ class TestRedflags(unittest.TestCase):
         response = self.app_tester.patch(
             '/api/v1/red-flags/1/comment', json=input_data)
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['error'], 400)
-        self.assertTrue(data['message'] == "Sorry, the record doesn't exist")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data['status'], 400)
+        self.assertTrue(data['error'] == "Sorry, the record doesn't exist.")
 
     def test_patch_redflag_when_there_is_no_data_in_request(self):
         """ This will test patching a red-flag with an
@@ -251,16 +268,19 @@ class TestRedflags(unittest.TestCase):
         input_data = self.input_data
         self.app_tester.post('/api/v1/red-flags', json=input_data)
 
-        # get red-flag record id
+        # get red-flag record flag_id
         response = self.app_tester.get('/api/v1/red-flags')
         data = json.loads(response.data)
         flag_id = data['data'][0]['id']
 
-        # patch red-flag record whose id has been returned
+        # patch red-flag whose id has been returned
         input_location = {"comment": "fhkdd"}
         response = self.app_tester.patch('/api/v1/red-flags/{}/comment'.format(flag_id),
                                          json=input_location)
         data = json.loads(response.data)
+
+        self.assertEqual(data['status'], 201)
+        self.assertIn("Updated", data['data'][0]['message'])
 
     def test_patch_redflag_with_wrong_comment_data(self):
         """ Test for patching a redflag location with
@@ -281,7 +301,7 @@ class TestRedflags(unittest.TestCase):
                                          json=input_location)
         data = json.loads(response.data)
         self.assertEqual(len(data), 2)
-        self.assertIn("comment must be", data['message'])
+        self.assertIn("comment must be", data['error'])
 
         # patch red-flag without comment data
         input_location = {"sdfjdk": "This is a new comment"}
