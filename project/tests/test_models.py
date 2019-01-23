@@ -23,7 +23,7 @@ class TestModels(unittest.TestCase):
         )
 
         # add user to dictionary
-        self.users[user.id] = user
+        self.users[user.user_id] = user
 
         # convert user to dictionary
         user.to_dictionary()
