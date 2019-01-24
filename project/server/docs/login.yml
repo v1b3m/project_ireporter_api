@@ -1,0 +1,32 @@
+This is used to login a user
+---
+tags:
+  - User Authentication
+parameters:
+  - in: body
+    name: body
+    required: true
+    type: string
+    description: Enables a user to login
+responses:
+  200:
+    description: Successfully logged in
+    schema:
+      properties:
+        username:
+          type: string
+          default: v1b3m
+        password:
+          type: string
+          default: 123456
+  400:
+    description: Failed to Log in
+  401:
+    description: Missing Authorization header
+security:
+  -  bearerAuth:
+        description: Pass the jwt token e.g Bearer <token>
+        type: http
+        scheme: bearer
+        in: header
+        bearerFormat: JWT

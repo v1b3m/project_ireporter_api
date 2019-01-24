@@ -3,6 +3,7 @@ import os
 
 from flask import Flask
 from flask_bcrypt import Bcrypt
+from flasgger import Swagger
 
 app = Flask(__name__)
 
@@ -15,6 +16,7 @@ app.config.from_object(app_settings)
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
 
 bcrypt = Bcrypt(app)
+Swagger(app)
 
 from project.server.redflags.views import redflags_blueprint
 from project.server.auth.views import auth_blueprint

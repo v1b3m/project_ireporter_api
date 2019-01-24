@@ -4,6 +4,7 @@ from flask.views import MethodView
 from project.server import bcrypt, app
 from project.server.auth.helpers import token_required, generate_auth_token
 from db import DatabaseConnection
+from flasgger import swag_from
 
 auth_blueprint = Blueprint('auth', __name__)
 db_name = DatabaseConnection()
@@ -12,6 +13,7 @@ class RegisterAPI(MethodView):
     """
     User Registration Resource
     """
+    @swag_from('../docs/register.yml')
     def post(self):
         # get the post data
         post_data = request.get_json()
@@ -51,6 +53,7 @@ class LoginAPI(MethodView):
     """
     User Login Resource
     """
+    @swag_from('../docs/login.yml')
     def post(self):
         # get the post data
         post_data = request.get_json()
@@ -87,7 +90,8 @@ class LogoutAPI(MethodView):
     """
     Logout Resource
     """
-    @token_required  
+    @token_required
+    @swag_from('../docs/logout.yml')
     def post(self):
         # mark the token as blacklisted
         auth_token = request.headers.get('Authorization').split(" ")[1]

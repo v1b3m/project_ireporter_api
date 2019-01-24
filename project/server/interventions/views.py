@@ -8,6 +8,7 @@ from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_comment_data,
                                              validate_edit_location_data,
                                              validate_edit_status_data)
+from flasgger import swag_from                                            
 
 interventions_blueprint = Blueprint('interventions', __name__)
 
@@ -19,6 +20,7 @@ class GetInterventionsAPI(MethodView):
     Intervention resource
     """
     @token_required
+    @swag_from('../docs/get_intervention.yml')
     def get(self):
         """
         get red-flags
@@ -41,6 +43,7 @@ class GetSpecificInterventionAPI(MethodView):
     Get a specific intervention
     """
     @token_required
+    @swag_from('../docs/get_specific_intervention.yml')
     def get(self, intervention_id):
         intervention = db_name.get_incident(intervention_id)
         if intervention:
@@ -61,6 +64,7 @@ class CreateInterventionsAPI(MethodView):
     Create interventions here
     """
     @token_required
+    @swag_from('../docs/add_intervention.yml')
     def post(self):
         """
         add an intervention
@@ -104,6 +108,7 @@ class UpdateStatusAPI(MethodView):
     Patch a redflag status
     """
     @token_required
+    @swag_from('../docs/edit_intervention_status.yml')
     def patch(self, intervention_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -151,6 +156,7 @@ class DeleteInterventionsAPI(MethodView):
     Delete a redflag
     """
     @token_required
+    @swag_from('../docs/delete_intervention.yml')
     def delete(self, intervention_id):
         """ This will delete a red-flag specified by id """
         # check if the record exists and delete the record

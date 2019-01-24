@@ -1,0 +1,18 @@
+This is used to logout a user
+---
+tags:
+  - User Authentication
+responses:
+  200:
+    description: Successfully logged out
+  400:
+    description: Failed to Log out
+  401:
+    description: Missing Authorization header
+security:
+  -  bearerAuth:
+        description: Pass the jwt token e.g Bearer <token>
+        type: http
+        scheme: bearer
+        in: header
+        bearerFormat: JWT
