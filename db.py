@@ -3,14 +3,15 @@ import psycopg2.extras
 from pprint import pprint
 import os
 from project.server import bcrypt, app
-import datetime, jwt
 
 class DatabaseConnection:
     def __init__(self):
         if os.getenv('APP_SETTINGS') == 'project.server.config.DevelopmentConfig':
             self.db_name = 'ireporter_db_test'
+            self.password = '2SweijecIf'
         elif os.getenv('APP_SETTINGS') == 'project.server.config.TravisConfig':
             self.db_name = 'travis_ci_test'
+            self.password = ''
         else:
             self.db_name = 'ireporter_db'
 
@@ -22,7 +23,6 @@ class DatabaseConnection:
             )
             self.connection.autocommit = True
             self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-            pprint("Connected to database")
 
         except:
             pprint('Failed to connect to the database.')
@@ -38,7 +38,7 @@ class DatabaseConnection:
                         password varchar(128) NOT NULL,
                         phone_number varchar(15) NOT NULL,
                         registered TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        is_admin BIT NOT NULL DEFAULT '0');
+                        is_admin boolean NOT NULL DEFAULT '0');
                     """
             self.cursor.execute(query)
             print("Succesfully created users table.")
@@ -79,6 +79,18 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+    def blacklist_token(self, token):
+        """
+        This module will blacklist a token
+        """
+        try:
+            query = """
+                    INSERT INTO blacklist (token) VALUES ('%s')
+                    """ % token
+            self.cursor.execute(query)
+            return True
+        except Exception as e:
+            pprint(e)
 
     def create_user(self, **kwargs):
         try:
@@ -99,7 +111,7 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def  check_user(self, email):
+    def check_user(self, email):
         try:
             query = "SELECT * FROM users WHERE email = '%s'" % email
             self.cursor.execute(query)
@@ -127,6 +139,18 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+    def is_admin(self, user_id):
+        try:
+            query="SELECT * FROM users WHERE userid = %d" % user_id
+            self.cursor.execute(query)
+            user = self.cursor.fetchone()
+            if user:
+                if dict(user)['is_admin']:
+                    return True
+                return False
+        except Exception as e:
+            pprint(e)
+
     def delete_incident(self, id):
         try:
             query = "DELETE FROM incidents WHERE incident_id = %d" % id
@@ -145,6 +169,16 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+    def get_incidents(self):
+        try:
+            query = "SELECT * FROM incidents"
+            self.cursor.execute(query)
+            incidents = self.cursor.fetchall()
+            if incidents:
+                return incidents
+            return None
+        except Exception as e:
+            pprint(e)
 
     def get_interventions(self):
         try:
@@ -180,6 +214,20 @@ class DatabaseConnection:
             pprint(e)
 
 
+    def check_blacklist(self, auth_token):
+        """
+        Checks the blacklist table for a token
+        """
+        try:
+            query = "SELECT * FROM blacklist WHERE token = '%s'" % auth_token
+            self.cursor.execute(query)
+            token = self.cursor.fetchone()
+            if token:
+                return token
+            return None
+        except Exception as e:
+            pprint(e)
+
     def edit_incident_comment(self, id, comment):
         try:
             query = """
@@ -211,6 +259,13 @@ class DatabaseConnection:
             self.cursor.execute(query)
         except Exception as e:
             pprint(e)
+    
+    def delete_all_tokens(self):
+        try:
+            query = 'DELETE FROM blacklist'
+            self.cursor.execute(query)
+        except Exception as e:
+            pprint(e)
 
     def drop_incident_table(self):
         try:
@@ -226,5 +281,36 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+    def update_incident_status(self, incident_id, status):
+        try:
+            query = """
+                    UPDATE incidents
+                    SET status = %s
+                    WHERE incident_id = %s
+                    """
+            self.cursor.execute(query, (status, incident_id))
+        except Exception as e:
+            pprint(e)
+
 if __name__ == '__main__':
     db_name = DatabaseConnection()
+    db_name.create_blacklist_table()
+    # db_name.delete_all_incidents()
+    db_name.create_user_table()
+
+    
+    # print('Create a user')
+    # user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
+                            # othernames='', username='v1b3m', email='v122e@gmi.com',
+                            # password='1234', phone_number='2309908' )
+    # id = db_name.create_incident(created_by=4322, type='kjshkj',
+                            # location='skljlk', comment='sjkjljks',
+                            # videos="a.mp4", images="a.jpg")
+    # db_name.get_incident(id)
+    # user = db_name.check_user('v122e@gmi.com')
+    # print(user)
+    # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgyNDk5MzIsImlhdCI6MTU0ODI0OTg3Miwic3ViIjo0MTUzfQ.aKmkd-6I97Qxg9S78DInYHtnuBE1APXWiV-uJdMrdZM")
+    # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgxNTU0NzUsImlhdCI6MTU0ODE1NTQxNSwic3ViIjo1Mjl9.tLhW_ifyTGRnMMbiJ3F6NOChHGt4U1ajWu_AOZuleMo")
+    # db_name.update_incident_status(1473, "Approved")
+    print(db_name.is_admin(1))
+    

@@ -1,0 +1,29 @@
+This is used to add a red-flag
+---
+tags:
+  - Red-flags
+parameters:
+  - in: body
+    name: body
+    required: true
+    type: string
+    description: This enables a user to add a red-flag to the database
+responses:
+  201:
+    desciption: Red-flag created successfully
+    schema:
+      properties:
+        name:
+          type: string
+          default: red-flag
+  400:
+    description: Request cannot be left empty
+  401:
+    description: Missing authorization header!
+security:
+  - bearerAuth:
+      description: Pass the jwt token e.g Bearer <token>
+      type: http
+      scheme: bearer
+      in: header
+      bearerFormat: JWT 
