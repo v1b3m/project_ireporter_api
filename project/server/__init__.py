@@ -3,6 +3,7 @@ import os
 
 from flask import Flask
 from flask_bcrypt import Bcrypt
+
 from flasgger import Swagger
 
 app = Flask(__name__)
