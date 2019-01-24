@@ -253,3 +253,26 @@ class TestRedflags(BaseTestCase):
             '/api/v1/interventions/{}'.format(intervention_id), headers=headers)
         data = json.loads(response.data)
         self.assertIn('deleted', data['data'][0]['message'])
+
+    def test_edit_intervention_status(self):
+        """ Test for editing status """
+        # log in user
+        register_user(self)
+        login_response = login_user(self)
+
+        # get token
+        headers=dict(Authorization='Bearer '+
+                    json.loads(login_response.data
+                    )['data'][0]['token']
+                )
+
+        input_data = {"status": "djhdjfj"}
+        response = self.client.patch('/api/v1/interventions/200/status',
+                        content_type='application/json',
+                        data=json.dumps(input_data),
+                        headers=headers)
+       
+        data = json.loads(response.data)
+
+        self.assertEqual(data['message'], "You need to be an admin to access this route")
+        self.assertTrue(data['status'] == 'fail')

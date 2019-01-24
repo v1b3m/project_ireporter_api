@@ -498,3 +498,28 @@ class TestRedflags(BaseTestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Hello', response.get_data(as_text=True))
+
+    def test_edit_flag_status(self):
+        """ Test for editing status """
+        # log in user
+        register_user(self)
+        login_response = login_user(self)
+
+        # get token
+        headers=dict(Authorization='Bearer '+
+                    json.loads(login_response.data
+                    )['data'][0]['token']
+                )
+
+        input_data = {"status": "djhdjfj"}
+        response = self.client.patch('/api/v1/red-flags/200/status',
+                        content_type='application/json',
+                        data=json.dumps(input_data),
+                        headers=headers)
+       
+        data = json.loads(response.data)
+
+        self.assertEqual(data['message'], "You need to be an admin to access this route")
+        self.assertTrue(data['status'] == 'fail')
+
+        
