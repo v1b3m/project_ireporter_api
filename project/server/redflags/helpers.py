@@ -41,6 +41,7 @@ def validate_edit_comment_data(data):
         return str(error)
     return None
 
+
 def validate_edit_status_data(data):
     """ This function will validate the data
         used to edit a status """
@@ -48,7 +49,8 @@ def validate_edit_status_data(data):
         if not isinstance(data['status'], str):
             raise TypeError('status must be a string')
         if data['status'] not in ['​under investigation', 'rejected', 'resolved']:
-            raise ValueError("status can only be `​under investigation`,`rejected` or `resolved` ")
+            raise ValueError(
+                "status can only be `​under investigation`,`rejected` or `resolved` ")
     except (TypeError, ValueError) as error:
         return str(error)
     return None

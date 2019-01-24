@@ -8,6 +8,7 @@ from project.tests.helpers import register_user, login_user, logout_user
 from db import DatabaseConnection
 db_name = DatabaseConnection()
 
+
 class TestAuthBlueprint(BaseTestCase):
     def test_registration(self):
         response = register_user(self)
@@ -24,13 +25,13 @@ class TestAuthBlueprint(BaseTestCase):
         response = self.client.post(
             '/auth/register',
             data=json.dumps(dict(
-                    firstname=32,
-                    lastname="Mayanja",
-                    othernames="",
-                    phone_number="070-755-9192",
-                    username='v1b3m',
-                    email="test@test.com",
-                    password='123456'
+                firstname=32,
+                lastname="Mayanja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="test@test.com",
+                password='123456'
             )),
             content_type='application/json'
         )
@@ -41,13 +42,13 @@ class TestAuthBlueprint(BaseTestCase):
         response = self.client.post(
             '/auth/register',
             data=json.dumps(dict(
-                    firstname="Benjamin",
-                    lastname=33,
-                    othernames="",
-                    phone_number="070-755-9192",
-                    username='v1b3m',
-                    email="test@test.com",
-                    password='123456'
+                firstname="Benjamin",
+                lastname=33,
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="test@test.com",
+                password='123456'
             )),
             content_type='application/json'
         )
@@ -58,13 +59,13 @@ class TestAuthBlueprint(BaseTestCase):
         response = self.client.post(
             '/auth/register',
             data=json.dumps(dict(
-                    firstname="Benjamin",
-                    lastname="Mayabja",
-                    othernames=4,
-                    phone_number="070-755-9192",
-                    username='v1b3m',
-                    email="test@test.com",
-                    password='123456'
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames=4,
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="test@test.com",
+                password='123456'
             )),
             content_type='application/json'
         )
@@ -75,13 +76,13 @@ class TestAuthBlueprint(BaseTestCase):
         response = self.client.post(
             '/auth/register',
             data=json.dumps(dict(
-                    firstname="Benjamin",
-                    lastname="Mayabja",
-                    othernames="",
-                    phone_number="070-755-9192",
-                    username='v1b3m',
-                    email="te@st@test.com",
-                    password='123456'
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="te@st@test.com",
+                password='123456'
             )),
             content_type='application/json'
         )
@@ -92,13 +93,13 @@ class TestAuthBlueprint(BaseTestCase):
         response = self.client.post(
             '/auth/register',
             data=json.dumps(dict(
-                    firstname="Benjamin",
-                    lastname="Mayabja",
-                    othernames="",
-                    phone_number="070-755-9192",
-                    username='v1b3m',
-                    email="tt@t.m",
-                    password='123456'
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="tt@t.m",
+                password='123456'
             )),
             content_type='application/json'
         )
@@ -109,21 +110,18 @@ class TestAuthBlueprint(BaseTestCase):
         response = self.client.post(
             '/auth/register',
             data=json.dumps(dict(
-                    firstname="Benjamin",
-                    lastname="Mayabja",
-                    othernames="",
-                    phone_number="070755-9192",
-                    username='v1b3m',
-                    email="ttsdf@dffd.dfm",
-                    password='123456'
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password='123456'
             )),
             content_type='application/json'
         )
         data = json.loads(response.data.decode())
         self.assertTrue(data['error'] == "Phone Number is invalid")
-
-
-
 
     def test_registration_with_alredy_registered_user(self):
         """ Test registration with aready registered email """

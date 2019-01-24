@@ -25,16 +25,17 @@ class GetInterventionsAPI(MethodView):
         """
         interventions = db_name.get_interventions()
         if not interventions:
-                return jsonify({
-                    'error': 'There are no interventions',
-                    'status': 404
-                })
+            return jsonify({
+                'error': 'There are no interventions',
+                'status': 404
+            })
 
         responseObject = ({
             "status": 200,
             "data": [dict(intervention) for intervention in interventions]
         })
         return jsonify(responseObject), 20
+
 
 class GetSpecificInterventionAPI(MethodView):
     """
@@ -99,6 +100,7 @@ class CreateInterventionsAPI(MethodView):
                         }]
                         }), 201
 
+
 class UpdateStatusAPI(MethodView):
     """
     Patch a redflag status
@@ -137,13 +139,12 @@ class UpdateStatusAPI(MethodView):
                     "message": "​Updated intervention record status"
                 }]
             })
-        
+
         # this code will run if the red-flag doesn't exist
         return jsonify({
             "error": 400,
             "message": "Intervention record doesn't exist."
         })
-
 
 
 class DeleteInterventionsAPI(MethodView):

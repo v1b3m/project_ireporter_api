@@ -227,6 +227,7 @@ class WelcomeAPI(MethodView):
         """ This route will return the message "Hello, World" """
         return "Hello, World!"
 
+
 class UpdateStatusAPI(MethodView):
     """
     Patch a redflag status
@@ -265,7 +266,7 @@ class UpdateStatusAPI(MethodView):
                     "message": "​Updated red-flag record status"
                 }]
             })
-        
+
         # this code will run if the red-flag doesn't exist
         return jsonify({
             "error": 400,

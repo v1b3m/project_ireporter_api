@@ -8,10 +8,12 @@ from db import DatabaseConnection
 auth_blueprint = Blueprint('auth', __name__)
 db_name = DatabaseConnection()
 
+
 class RegisterAPI(MethodView):
     """
     User Registration Resource
     """
+
     def post(self):
         # get the post data
         post_data = request.get_json()
@@ -29,9 +31,9 @@ class RegisterAPI(MethodView):
         if not user:
             try:
                 user_id = db_name.create_user(firstname=post_data.get('firstname'),
-                    lastname=post_data.get('lastname'), othernames=post_data.get('othernames'),
-                    username=post_data.get('username'), email=post_data.get('email'),
-                    password=post_data.get('password'), phone_number=post_data.get('phone_number'))
+                                              lastname=post_data.get('lastname'), othernames=post_data.get('othernames'),
+                                              username=post_data.get('username'), email=post_data.get('email'),
+                                              password=post_data.get('password'), phone_number=post_data.get('phone_number'))
                 user = db_name.check_user(email=post_data.get('email'))
                 # generate auth token
                 auth_token = generate_auth_token(user_id)
@@ -40,7 +42,7 @@ class RegisterAPI(MethodView):
                     'data': [{
                         'token': auth_token.decode(),
                         "user": user
-                    }] 
+                    }]
                 }
                 return make_response(jsonify(responseObject)), 201
             except:
@@ -56,10 +58,12 @@ class RegisterAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 202
 
+
 class LoginAPI(MethodView):
     """
     User Login Resource
     """
+
     def post(self):
         # get the post data
         post_data = request.get_json()
@@ -92,11 +96,12 @@ class LoginAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 500
 
+
 class LogoutAPI(MethodView):
     """
     Logout Resource
     """
-    @token_required  
+    @token_required
     def post(self):
         # mark the token as blacklisted
         auth_token = request.headers.get('Authorization').split(" ")[1]
@@ -113,6 +118,7 @@ class LogoutAPI(MethodView):
                 'message': e
             }
             return make_response(jsonify(responseObject)), 200
+
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')

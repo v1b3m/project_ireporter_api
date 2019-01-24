@@ -1,4 +1,6 @@
-import re, jwt, datetime
+import re
+import jwt
+import datetime
 from db import DatabaseConnection
 from project.server import app
 from functools import wraps
@@ -6,6 +8,7 @@ from flask import request, make_response, jsonify
 """ This script will contain all helper functions for authentication """
 
 db_name = DatabaseConnection()
+
 
 def validate_registration_input(data):
     try:
@@ -39,6 +42,7 @@ def validate_login_input(data):
     except (TypeError, ValueError) as e:
         return str(e)
 
+
 def decode_auth_token(auth_token):
     """
     Decodes the auth token
@@ -56,6 +60,7 @@ def decode_auth_token(auth_token):
         return 'Signature expired. Please log in again.'
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
+
 
 def token_required(func):
     @wraps(func)
@@ -82,6 +87,7 @@ def token_required(func):
             }
             return make_response(jsonify(responseObject)), 403
     return decorated_function
+
 
 def admin_required(func):
     @wraps(func)
@@ -118,19 +124,19 @@ def admin_required(func):
 
 
 def generate_auth_token(user_id):
-        """
-        Generates the auth token string
-        """
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
-            }
-            return jwt.encode(
-                payload,
-                app.config.get('SECRET_KEY'),
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
+    """
+    Generates the auth token string
+    """
+    try:
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+            'iat': datetime.datetime.utcnow(),
+            'sub': user_id
+        }
+        return jwt.encode(
+            payload,
+            app.config.get('SECRET_KEY'),
+            algorithm='HS256'
+        )
+    except Exception as e:
+        return e

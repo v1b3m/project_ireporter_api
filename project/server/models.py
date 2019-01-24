@@ -29,6 +29,7 @@ class User:
             'is_admin': self.is_admin
         }
 
+
 class Incident:
     """ Both red-flag and intervention records will be
         created using this class """

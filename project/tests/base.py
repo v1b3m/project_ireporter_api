@@ -5,6 +5,7 @@ from db import DatabaseConnection
 
 db_name = DatabaseConnection()
 
+
 class BaseTestCase(TestCase):
     """ Base Tests """
 

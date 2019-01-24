@@ -4,10 +4,11 @@ import json
 from project.server import app
 from project.tests.base import BaseTestCase
 from project.tests.helpers import (login_user, register_user,
-                 add_intervention)
+                                   add_intervention)
 
 from db import DatabaseConnection
 db_name = DatabaseConnection()
+
 
 class TestRedflags(BaseTestCase):
     """ This class will handle all the tests """
@@ -19,10 +20,10 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
         response = self.client.get('/api/v1/interventions', headers=headers)
         data = json.loads(response.data)
@@ -36,10 +37,10 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
         input_data = self.intervention_data
         add_intervention(self, headers, input_data)
@@ -56,12 +57,13 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
-        response = self.client.get('/api/v1/interventions/200000', headers=headers)
+        response = self.client.get(
+            '/api/v1/interventions/200000', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 404)
         self.assertIn("doesn't exist", data['error'])
@@ -73,10 +75,10 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
         # create an intervention
         input_data = self.intervention_data
@@ -102,10 +104,10 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
         input_data = self.intervention_data
         response = add_intervention(self, headers, input_data)
@@ -122,10 +124,10 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
         # create input_data with missing data
         input_data = {
@@ -144,10 +146,10 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
         # post empty request
         response = self.client.post('/api/v1/interventions', headers=headers)
@@ -163,10 +165,10 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
         # integer location
         input_data = {
@@ -219,12 +221,13 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
-        response = self.client.delete('/api/v1/interventions/2', headers=headers)
+        response = self.client.delete(
+            '/api/v1/interventions/2', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(response.status_code == 200)
         self.assertIn("Oops", data['message'])
@@ -237,10 +240,10 @@ class TestRedflags(BaseTestCase):
         response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(response.data
+                                  )['data'][0]['token']
+                       )
 
         # create an intervention
         input_data = self.intervention_data
@@ -264,22 +267,22 @@ class TestRedflags(BaseTestCase):
         login_response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(login_response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(login_response.data
+                                  )['data'][0]['token']
+                       )
 
         input_data = {"status": "djhdjfj"}
         response = self.client.patch('/api/v1/interventions/200/status',
-                        content_type='application/json',
-                        data=json.dumps(input_data),
-                        headers=headers)
-       
+                                     content_type='application/json',
+                                     data=json.dumps(input_data),
+                                     headers=headers)
+
         data = json.loads(response.data)
 
-        self.assertEqual(data['message'], "You need to be an admin to access this route")
+        self.assertEqual(
+            data['message'], "You need to be an admin to access this route")
         self.assertTrue(data['status'] == 'fail')
-
 
     def test_edit_status_while_admin(self):
         """ This will test editing status while user is admin """
@@ -288,10 +291,10 @@ class TestRedflags(BaseTestCase):
         login_response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(login_response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(login_response.data
+                                  )['data'][0]['token']
+                       )
 
         # obtain user id
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
@@ -300,7 +303,8 @@ class TestRedflags(BaseTestCase):
         db_name.make_admin(user_id)
 
         # send request witn no data
-        response = self.client.patch('/api/v1/red-flags/200/status', headers=headers)
+        response = self.client.patch(
+            '/api/v1/red-flags/200/status', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 400)
 
@@ -311,10 +315,10 @@ class TestRedflags(BaseTestCase):
         login_response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(login_response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(login_response.data
+                                  )['data'][0]['token']
+                       )
 
         # obtain user id
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
@@ -325,22 +329,22 @@ class TestRedflags(BaseTestCase):
         # send request without status data
         input_data = {"statu": "sjkj"}
 
-        # send request 
+        # send request
         response = self.client.patch('/api/v1/interventions/200/status',
-                        content_type='application/json',
-                        data=json.dumps(input_data),
-                        headers=headers)
+                                     content_type='application/json',
+                                     data=json.dumps(input_data),
+                                     headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data["error"] == 'Status data not found')
 
         # send request with integer status
         input_data = {"status": 1}
 
-        # send request 
+        # send request
         response = self.client.patch('/api/v1/interventions/200/status',
-                        content_type='application/json',
-                        data=json.dumps(input_data),
-                        headers=headers)
+                                     content_type='application/json',
+                                     data=json.dumps(input_data),
+                                     headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data["error"] == 400)
 
@@ -351,10 +355,10 @@ class TestRedflags(BaseTestCase):
         login_response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(login_response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(login_response.data
+                                  )['data'][0]['token']
+                       )
 
         # obtain user id
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
@@ -363,7 +367,8 @@ class TestRedflags(BaseTestCase):
         db_name.make_admin(user_id)
 
         # send request witn no data
-        response = self.client.patch('/api/v1/interventions/200/status', headers=headers)
+        response = self.client.patch(
+            '/api/v1/interventions/200/status', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 400)
 
@@ -374,10 +379,10 @@ class TestRedflags(BaseTestCase):
         login_response = login_user(self)
 
         # get token
-        headers=dict(Authorization='Bearer '+
-                    json.loads(login_response.data
-                    )['data'][0]['token']
-                )
+        headers = dict(Authorization='Bearer ' +
+                       json.loads(login_response.data
+                                  )['data'][0]['token']
+                       )
 
         # obtain user id
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
@@ -398,16 +403,16 @@ class TestRedflags(BaseTestCase):
         # send request with wrong status format
         input_data = {"status": "rejected"}
         response = self.client.patch('/api/v1/interventions/%d/status' % intervention_id,
-                        content_type='application/json',
-                        data=json.dumps(input_data),
-                        headers=headers)
+                                     content_type='application/json',
+                                     data=json.dumps(input_data),
+                                     headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data["status"] == 201)
 
         # edit non-existent red-flag
         response = self.client.patch('/api/v1/interventions/200/status',
-                        content_type='application/json',
-                        data=json.dumps(input_data),
-                        headers=headers)
+                                     content_type='application/json',
+                                     data=json.dumps(input_data),
+                                     headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data["error"] == 400)
