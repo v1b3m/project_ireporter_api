@@ -439,11 +439,7 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record id
-<<<<<<< HEAD
         response = self.client.get('/api/v1/red-flags', headers=headers)
-=======
-        response = self.client.get('/api/v1/red-flags')
->>>>>>> 8286d7e0e38824c8abafb7356d9469a3349a5fbd
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
