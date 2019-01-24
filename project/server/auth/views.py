@@ -2,7 +2,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server import bcrypt, app
-from project.server.auth.helpers import token_required, generate_auth_token
+from project.server.auth.helpers import token_required, generate_auth_token, validate_registration_input
 from db import DatabaseConnection
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -15,6 +15,15 @@ class RegisterAPI(MethodView):
     def post(self):
         # get the post data
         post_data = request.get_json()
+
+        # validate data
+        if validate_registration_input(post_data):
+            response_object = {
+                "status": 400,
+                "error": validate_registration_input(post_data)
+            }
+            return make_response(jsonify(response_object)), 400
+
         # check if user already exists
         user = db_name.check_user(email=post_data.get('email'))
         if not user:
