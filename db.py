@@ -17,7 +17,9 @@ class DatabaseConnection:
 
         try:
             self.connection = psycopg2.connect(
-                dbname=self.db_name, user='postgres', host='localhost', password=self.password, port=5432
+                dbname="dag0v25ipfvqli", user='dkyxylihtgnsgo', 
+                host='ec2-50-17-193-83.compute-1.amazonaws.com',
+                password='97e77d4fc534b3fbbe339b2f77bea1f32825a45f26fea1b6dbb1a7d17caadb59'
             )
             self.connection.autocommit = True
             self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -27,6 +29,20 @@ class DatabaseConnection:
 
     def create_user_table(self):
         try:
+            query = """CREATE TABLE IF NOT EXISTS users (userId SERIAL PRIMARY KEY,
+                        firstname varchar(32) NOT NULL,
+                        lastname varchar(32) NOT NULL,
+                        othernames varchar(64) NULL,
+                        username varchar(32) NOT NULL,
+                        email varchar(128) NOT NULL UNIQUE,
+                        password varchar(128) NOT NULL,
+                        phone_number varchar(15) NOT NULL,
+                        registered TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        is_admin BIT NOT NULL DEFAULT '0');
+                    """
+            self.cursor.execute(query)
+            query = "DROP table users"
+            self.cursor.execute(query)
             query = """CREATE TABLE IF NOT EXISTS users (userId SERIAL PRIMARY KEY,
                         firstname varchar(32) NOT NULL,
                         lastname varchar(32) NOT NULL,
