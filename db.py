@@ -3,7 +3,6 @@ import psycopg2.extras
 from pprint import pprint
 import os
 from project.server import bcrypt, app
-import datetime, jwt
 
 class DatabaseConnection:
     def __init__(self):
@@ -37,7 +36,7 @@ class DatabaseConnection:
                         password varchar(128) NOT NULL,
                         phone_number varchar(15) NOT NULL,
                         registered TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        is_admin BIT NOT NULL DEFAULT '0');
+                        is_admin boolean NOT NULL DEFAULT '0');
                     """
             self.cursor.execute(query)
             print("Succesfully created users table.")
@@ -110,7 +109,7 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def  check_user(self, email):
+    def check_user(self, email):
         try:
             query = "SELECT * FROM users WHERE email = '%s'" % email
             self.cursor.execute(query)
@@ -138,6 +137,18 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+    def is_admin(self, user_id):
+        try:
+            query="SELECT * FROM users WHERE userid = %d" % user_id
+            self.cursor.execute(query)
+            user = self.cursor.fetchone()
+            if user:
+                if dict(user)['is_admin']:
+                    return True
+                return False
+        except Exception as e:
+            pprint(e)
+
     def delete_incident(self, id):
         try:
             query = "DELETE FROM incidents WHERE incident_id = %d" % id
@@ -156,24 +167,16 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def generate_auth_token(self, user_id):
-        """
-        Generates the auth token string
-        """
+    def get_incidents(self):
         try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
-            }
-            return jwt.encode(
-                payload,
-                app.config.get('SECRET_KEY'),
-                algorithm='HS256'
-            )
+            query = "SELECT * FROM incidents"
+            self.cursor.execute(query)
+            incidents = self.cursor.fetchall()
+            if incidents:
+                return incidents
+            return None
         except Exception as e:
-            return e
-
+            pprint(e)
 
     def get_interventions(self):
         try:
@@ -276,20 +279,36 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
+    def update_incident_status(self, incident_id, status):
+        try:
+            query = """
+                    UPDATE incidents
+                    SET status = %s
+                    WHERE incident_id = %s
+                    """
+            self.cursor.execute(query, (status, incident_id))
+        except Exception as e:
+            pprint(e)
+
 if __name__ == '__main__':
     db_name = DatabaseConnection()
-    # db_name.create_blacklist_table()
+    db_name.create_blacklist_table()
     # db_name.delete_all_incidents()
+    db_name.create_user_table()
+
     
     # print('Create a user')
     # user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
-    #                         othernames='', username='v1b3m', email='v122e@gmi.com',
-    #                         password='1234', phone_number='2309908' )
-    # id = db_name.create_incident(created_by=user_id, type='kjshkj',
-    #                         location='skljlk', comment='sjkjljks',
-    #                         videos="a.mp4", images="a.jpg")
+                            # othernames='', username='v1b3m', email='v122e@gmi.com',
+                            # password='1234', phone_number='2309908' )
+    # id = db_name.create_incident(created_by=4322, type='kjshkj',
+                            # location='skljlk', comment='sjkjljks',
+                            # videos="a.mp4", images="a.jpg")
     # db_name.get_incident(id)
-    user = db_name.check_user('v122e@gmi.com')
-    print(user)
+    # user = db_name.check_user('v122e@gmi.com')
+    # print(user)
+    # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgyNDk5MzIsImlhdCI6MTU0ODI0OTg3Miwic3ViIjo0MTUzfQ.aKmkd-6I97Qxg9S78DInYHtnuBE1APXWiV-uJdMrdZM")
     # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgxNTU0NzUsImlhdCI6MTU0ODE1NTQxNSwic3ViIjo1Mjl9.tLhW_ifyTGRnMMbiJ3F6NOChHGt4U1ajWu_AOZuleMo")
+    # db_name.update_incident_status(1473, "Approved")
+    print(db_name.is_admin(1))
     

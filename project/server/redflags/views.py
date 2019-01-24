@@ -3,9 +3,11 @@ from db import DatabaseConnection
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
+from project.server.auth.helpers import token_required, admin_required
 from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_comment_data,
-                                             validate_edit_location_data)
+                                             validate_edit_location_data,
+                                             validate_edit_status_data)
 
 redflags_blueprint = Blueprint('redflags', __name__)
 
@@ -16,7 +18,7 @@ class GetRedflagsAPI(MethodView):
     """
     Redflag and Intervention resource
     """
-
+    @token_required
     def get(self):
         """
         get red-flags
@@ -40,7 +42,7 @@ class GetSpecificRedflagAPI(MethodView):
     """
     Get a specific red-flag
     """
-
+    @token_required
     def get(self, flag_id):
         redflag = db_name.get_incident(flag_id)
         if redflag:
@@ -60,7 +62,7 @@ class CreateRedflagsAPI(MethodView):
     """
     Create redflags here
     """
-
+    @token_required
     def post(self):
         """
         add a redflag
@@ -104,7 +106,7 @@ class DeleteRedflagsAPI(MethodView):
     """
     Delete a redflag
     """
-
+    @token_required
     def delete(self, flag_id):
         """ This will delete a red-flag specified by id """
         # check if the record exists and delete the record
@@ -128,7 +130,7 @@ class PatchRedflagLocationAPI(MethodView):
     """
     Patch a redflag location
     """
-
+    @token_required
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -174,7 +176,7 @@ class PatchRedflagCommentAPI(MethodView):
     """
     Patch a redflag location
     """
-
+    @token_required
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -225,6 +227,51 @@ class WelcomeAPI(MethodView):
         """ This route will return the message "Hello, World" """
         return "Hello, World!"
 
+class UpdateStatusAPI(MethodView):
+    """
+    Patch a redflag status
+    """
+    @admin_required
+    def patch(self, flag_id):
+        # check if request has no json data in its body
+        if not request.is_json:
+            return jsonify({
+                "error": 'Please provide a status',
+                "status": 400
+            })
+        data = request.get_json()
+
+        # check for location in missing data
+        if 'status' not in data:
+            return jsonify({
+                'error': "Status data not found",
+                "status": 400
+            }), 400
+
+        # validate the data
+        if validate_edit_status_data(data):
+            return jsonify({"error": 400,
+                            "message": validate_edit_status_data(data)
+                            }), 400
+
+        # check if record exists
+        red_flag = db_name.get_incident(flag_id)
+        if red_flag:
+            db_name.update_incident_status(flag_id, data['status'])
+            return jsonify({
+                "status": 201,
+                "data": [{
+                    "id": flag_id,
+                    "message": "​Updated red-flag record status"
+                }]
+            })
+        
+        # this code will run if the red-flag doesn't exist
+        return jsonify({
+            "error": 400,
+            "message": "Red-flag record doesn't exist."
+        })
+
 
 # define the API resources
 get_redflags_view = GetRedflagsAPI.as_view('get_redflags_api')
@@ -237,6 +284,7 @@ edit_redflag_location_view = PatchRedflagLocationAPI.as_view(
 edit_redflag_comment_view = PatchRedflagCommentAPI.as_view(
     'patch_redflag_comment_api')
 welome_view = WelcomeAPI.as_view('welcome_api')
+update_redflag_status = UpdateStatusAPI.as_view('update_status_api')
 
 # add rules for API endpoints
 redflags_blueprint.add_url_rule(
@@ -272,5 +320,10 @@ redflags_blueprint.add_url_rule(
 redflags_blueprint.add_url_rule(
     '/api/v1/red-flags/<int:flag_id>/comment',
     view_func=edit_redflag_comment_view,
+    methods=['PATCH']
+)
+redflags_blueprint.add_url_rule(
+    '/api/v1/red-flags/<int:flag_id>/status',
+    view_func=update_redflag_status,
     methods=['PATCH']
 )
