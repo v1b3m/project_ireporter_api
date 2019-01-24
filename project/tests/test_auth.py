@@ -18,6 +18,113 @@ class TestAuthBlueprint(BaseTestCase):
         self.assertTrue(response.content_type == 'application/json')
         self.assertEqual(response.status_code, 201)
 
+    def test_registration_with_wrong_data(self):
+        """ This function will test the data validation """
+        # integer firstname
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                    firstname=32,
+                    lastname="Mayanja",
+                    othernames="",
+                    phone_number="070-755-9192",
+                    username='v1b3m',
+                    email="test@test.com",
+                    password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['status'] == 400)
+
+        # integer lastname
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                    firstname="Benjamin",
+                    lastname=33,
+                    othernames="",
+                    phone_number="070-755-9192",
+                    username='v1b3m',
+                    email="test@test.com",
+                    password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertIn("Lastname should be", data['error'])
+
+        # integer othernames
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                    firstname="Benjamin",
+                    lastname="Mayabja",
+                    othernames=4,
+                    phone_number="070-755-9192",
+                    username='v1b3m',
+                    email="test@test.com",
+                    password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertIn("Othernames should be", data['error'])
+
+        # wrong email
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                    firstname="Benjamin",
+                    lastname="Mayabja",
+                    othernames="",
+                    phone_number="070-755-9192",
+                    username='v1b3m',
+                    email="te@st@test.com",
+                    password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] == "This email is not valid.")
+
+        # short email
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                    firstname="Benjamin",
+                    lastname="Mayabja",
+                    othernames="",
+                    phone_number="070-755-9192",
+                    username='v1b3m',
+                    email="tt@t.m",
+                    password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] == "Email too short.")
+
+        # wrong phone number
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                    firstname="Benjamin",
+                    lastname="Mayabja",
+                    othernames="",
+                    phone_number="070755-9192",
+                    username='v1b3m',
+                    email="ttsdf@dffd.dfm",
+                    password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] == "Phone Number is invalid")
+
+
+
+
     def test_registration_with_alredy_registered_user(self):
         """ Test registration with aready registered email """
         # create user
