@@ -6,6 +6,9 @@ from project.tests.base import BaseTestCase
 from project.tests.helpers import (login_user, register_user,
                  add_intervention)
 
+from db import DatabaseConnection
+db_name = DatabaseConnection()
+
 class TestRedflags(BaseTestCase):
     """ This class will handle all the tests """
 
@@ -276,3 +279,121 @@ class TestRedflags(BaseTestCase):
 
         self.assertEqual(data['message'], "You need to be an admin to access this route")
         self.assertTrue(data['status'] == 'fail')
+
+
+    def test_edit_status_while_admin(self):
+        """ This will test editing status while user is admin """
+        # log in user
+        register_user(self)
+        login_response = login_user(self)
+
+        # get token
+        headers=dict(Authorization='Bearer '+
+                    json.loads(login_response.data
+                    )['data'][0]['token']
+                )
+
+        # obtain user id
+        user_id = json.loads(login_response.data)['data'][0]['user']['userid']
+
+        # make user an admin
+        db_name.make_admin(user_id)
+
+        # send request witn no data
+        response = self.client.patch('/api/v1/red-flags/200/status', headers=headers)
+        data = json.loads(response.data)
+        self.assertTrue(data['status'] == 400)
+
+    def test_update_status_with_wrong_data(self):
+        """ This test will attempt to edit status with wrong data """
+        # log in user
+        register_user(self)
+        login_response = login_user(self)
+
+        # get token
+        headers=dict(Authorization='Bearer '+
+                    json.loads(login_response.data
+                    )['data'][0]['token']
+                )
+
+        # obtain user id
+        user_id = json.loads(login_response.data)['data'][0]['user']['userid']
+
+        # make user an admin
+        db_name.make_admin(user_id)
+
+        # send request without status data
+        input_data = {"statu": "sjkj"}
+
+        # send request 
+        response = self.client.patch('/api/v1/interventions/200/status',
+                        content_type='application/json',
+                        data=json.dumps(input_data),
+                        headers=headers)
+        data = json.loads(response.data)
+        self.assertTrue(data["error"] == 'Status data not found')
+
+        # send request with integer status
+        input_data = {"status": 1}
+
+        # send request 
+        response = self.client.patch('/api/v1/interventions/200/status',
+                        content_type='application/json',
+                        data=json.dumps(input_data),
+                        headers=headers)
+        data = json.loads(response.data)
+        self.assertTrue(data["error"] == 400)
+
+        # # send request with wrong status format
+        # input_data = {"status": "hey"}
+        # response = self.client.patch('/api/v1/red-flags/200/status',
+        #                 content_type='application/json',
+        #                 data=json.dumps(input_data),
+        #                 headers=headers)
+        # data = json.loads(response.data)
+        # self.assertTrue(data["error"] == 400)
+
+    # def test_edit_redflag_with_correct_data(self):
+    #     """ Test correct data to update status """
+    #     # log in user
+    #     register_user(self)
+    #     login_response = login_user(self)
+
+    #     # get token
+    #     headers=dict(Authorization='Bearer '+
+    #                 json.loads(login_response.data
+    #                 )['data'][0]['token']
+    #             )
+
+    #     # obtain user id
+    #     user_id = json.loads(login_response.data)['data'][0]['user']['userid']
+
+    #     # make user an admin
+    #     db_name.make_admin(user_id)
+
+    #     # create red-flag record
+    #     input_data = self.input_data
+    #     add_redflag(self, headers, input_data)
+
+    #     # get red-flag record id
+    #     response = self.client.get('/api/v1/red-flags', headers=headers)
+    #     data = json.loads(response.data)
+    #     flag_id = data['data'][0]['incident_id']
+
+    #     # edit the red-flag status
+    #     # send request with wrong status format
+    #     input_data = {"status": "rejected"}
+    #     response = self.client.patch('/api/v1/red-flags/%d/status' % flag_id,
+    #                     content_type='application/json',
+    #                     data=json.dumps(input_data),
+    #                     headers=headers)
+    #     data = json.loads(response.data)
+    #     self.assertTrue(data["status"] == 201)
+
+    #     # edit non-existent red-flag
+    #     response = self.client.patch('/api/v1/red-flags/200/status',
+    #                     content_type='application/json',
+    #                     data=json.dumps(input_data),
+    #                     headers=headers)
+    #     data = json.loads(response.data)
+    #     self.assertTrue(data["error"] == 400)
