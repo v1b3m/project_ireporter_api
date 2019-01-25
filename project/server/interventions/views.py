@@ -58,7 +58,7 @@ class GetSpecificInterventionAPI(MethodView):
 
 
 class CreateInterventionsAPI(MethodView):
-    """
+    """
     Create interventions here
     """
     @token_required

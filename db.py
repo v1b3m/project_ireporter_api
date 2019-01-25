@@ -7,13 +7,14 @@ from project.server import bcrypt, app
 class DatabaseConnection:
     def __init__(self):
         if os.getenv('APP_SETTINGS') == 'project.server.config.DevelopmentConfig':
-            self.db_name = 'ireporter_db_test'
+            self.db_name = 'ireporter_db'
             self.password = '2SweijecIf'
         elif os.getenv('APP_SETTINGS') == 'project.server.config.TravisConfig':
             self.db_name = 'travis_ci_test'
             self.password = ''
-        else:
-            self.db_name = 'ireporter_db'
+        elif os.getenv('APP_SETTINGS') == 'project.server.config.TestingConfig':
+            self.db_name = 'ireporter_db_test'
+            self.password = '2SweijecIf'
 
         try:
             self.connection = psycopg2.connect(
@@ -322,5 +323,8 @@ if __name__ == '__main__':
     # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgyNDk5MzIsImlhdCI6MTU0ODI0OTg3Miwic3ViIjo0MTUzfQ.aKmkd-6I97Qxg9S78DInYHtnuBE1APXWiV-uJdMrdZM")
     # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgxNTU0NzUsImlhdCI6MTU0ODE1NTQxNSwic3ViIjo1Mjl9.tLhW_ifyTGRnMMbiJ3F6NOChHGt4U1ajWu_AOZuleMo")
     # db_name.update_incident_status(1473, "Approved")
-    print(db_name.is_admin(user_id))
+    # print(db_name.is_admin(user_id))
+    # db_name.create_blacklist_table()
+    # db_name.create_incidents_table()
+    # db_name.create_user_table()
     

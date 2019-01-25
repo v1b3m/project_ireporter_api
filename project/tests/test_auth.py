@@ -138,7 +138,8 @@ class TestAuthBlueprint(BaseTestCase):
             content_type='application/json'
         )
         data = json.loads(response.data.decode())
-        self.assertTrue(data['error'] == "Password should be a string or an integer")
+        self.assertTrue(data['error'] ==
+                        "Password should be a string or an integer")
 
     def test_registration_with_alredy_registered_user(self):
         """ Test registration with aready registered email """
@@ -250,13 +251,13 @@ class TestAuthBlueprint(BaseTestCase):
         """ This will test logging in with wrong data """
         # invalid email
         response = self.client.post(
-                        '/auth/login',
-                        data=json.dumps(dict(
+            '/auth/login',
+            data=json.dumps(dict(
                             email="t@est@test.com",
                             password="123456"
-                        )),
-                        content_type='application/json'
-                        )
+                            )),
+            content_type='application/json'
+        )
         data = json.loads(response.data.decode())
         self.assertEqual(data['error'], "This email is not valid.")
 
@@ -275,8 +276,8 @@ class TestAuthBlueprint(BaseTestCase):
             content_type='application/json'
         )
         data = json.loads(response.data.decode())
-        self.assertTrue(data['error'] == "Password should be a string or an integer")
-        
+        self.assertTrue(data['error'] ==
+                        "Password should be a string or an integer")
 
     def test_valid_blacklisted_token_logout(self):
         """ Test for logout after a valid token gets blacklisted """
@@ -329,12 +330,10 @@ class TestAuthBlueprint(BaseTestCase):
         self.assertEqual(data['status'], 'fail')
 
         # invalid token
-        response =  self.client.post(
-                    '/auth/logout',
-                    headers=dict(
-                        Authorization='Bearer 1234'
-                        )
-                    )
+        response = self.client.post(
+            '/auth/logout',
+            headers=dict(
+                Authorization='Bearer 1234'
+            )
+        )
         self.assertEqual(data['status'], 'fail')
-
-

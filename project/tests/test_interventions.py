@@ -29,6 +29,7 @@ class TestRedflags(BaseTestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data['status'] == 404)
+        self.assertTrue(data['error'] == "There are no interventions")
 
     def test_get_all_interventions_when_there_is_data(self):
         """ This will test for getting all stored interventions """
@@ -36,7 +37,7 @@ class TestRedflags(BaseTestCase):
         register_user(self)
         response = login_user(self)
 
-        # get token
+        # get token
         headers = dict(Authorization='Bearer ' +
                        json.loads(response.data
                                   )['data'][0]['token']
@@ -49,6 +50,7 @@ class TestRedflags(BaseTestCase):
         self.assertEqual(data['status'], 200)
         self.assertIsNotNone(data['data'][0])
         self.assertTrue(len(data) == 2)
+    
 
     def test_get_specific_intervention_when_list_empty(self):
         """ Test for getting non-existent intervention """

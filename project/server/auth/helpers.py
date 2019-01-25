@@ -12,16 +12,36 @@ db_name = DatabaseConnection()
 
 def validate_registration_input(data):
     try:
-        if not isinstance(data.get('firstname'), str):
+        if (
+            not data['firstname']
+            or not isinstance(data['firstname'], str)
+            or data['firstname'].isspace()
+            ):
             raise TypeError("Firstname should be a string")
-        if not isinstance(data.get('lastname'), str):
+        if (
+            not data['lastname']
+            or not isinstance(data['lastname'], str)
+            or data['lastname'].isspace()
+        ):
             raise TypeError("Lastname should be a string")
-        if data.get('othernames'):
-            if not isinstance(data.get('othernames'), str):
+        if data['othernames']:
+            if (
+                not isinstance(data['othernames'], str)
+                or data['othernames'].isspace()
+                ):
                 raise TypeError("Othernames should be a string")
-        if not isinstance(data.get('password'), str):
-            if not isinstance(data.get('password'), int):
-                raise TypeError("Password should be a string or an integer")
+        if (
+            not data['password']
+            or not isinstance(data['password'], (int, str)) 
+            or data['password'].isspace()
+            ):   
+            raise TypeError("Password should be a string or an integer")
+        if (
+            not data['username']
+            or not isinstance(data['username'], (int, str)) 
+            or data['username'].isspace()
+            ):   
+            raise TypeError("Username should be a string or an integer")
         if len(data.get('email')) < 7:
             raise ValueError("Email too short.")
         if not re.match("[^@]+@[^@]+\.[^@]+", data.get('email')):
@@ -129,7 +149,7 @@ def generate_auth_token(user_id):
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=10000),
             'iat': datetime.datetime.utcnow(),
             'sub': user_id
         }
