@@ -311,3 +311,30 @@ class TestAuthBlueprint(BaseTestCase):
             # self.assertTrue(data['message'] ==
             #                 'Token blacklisted. Please log in again.')
             # self.assertEqual(response.status_code, 401)
+
+    def test_decode_invalid_token(self):
+        """ Test for decoding an invalid token """
+        # logout with wrong token
+        response = self.client.post('/auth/logout', headers="")
+        data = json.loads(response.data.decode())
+        self.assertEqual(data['status'], 'fail')
+
+        # invalid admin token
+        input_data = ""
+        response = self.client.patch('/api/v1/red-flags/200/status',
+                                     content_type='application/json',
+                                     data=json.dumps(input_data),
+                                     headers="")
+        data = json.loads(response.data.decode())
+        self.assertEqual(data['status'], 'fail')
+
+        # invalid token
+        response =  self.client.post(
+                    '/auth/logout',
+                    headers=dict(
+                        Authorization='Bearer 1234'
+                        )
+                    )
+        self.assertEqual(data['status'], 'fail')
+
+
