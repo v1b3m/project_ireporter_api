@@ -5,7 +5,11 @@ def validate_add_redflag_data(data):
     """ This function will be used to
         validate input_data """
     try:
-        if not isinstance(data['location'], str):
+        if(
+            not data['location']
+            or not isinstance(data['location'], str)
+            or data['location'].isspace()
+        ):
             raise TypeError("location must be a string")
         if not isinstance(data['type'], str):
             raise TypeError("type must be a string")
