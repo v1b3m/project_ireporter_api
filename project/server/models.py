@@ -29,9 +29,6 @@ class User:
             'is_admin': self.is_admin
         }
 
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
-
 
 class Incident:
     """ Both red-flag and intervention records will be
@@ -47,17 +44,3 @@ class Incident:
         self.images = None
         self.videos = None
         self.comment = kwargs['comment']
-
-    def __repr__(self):
-        return '<Incident {}>'.format(self.type)
-
-    def __iter__(self):
-        yield 'id', self.flag_id
-        yield 'created_on', self.created_on
-        yield 'created_by', self.created_by
-        yield 'type', self.type
-        yield 'location', self.location
-        yield 'status', self.status
-        yield 'images', self.images
-        yield 'videos', self.videos
-        yield 'comment', self.comment

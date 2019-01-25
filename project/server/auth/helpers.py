@@ -1,4 +1,6 @@
-import re, jwt, datetime
+import re
+import jwt
+import datetime
 from db import DatabaseConnection
 from project.server import app
 from functools import wraps
@@ -7,18 +9,39 @@ from flask import request, make_response, jsonify
 
 db_name = DatabaseConnection()
 
+
 def validate_registration_input(data):
     try:
-        if not isinstance(data.get('firstname'), str):
+        if (
+            not data['firstname']
+            or not isinstance(data['firstname'], str)
+            or data['firstname'].isspace()
+            ):
             raise TypeError("Firstname should be a string")
-        if not isinstance(data.get('lastname'), str):
+        if (
+            not data['lastname']
+            or not isinstance(data['lastname'], str)
+            or data['lastname'].isspace()
+        ):
             raise TypeError("Lastname should be a string")
-        if data.get('othernames'):
-            if not isinstance(data.get('othernames'), str):
+        if data['othernames']:
+            if (
+                not isinstance(data['othernames'], str)
+                or data['othernames'].isspace()
+                ):
                 raise TypeError("Othernames should be a string")
-        if not isinstance(data.get('password'), str):
-            if not isinstance(data.get('password'), int):
-                raise TypeError("Password should be a string or an integer")
+        if (
+            not data['password']
+            or not isinstance(data['password'], (int, str)) 
+            or data['password'].isspace()
+            ):   
+            raise TypeError("Password should be a string or an integer")
+        if (
+            not data['username']
+            or not isinstance(data['username'], (int, str)) 
+            or data['username'].isspace()
+            ):   
+            raise TypeError("Username should be a string or an integer")
         if len(data.get('email')) < 7:
             raise ValueError("Email too short.")
         if not re.match("[^@]+@[^@]+\.[^@]+", data.get('email')):
@@ -33,11 +56,15 @@ def validate_login_input(data):
     try:
         if not re.match("[^@]+@[^@]+\.[^@]+", data.get('email')):
             raise ValueError("This email is not valid.")
-        if not isinstance(data.get('password'), str):
-            if not isinstance(data.get('password'), int):
-                raise TypeError("Password should be a string or an integer")
+        if (
+            not data['password']
+            or not isinstance(data['password'], (int, str)) 
+            or data['password'].isspace()
+            ): 
+            raise TypeError("Password should be a string or an integer")
     except (TypeError, ValueError) as e:
         return str(e)
+
 
 def decode_auth_token(auth_token):
     """
@@ -56,6 +83,7 @@ def decode_auth_token(auth_token):
         return 'Signature expired. Please log in again.'
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
+
 
 def token_required(func):
     @wraps(func)
@@ -82,6 +110,7 @@ def token_required(func):
             }
             return make_response(jsonify(responseObject)), 403
     return decorated_function
+
 
 def admin_required(func):
     @wraps(func)
@@ -118,19 +147,19 @@ def admin_required(func):
 
 
 def generate_auth_token(user_id):
-        """
-        Generates the auth token string
-        """
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
-            }
-            return jwt.encode(
-                payload,
-                app.config.get('SECRET_KEY'),
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
+    """
+    Generates the auth token string
+    """
+    try:
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+            'iat': datetime.datetime.utcnow(),
+            'sub': user_id
+        }
+        return jwt.encode(
+            payload,
+            app.config.get('SECRET_KEY'),
+            algorithm='HS256'
+        )
+    except Exception as e:
+        return e

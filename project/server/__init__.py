@@ -19,9 +19,9 @@ app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
 bcrypt = Bcrypt(app)
 Swagger(app)
 
-from project.server.redflags.views import redflags_blueprint
-from project.server.auth.views import auth_blueprint
 from project.server.interventions.views import interventions_blueprint
+from project.server.auth.views import auth_blueprint
+from project.server.redflags.views import redflags_blueprint
 
 app.register_blueprint(redflags_blueprint)
 app.register_blueprint(auth_blueprint)

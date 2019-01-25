@@ -2,12 +2,15 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server import bcrypt, app
-from project.server.auth.helpers import token_required, generate_auth_token
+from project.server.auth.helpers import (token_required, 
+            generate_auth_token, validate_registration_input,
+            validate_login_input)
 from db import DatabaseConnection
 from flasgger import swag_from
 
 auth_blueprint = Blueprint('auth', __name__)
 db_name = DatabaseConnection()
+
 
 class RegisterAPI(MethodView):
     """
@@ -17,14 +20,23 @@ class RegisterAPI(MethodView):
     def post(self):
         # get the post data
         post_data = request.get_json()
+
+        # validate data
+        if validate_registration_input(post_data):
+            response_object = {
+                "status": 400,
+                "error": validate_registration_input(post_data)
+            }
+            return make_response(jsonify(response_object)), 400
+
         # check if user already exists
         user = db_name.check_user(email=post_data.get('email'))
         if not user:
             try:
                 user_id = db_name.create_user(firstname=post_data.get('firstname'),
-                    lastname=post_data.get('lastname'), othernames=post_data.get('othernames'),
-                    username=post_data.get('username'), email=post_data.get('email'),
-                    password=post_data.get('password'), phone_number=post_data.get('phone_number'))
+                                              lastname=post_data.get('lastname'), othernames=post_data.get('othernames'),
+                                              username=post_data.get('username'), email=post_data.get('email'),
+                                              password=post_data.get('password'), phone_number=post_data.get('phone_number'))
                 user = db_name.check_user(email=post_data.get('email'))
                 # generate auth token
                 auth_token = generate_auth_token(user_id)
@@ -33,7 +45,7 @@ class RegisterAPI(MethodView):
                     'data': [{
                         'token': auth_token.decode(),
                         "user": user
-                    }] 
+                    }]
                 }
                 return make_response(jsonify(responseObject)), 201
             except:
@@ -49,6 +61,7 @@ class RegisterAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 202
 
+
 class LoginAPI(MethodView):
     """
     User Login Resource
@@ -57,6 +70,15 @@ class LoginAPI(MethodView):
     def post(self):
         # get the post data
         post_data = request.get_json()
+
+        # validate data
+        if validate_login_input(post_data):
+            response_object = {
+                "status": 400,
+                "error": validate_login_input(post_data)
+            }
+            return make_response(jsonify(response_object)), 400
+
         try:
             # fetch the user data
             user = db_name.check_user(email=post_data.get('email'))
@@ -86,6 +108,7 @@ class LoginAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 500
 
+
 class LogoutAPI(MethodView):
     """
     Logout Resource
@@ -108,6 +131,7 @@ class LogoutAPI(MethodView):
                 'message': e
             }
             return make_response(jsonify(responseObject)), 200
+
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')

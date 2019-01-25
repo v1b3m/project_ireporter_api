@@ -8,6 +8,7 @@ from project.tests.helpers import register_user, login_user, logout_user
 from db import DatabaseConnection
 db_name = DatabaseConnection()
 
+
 class TestAuthBlueprint(BaseTestCase):
     def test_registration(self):
         response = register_user(self)
@@ -17,6 +18,128 @@ class TestAuthBlueprint(BaseTestCase):
         self.assertTrue(data['data'][0]['token'])
         self.assertTrue(response.content_type == 'application/json')
         self.assertEqual(response.status_code, 201)
+
+    def test_registration_with_wrong_data(self):
+        """ This function will test the data validation """
+        # integer firstname
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname=32,
+                lastname="Mayanja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="test@test.com",
+                password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['status'] == 400)
+
+        # integer lastname
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname=33,
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="test@test.com",
+                password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertIn("Lastname should be", data['error'])
+
+        # integer othernames
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames=4,
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="test@test.com",
+                password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertIn("Othernames should be", data['error'])
+
+        # wrong email
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="te@st@test.com",
+                password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] == "This email is not valid.")
+
+        # short email
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="tt@t.m",
+                password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] == "Email too short.")
+
+        # wrong phone number
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password='123456'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] == "Phone Number is invalid")
+
+        # wrong password
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password=[]
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] ==
+                        "Password should be a string or an integer")
 
     def test_registration_with_alredy_registered_user(self):
         """ Test registration with aready registered email """
@@ -124,6 +247,38 @@ class TestAuthBlueprint(BaseTestCase):
             )
             self.assertEqual(response.status_code, 401)
 
+    def test_login_with_wrong_data(self):
+        """ This will test logging in with wrong data """
+        # invalid email
+        response = self.client.post(
+            '/auth/login',
+            data=json.dumps(dict(
+                            email="t@est@test.com",
+                            password="123456"
+                            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertEqual(data['error'], "This email is not valid.")
+
+        # wrong password
+        response = self.client.post(
+            '/auth/login',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password=[]
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] ==
+                        "Password should be a string or an integer")
+
     def test_valid_blacklisted_token_logout(self):
         """ Test for logout after a valid token gets blacklisted """
         with self.client:
@@ -157,3 +312,28 @@ class TestAuthBlueprint(BaseTestCase):
             # self.assertTrue(data['message'] ==
             #                 'Token blacklisted. Please log in again.')
             # self.assertEqual(response.status_code, 401)
+
+    def test_decode_invalid_token(self):
+        """ Test for decoding an invalid token """
+        # logout with wrong token
+        response = self.client.post('/auth/logout', headers="")
+        data = json.loads(response.data.decode())
+        self.assertEqual(data['status'], 'fail')
+
+        # invalid admin token
+        input_data = ""
+        response = self.client.patch('/api/v1/red-flags/200/status',
+                                     content_type='application/json',
+                                     data=json.dumps(input_data),
+                                     headers="")
+        data = json.loads(response.data.decode())
+        self.assertEqual(data['status'], 'fail')
+
+        # invalid token
+        response = self.client.post(
+            '/auth/logout',
+            headers=dict(
+                Authorization='Bearer 1234'
+            )
+        )
+        self.assertEqual(data['status'], 'fail')

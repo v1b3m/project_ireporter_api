@@ -1,7 +1,7 @@
 # ireporter-challenge-2
 A simple api endpoints to the Andela iReporter
 
-[![Coverage Status](https://coveralls.io/repos/github/v1b3m/ireporter-challenge-2/badge.svg?branch=develop)](https://coveralls.io/github/v1b3m/ireporter-challenge-2?branch=develop) [![Build Status](https://travis-ci.org/v1b3m/ireporter-challenge-2.svg?branch=Add-travis)](https://travis-ci.org/v1b3m/ireporter-challenge-2) [![Maintainability](https://api.codeclimate.com/v1/badges/b926e59a913d6c5e1f43/maintainability)](https://codeclimate.com/github/v1b3m/ireporter-challenge-2/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/v1b3m/project_ireporter_api/badge.svg?branch=develop)](https://coveralls.io/github/v1b3m/project_ireporter_api?branch=develop) [![Build Status](https://travis-ci.org/v1b3m/project_ireporter_api.svg?branch=develop)](https://travis-ci.org/v1b3m/project_ireporter_api) [![Maintainability](https://api.codeclimate.com/v1/badges/b926e59a913d6c5e1f43/maintainability)](https://codeclimate.com/github/v1b3m/ireporter-challenge-2/maintainability)
 
 ## Overview
 Corruption is a huge bane to Africa’s development. African countries must develop novel and localised 
