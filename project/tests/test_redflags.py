@@ -24,7 +24,7 @@ class TestRedflags(BaseTestCase):
                                   )['data'][0]['token']
                        )
 
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data['status'] == 404)
@@ -43,7 +43,7 @@ class TestRedflags(BaseTestCase):
 
         input_data = self.input_data
         add_redflag(self, headers, input_data)
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         self.assertEqual(data['status'], 200)
         self.assertIsNotNone(data['data'][0])
@@ -56,7 +56,7 @@ class TestRedflags(BaseTestCase):
         login_response = login_user(self)
 
         response = self.client.get(
-            '/api/v1/red-flags/200000',
+            '/api/v2/red-flags/200000',
             headers=dict(
                 Authorization='Bearer '+json.loads(
                     login_response.data
@@ -84,13 +84,13 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get the red-flag's id
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
         # get the red-flag with the returned id
         response = self.client.get(
-            '/api/v1/red-flags/{}'.format(flag_id),
+            '/api/v2/red-flags/{}'.format(flag_id),
             headers=dict(
                 Authorization='Bearer '+json.loads(
                     login_response.data
@@ -158,7 +158,7 @@ class TestRedflags(BaseTestCase):
 
         # post empty request
         response = self.client.post(
-            '/api/v1/red-flags',
+            '/api/v2/red-flags',
             headers=headers
         )
         data = json.loads(response.data)
@@ -244,7 +244,7 @@ class TestRedflags(BaseTestCase):
                                   )['data'][0]['token']
                        )
 
-        response = self.client.delete('/api/v1/red-flags/2', headers=headers)
+        response = self.client.delete('/api/v2/red-flags/2', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(response.status_code == 200)
         self.assertIn("Oops", data['message'])
@@ -267,13 +267,13 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record id
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
         # delete red-flag whose id has been returned
         response = self.client.delete(
-            '/api/v1/red-flags/{}'.format(flag_id),
+            '/api/v2/red-flags/{}'.format(flag_id),
             headers=headers)
         data = json.loads(response.data)
         self.assertIn('deleted', data['data'][0]['message'])
@@ -291,7 +291,7 @@ class TestRedflags(BaseTestCase):
                        )
 
         input_data = {"location": "2375812"}
-        response = self.client.patch('/api/v1/red-flags/1/location',
+        response = self.client.patch('/api/v2/red-flags/1/location',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -316,7 +316,7 @@ class TestRedflags(BaseTestCase):
 
         # send empty patch request to server
         response = self.client.patch(
-            '/api/v1/red-flags/1/location', headers=headers)
+            '/api/v2/red-flags/1/location', headers=headers)
         data = json.loads(response.data)
         self.assertEqual(data['error'], 'Please provide a location')
 
@@ -337,13 +337,13 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record flag_id
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
         # patch red-flag whose id has been returned
         input_data = {"location": "fhkdd"}
-        response = self.client.patch('/api/v1/red-flags/{}/location'.format(flag_id),
+        response = self.client.patch('/api/v2/red-flags/{}/location'.format(flag_id),
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -369,13 +369,13 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record flag_id
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
         # patch red-flag whose id has been returned
         input_data = {"location": 21}
-        response = self.client.patch('/api/v1/red-flags/{}/location'.format(flag_id),
+        response = self.client.patch('/api/v2/red-flags/{}/location'.format(flag_id),
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -385,7 +385,7 @@ class TestRedflags(BaseTestCase):
 
         # patch red-flag without location data in request
         input_data = {"locatio": "0.12, 3.22"}
-        response = self.client.patch('/api/v1/red-flags/{}/location'.format(flag_id),
+        response = self.client.patch('/api/v2/red-flags/{}/location'.format(flag_id),
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -407,7 +407,7 @@ class TestRedflags(BaseTestCase):
 
         input_data = {"comment": "I am sick"}
         response = self.client.patch(
-            '/api/v1/red-flags/1/comment',
+            '/api/v2/red-flags/1/comment',
             content_type='application/json',
             data=json.dumps(input_data),
             headers=headers)
@@ -432,7 +432,7 @@ class TestRedflags(BaseTestCase):
 
         # send empty patch request to server
         response = self.client.patch(
-            '/api/v1/red-flags/1/comment', headers=headers)
+            '/api/v2/red-flags/1/comment', headers=headers)
         data = json.loads(response.data)
         self.assertIn('provide a comment', data['error'])
 
@@ -453,13 +453,13 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record id
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
         # patch red-flag record whose id has been returned
         input_data = {"comment": "fhkdd"}
-        response = self.client.patch('/api/v1/red-flags/{}/comment'.format(flag_id),
+        response = self.client.patch('/api/v2/red-flags/{}/comment'.format(flag_id),
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -483,13 +483,13 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record flag_id
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
         # patch red-flag with an integer comment
         input_data = {"comment": 21}
-        response = self.client.patch('/api/v1/red-flags/{}/comment'.format(flag_id),
+        response = self.client.patch('/api/v2/red-flags/{}/comment'.format(flag_id),
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -499,7 +499,7 @@ class TestRedflags(BaseTestCase):
 
         # patch red-flag without comment data
         input_data = {"sdfjdk": "This is a new comment"}
-        response = self.client.patch('/api/v1/red-flags/{}/comment'.format(flag_id),
+        response = self.client.patch('/api/v2/red-flags/{}/comment'.format(flag_id),
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -526,7 +526,7 @@ class TestRedflags(BaseTestCase):
                        )
 
         input_data = {"status": "djhdjfj"}
-        response = self.client.patch('/api/v1/red-flags/200/status',
+        response = self.client.patch('/api/v2/red-flags/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -557,7 +557,7 @@ class TestRedflags(BaseTestCase):
 
         # send request witn no data
         response = self.client.patch(
-            '/api/v1/red-flags/200/status', headers=headers)
+            '/api/v2/red-flags/200/status', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 400)
 
@@ -583,7 +583,7 @@ class TestRedflags(BaseTestCase):
         input_data = {"statu": "sjkj"}
 
         # send request
-        response = self.client.patch('/api/v1/red-flags/200/status',
+        response = self.client.patch('/api/v2/red-flags/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -594,7 +594,7 @@ class TestRedflags(BaseTestCase):
         input_data = {"status": 1}
 
         # send request
-        response = self.client.patch('/api/v1/red-flags/200/status',
+        response = self.client.patch('/api/v2/red-flags/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -603,7 +603,7 @@ class TestRedflags(BaseTestCase):
 
         # send request with wrong status format
         input_data = {"status": "hey"}
-        response = self.client.patch('/api/v1/red-flags/200/status',
+        response = self.client.patch('/api/v2/red-flags/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -633,14 +633,14 @@ class TestRedflags(BaseTestCase):
         add_redflag(self, headers, input_data)
 
         # get red-flag record id
-        response = self.client.get('/api/v1/red-flags', headers=headers)
+        response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
         flag_id = data['data'][0]['incident_id']
 
         # edit the red-flag status
         # send request with wrong status format
         input_data = {"status": "rejected"}
-        response = self.client.patch('/api/v1/red-flags/%d/status' % flag_id,
+        response = self.client.patch('/api/v2/red-flags/%d/status' % flag_id,
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -648,7 +648,7 @@ class TestRedflags(BaseTestCase):
         self.assertTrue(data["status"] == 201)
 
         # edit non-existent red-flag
-        response = self.client.patch('/api/v1/red-flags/200/status',
+        response = self.client.patch('/api/v2/red-flags/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)

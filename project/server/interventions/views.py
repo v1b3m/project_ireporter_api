@@ -189,27 +189,27 @@ update_intervention_status = UpdateStatusAPI.as_view('update_status_api')
 
 # add rules for API endpoints
 interventions_blueprint.add_url_rule(
-    '/api/v1/interventions',
+    '/api/v2/interventions',
     view_func=get_interventions_view,
     methods=['GET']
 )
 interventions_blueprint.add_url_rule(
-    '/api/v1/interventions/<int:intervention_id>',
+    '/api/v2/interventions/<int:intervention_id>',
     view_func=get_specific_intervention_view,
     methods=['GET']
 )
 interventions_blueprint.add_url_rule(
-    '/api/v1/interventions',
+    '/api/v2/interventions',
     view_func=add_interventions_view,
     methods=['POST']
 )
 interventions_blueprint.add_url_rule(
-    '/api/v1/interventions/<int:intervention_id>',
+    '/api/v2/interventions/<int:intervention_id>',
     view_func=delete_interventions_view,
     methods=['DELETE']
 )
 interventions_blueprint.add_url_rule(
-    '/api/v1/interventions/<int:intervention_id>/status',
+    '/api/v2/interventions/<int:intervention_id>/status',
     view_func=update_intervention_status,
     methods=['PATCH']
 )

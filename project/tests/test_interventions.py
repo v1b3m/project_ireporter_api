@@ -25,7 +25,7 @@ class TestRedflags(BaseTestCase):
                                   )['data'][0]['token']
                        )
 
-        response = self.client.get('/api/v1/interventions', headers=headers)
+        response = self.client.get('/api/v2/interventions', headers=headers)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data['status'] == 404)
@@ -45,7 +45,7 @@ class TestRedflags(BaseTestCase):
 
         input_data = self.intervention_data
         add_intervention(self, headers, input_data)
-        response = self.client.get('/api/v1/interventions', headers=headers)
+        response = self.client.get('/api/v2/interventions', headers=headers)
         data = json.loads(response.data)
         self.assertEqual(data['status'], 200)
         self.assertIsNotNone(data['data'][0])
@@ -65,7 +65,7 @@ class TestRedflags(BaseTestCase):
                        )
 
         response = self.client.get(
-            '/api/v1/interventions/200000', headers=headers)
+            '/api/v2/interventions/200000', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 404)
         self.assertIn("doesn't exist", data['error'])
@@ -87,13 +87,13 @@ class TestRedflags(BaseTestCase):
         add_intervention(self, headers, input_data)
 
         # get the intervention's id
-        response = self.client.get('/api/v1/interventions', headers=headers)
+        response = self.client.get('/api/v2/interventions', headers=headers)
         data = json.loads(response.data)
         intervention_id = data['data'][0]['incident_id']
 
         # get the intervention with the returned id
         response = self.client.get(
-            '/api/v1/interventions/{}'.format(intervention_id), headers=headers)
+            '/api/v2/interventions/{}'.format(intervention_id), headers=headers)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(data["data"])
@@ -154,7 +154,7 @@ class TestRedflags(BaseTestCase):
                        )
 
         # post empty request
-        response = self.client.post('/api/v1/interventions', headers=headers)
+        response = self.client.post('/api/v2/interventions', headers=headers)
         data = json.loads(response.data)
         self.assertIn('Empty', data['error'])
         self.assertIsNot(response.status_code, 404)
@@ -229,7 +229,7 @@ class TestRedflags(BaseTestCase):
                        )
 
         response = self.client.delete(
-            '/api/v1/interventions/2', headers=headers)
+            '/api/v2/interventions/2', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(response.status_code == 200)
         self.assertIn("Oops", data['message'])
@@ -252,13 +252,13 @@ class TestRedflags(BaseTestCase):
         add_intervention(self, headers, input_data)
 
         # get red-flag record id
-        response = self.client.get('/api/v1/interventions', headers=headers)
+        response = self.client.get('/api/v2/interventions', headers=headers)
         data = json.loads(response.data)
         intervention_id = data['data'][0]['incident_id']
 
         # delete red-flag whose id has been returned
         response = self.client.delete(
-            '/api/v1/interventions/{}'.format(intervention_id), headers=headers)
+            '/api/v2/interventions/{}'.format(intervention_id), headers=headers)
         data = json.loads(response.data)
         self.assertIn('deleted', data['data'][0]['message'])
 
@@ -275,7 +275,7 @@ class TestRedflags(BaseTestCase):
                        )
 
         input_data = {"status": "djhdjfj"}
-        response = self.client.patch('/api/v1/interventions/200/status',
+        response = self.client.patch('/api/v2/interventions/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -306,7 +306,7 @@ class TestRedflags(BaseTestCase):
 
         # send request witn no data
         response = self.client.patch(
-            '/api/v1/red-flags/200/status', headers=headers)
+            '/api/v2/red-flags/200/status', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 400)
 
@@ -332,7 +332,7 @@ class TestRedflags(BaseTestCase):
         input_data = {"statu": "sjkj"}
 
         # send request
-        response = self.client.patch('/api/v1/interventions/200/status',
+        response = self.client.patch('/api/v2/interventions/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -343,7 +343,7 @@ class TestRedflags(BaseTestCase):
         input_data = {"status": 1}
 
         # send request
-        response = self.client.patch('/api/v1/interventions/200/status',
+        response = self.client.patch('/api/v2/interventions/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -370,7 +370,7 @@ class TestRedflags(BaseTestCase):
 
         # send request witn no data
         response = self.client.patch(
-            '/api/v1/interventions/200/status', headers=headers)
+            '/api/v2/interventions/200/status', headers=headers)
         data = json.loads(response.data)
         self.assertTrue(data['status'] == 400)
 
@@ -397,14 +397,14 @@ class TestRedflags(BaseTestCase):
         add_intervention(self, headers, input_data)
 
         # get intervention record id
-        response = self.client.get('/api/v1/interventions', headers=headers)
+        response = self.client.get('/api/v2/interventions', headers=headers)
         data = json.loads(response.data)
         intervention_id = data['data'][0]['incident_id']
 
         # edit the red-flag status
         # send request with wrong status format
         input_data = {"status": "rejected"}
-        response = self.client.patch('/api/v1/interventions/%d/status' % intervention_id,
+        response = self.client.patch('/api/v2/interventions/%d/status' % intervention_id,
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)
@@ -412,7 +412,7 @@ class TestRedflags(BaseTestCase):
         self.assertTrue(data["status"] == 201)
 
         # edit non-existent red-flag
-        response = self.client.patch('/api/v1/interventions/200/status',
+        response = self.client.patch('/api/v2/interventions/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers=headers)

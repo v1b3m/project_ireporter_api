@@ -302,37 +302,37 @@ redflags_blueprint.add_url_rule(
     methods=['GET']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v1/red-flags',
+    '/api/v2/red-flags',
     view_func=get_redflags_view,
     methods=['GET']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v1/red-flags/<int:flag_id>',
+    '/api/v2/red-flags/<int:flag_id>',
     view_func=get_specific_redflag_view,
     methods=['GET']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v1/red-flags',
+    '/api/v2/red-flags',
     view_func=add_redflags_view,
     methods=['POST']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v1/red-flags/<int:flag_id>',
+    '/api/v2/red-flags/<int:flag_id>',
     view_func=delete_redflags_view,
     methods=['DELETE']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v1/red-flags/<int:flag_id>/location',
+    '/api/v2/red-flags/<int:flag_id>/location',
     view_func=edit_redflag_location_view,
     methods=['PATCH']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v1/red-flags/<int:flag_id>/comment',
+    '/api/v2/red-flags/<int:flag_id>/comment',
     view_func=edit_redflag_comment_view,
     methods=['PATCH']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v1/red-flags/<int:flag_id>/status',
+    '/api/v2/red-flags/<int:flag_id>/status',
     view_func=update_redflag_status,
     methods=['PATCH']
 )
