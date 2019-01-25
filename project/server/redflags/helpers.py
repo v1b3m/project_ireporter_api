@@ -11,9 +11,17 @@ def validate_add_redflag_data(data):
             or data['location'].isspace()
         ):
             raise TypeError("location must be a string")
-        if not isinstance(data['type'], str):
+        if (
+            not data['type']
+            or not isinstance(data['type'], str)
+            or data['type'].isspace()
+        ):
             raise TypeError("type must be a string")
-        if not isinstance(data['comment'], str):
+        if (
+            not data['comment']
+            or not isinstance(data['comment'], str)
+            or data['comment'].isspace()
+        ):
             raise TypeError("comment must be a string")
         if not isinstance(data['created_by'], int):
             raise TypeError("created_by must be an integer")
