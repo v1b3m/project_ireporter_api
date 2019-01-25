@@ -56,9 +56,12 @@ def validate_login_input(data):
     try:
         if not re.match("[^@]+@[^@]+\.[^@]+", data.get('email')):
             raise ValueError("This email is not valid.")
-        if not isinstance(data.get('password'), str):
-            if not isinstance(data.get('password'), int):
-                raise TypeError("Password should be a string or an integer")
+        if (
+            not data['password']
+            or not isinstance(data['password'], (int, str)) 
+            or data['password'].isspace()
+            ): 
+            raise TypeError("Password should be a string or an integer")
     except (TypeError, ValueError) as e:
         return str(e)
 
