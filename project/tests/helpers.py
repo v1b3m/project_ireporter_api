@@ -41,7 +41,7 @@ def logout_user(self, login_response):
 
 def add_redflag(self, headers, input_data):
     return self.client.post(
-        '/api/v1/red-flags',
+        '/api/v2/red-flags',
         content_type='application/json',
         data=json.dumps(input_data),
         headers=headers
@@ -50,7 +50,7 @@ def add_redflag(self, headers, input_data):
 
 def add_intervention(self, headers, input_data):
     return self.client.post(
-        '/api/v1/interventions',
+        '/api/v2/interventions',
         content_type='application/json',
         data=json.dumps(input_data),
         headers=headers

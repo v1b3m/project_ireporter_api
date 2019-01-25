@@ -322,7 +322,7 @@ class TestAuthBlueprint(BaseTestCase):
 
         # invalid admin token
         input_data = ""
-        response = self.client.patch('/api/v1/red-flags/200/status',
+        response = self.client.patch('/api/v2/red-flags/200/status',
                                      content_type='application/json',
                                      data=json.dumps(input_data),
                                      headers="")
