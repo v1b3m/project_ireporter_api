@@ -36,7 +36,11 @@ def validate_edit_location_data(data):
     """ This function will validate the data
         used to edit a location """
     try:
-        if not isinstance(data['location'], str):
+        if(
+            not data['location']
+            or not isinstance(data['location'], str)
+            or data['location'].isspace()
+        ):
             raise TypeError('location must be a string')
     except TypeError as error:
         return str(error)
@@ -47,7 +51,11 @@ def validate_edit_comment_data(data):
     """ This function will validate the data
         used to edit a comment """
     try:
-        if not isinstance(data['comment'], str):
+        if(
+            not data['comment']
+            or not isinstance(data['comment'], str)
+            or data['comment'].isspace()
+        ) :
             raise TypeError("comment must be a string")
     except TypeError as error:
         return str(error)
@@ -58,7 +66,11 @@ def validate_edit_status_data(data):
     """ This function will validate the data
         used to edit a status """
     try:
-        if not isinstance(data['status'], str):
+        if(
+            not data['status']
+            or not isinstance(data['status'], str)
+            or data['status'].isspace()
+        ):
             raise TypeError('status must be a string')
         if data['status'] not in ['​under investigation', 'rejected', 'resolved']:
             raise ValueError(
