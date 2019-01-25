@@ -305,27 +305,5 @@ class DatabaseConnection:
 
 if __name__ == '__main__':
     db_name = DatabaseConnection()
-    db_name.create_blacklist_table()
-    # db_name.delete_all_incidents()
-    # db_name.create_user_table()
 
-    
-    # print('Create a user')
-    # user_id = db_name.create_user(firstname='benjamin', lastname='mayanja',
-    #                         othernames='', username='v1b3m', email='v122sdse@gmi.com',
-    #                         password='1234', phone_number='2309908' )
-    # db_name.make_admin(user_id)
-    # id = db_name.create_incident(created_by=4322, type='kjshkj',
-    #                         location='skljlk', comment='sjkjljks',
-    #                         videos="a.mp4", images="a.jpg")
-    # db_name.get_incident(id)
-    # user = db_name.check_user('v122e@gmi.com')
-    # print(user)
-    # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgyNDk5MzIsImlhdCI6MTU0ODI0OTg3Miwic3ViIjo0MTUzfQ.aKmkd-6I97Qxg9S78DInYHtnuBE1APXWiV-uJdMrdZM")
-    # db_name.blacklist_token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgxNTU0NzUsImlhdCI6MTU0ODE1NTQxNSwic3ViIjo1Mjl9.tLhW_ifyTGRnMMbiJ3F6NOChHGt4U1ajWu_AOZuleMo")
-    # db_name.update_incident_status(1473, "Approved")
-    # print(db_name.is_admin(user_id))
-    # db_name.create_blacklist_table()
-    # db_name.create_incidents_table()
-    # db_name.create_user_table()
     
