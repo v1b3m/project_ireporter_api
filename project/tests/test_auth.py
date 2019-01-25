@@ -246,6 +246,38 @@ class TestAuthBlueprint(BaseTestCase):
             )
             self.assertEqual(response.status_code, 401)
 
+    def test_login_with_wrong_data(self):
+        """ This will test logging in with wrong data """
+        # invalid email
+        response = self.client.post(
+                        '/auth/login',
+                        data=json.dumps(dict(
+                            email="t@est@test.com",
+                            password="123456"
+                        )),
+                        content_type='application/json'
+                        )
+        data = json.loads(response.data.decode())
+        self.assertEqual(data['error'], "This email is not valid.")
+
+        # wrong password
+        response = self.client.post(
+            '/auth/login',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password=[]
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] == "Password should be a string or an integer")
+        
+
     def test_valid_blacklisted_token_logout(self):
         """ Test for logout after a valid token gets blacklisted """
         with self.client:
