@@ -123,6 +123,23 @@ class TestAuthBlueprint(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertTrue(data['error'] == "Phone Number is invalid")
 
+        # wrong password
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password=[]
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] == "Password should be a string or an integer")
+
     def test_registration_with_alredy_registered_user(self):
         """ Test registration with aready registered email """
         # create user
