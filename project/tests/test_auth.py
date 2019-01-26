@@ -308,10 +308,8 @@ class TestAuthBlueprint(BaseTestCase):
             # blacklisted valid token logout
             response = logout_user(self, response)
             data = json.loads(response.data.decode())
-            # self.assertTrue(data['status'] == 'fail')
-            # self.assertTrue(data['message'] ==
-            #                 'Token blacklisted. Please log in again.')
-            # self.assertEqual(response.status_code, 401)
+            self.assertTrue(data['status'] == 401)
+            
 
     def test_decode_invalid_token(self):
         """ Test for decoding an invalid token """
