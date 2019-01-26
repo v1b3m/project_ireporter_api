@@ -99,16 +99,16 @@ def token_required(func):
                 return func(*args, **kwargs)
             else:
                 responseObject = {
-                    'status': 'fail',
-                    'message': resp
+                    'status': 401,
+                    'error': resp
                 }
                 return make_response(jsonify(responseObject)), 401
         else:
             responseObject = {
-                'status': 'fail',
-                'message': 'Provide a valid auth token.'
+                'status': 401,
+                'error': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 403
+            return make_response(jsonify(responseObject)), 401
     return decorated_function
 
 
@@ -128,13 +128,13 @@ def admin_required(func):
                 else:
                     responseObject = {
                         'status': 403,
-                        'message': "You need to be an admin to access this route"
+                        'error': "You need to be an admin to access this route"
                     }
                     return make_response(jsonify(responseObject)), 403
             else:
                 responseObject = {
                     'status': 401,
-                    'message': resp
+                    'error': resp
                 }
                 return make_response(jsonify(responseObject)), 401
         else:
