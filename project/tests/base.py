@@ -26,6 +26,6 @@ class BaseTestCase(TestCase):
                                   }
 
     def tearDown(self):
-        self.db_name.delete_all_incidents()
-        self.db_name.delete_all_users()
-        self.db_name.delete_all_tokens()
+        self.db_name.delete_from_table('incidents')
+        self.db_name.delete_from_table('users')
+        self.db_name.delete_from_table('blacklist')

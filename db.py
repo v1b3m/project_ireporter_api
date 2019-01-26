@@ -199,35 +199,24 @@ class DatabaseConnection:
             if column == 'status':
                 query = """UPDATE incidents SET status = %s
                         WHERE incident_id = %s"""
-                self.cursor.execute(query, (data, id))
             elif column == 'comment':
                 query = """UPDATE incidents SET comment = %s
                     WHERE incident_id = %s"""
-                self.cursor.execute(query, (data, id))
             elif column == 'location':
                 query = """UPDATE incidents SET location = %s
                     WHERE incident_id = %s"""
-                self.cursor.execute(query, (data, id))
+            self.cursor.execute(query, (data, id))
         except Exception as e:
             pprint(e)
 
-    def delete_all_users(self):
+    def delete_from_table(self, table):
         try:
-            query = "DELETE FROM  users"
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-
-    def delete_all_incidents(self):
-        try:
-            query = 'DELETE FROM incidents'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-    
-    def delete_all_tokens(self):
-        try:
-            query = 'DELETE FROM blacklist'
+            if table == 'users':
+                query = "DELETE FROM  users"
+            elif table == 'incidents':
+                query = 'DELETE FROM incidents'
+            elif table == 'blacklist':
+                query = 'DELETE FROM blacklist'
             self.cursor.execute(query)
         except Exception as e:
             pprint(e)
