@@ -41,7 +41,7 @@ class RegisterAPI(MethodView):
                 # generate auth token
                 auth_token = generate_auth_token(user_id)
                 responseObject = {
-                    'status': '200',
+                    'status': 201,
                     'data': [{
                         'token': auth_token.decode(),
                         "user": user
@@ -50,14 +50,14 @@ class RegisterAPI(MethodView):
                 return make_response(jsonify(responseObject)), 201
             except:
                 responseObject = {
-                    'status': 'fail',
-                    'message': 'Some error occurred. Please try again.'
+                    'status': 401,
+                    'error': 'Some error occurred. Please try again.'
                 }
                 return make_response(jsonify(responseObject)), 401
         else:
             responseObject = {
-                'status': 'fail',
-                'message': 'User already exists. Please Log in.'
+                'status': 202,
+                'error': 'User already exists. Please Log in.'
             }
             return make_response(jsonify(responseObject)), 202
 
@@ -97,14 +97,14 @@ class LoginAPI(MethodView):
                     return make_response(jsonify(responseObject)), 200
             else:
                 responseObject = {
-                    'status': 'fail',
-                    'message': 'User does not exist.'
+                    'status': 404,
+                    'error': 'User does not exist.'
                 }
                 return make_response(jsonify(responseObject)), 404
         except:
             responseObject = {
-                'status': 'fail',
-                'message': 'Try again'
+                'status': 500,
+                'error': 'Try again'
             }
             return make_response(jsonify(responseObject)), 500
 
@@ -121,13 +121,13 @@ class LogoutAPI(MethodView):
         try:
             db_name.blacklist_token(auth_token)
             responseObject = {
-                'status': 'success',
+                'status': 200,
                 'message': 'Successfully logged out.'
             }
             return make_response(jsonify(responseObject)), 200
         except Exception as e:
             responseObject = {
-                'status': 'fail',
+                'status': 200,
                 'message': e
             }
             return make_response(jsonify(responseObject)), 200
