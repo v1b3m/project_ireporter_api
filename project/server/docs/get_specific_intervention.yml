@@ -1,0 +1,22 @@
+This enables a user to get a specific intervention
+---
+tags:
+  - Interventions
+parameters:
+  - in: path
+    name: intervention_id
+    required: true
+    type: integer
+    description: Enter intervention id
+responses:
+  200:
+    description: Intervention retrieved
+  404:
+    description: Intervention does not exist
+security:
+  -  bearerAuth:
+        description: Pass the jwt token e.g Bearer <token>
+        type: http
+        scheme: bearer
+        in: header
+        bearerFormat: JWT

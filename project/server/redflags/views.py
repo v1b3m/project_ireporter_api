@@ -2,6 +2,7 @@ from db import DatabaseConnection
 
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
+from flasgger import swag_from
 
 from project.server.auth.helpers import token_required, admin_required
 from project.server.redflags.helpers import (validate_add_redflag_data,
@@ -19,6 +20,7 @@ class GetRedflagsAPI(MethodView):
     Redflag and Intervention resource
     """
     @token_required
+    @swag_from('../docs/get_redflag.yml')
     def get(self):
         """
         get red-flags
@@ -43,6 +45,7 @@ class GetSpecificRedflagAPI(MethodView):
     Get a specific red-flag
     """
     @token_required
+    @swag_from('../docs/get_specific_redflag.yml')
     def get(self, flag_id):
         redflag = db_name.get_incident(flag_id)
         if redflag:
@@ -63,6 +66,7 @@ class CreateRedflagsAPI(MethodView):
     Create redflags here
     """
     @token_required
+    @swag_from('../docs/add_redflag.yml')
     def post(self):
         """
         add a redflag
@@ -107,6 +111,7 @@ class DeleteRedflagsAPI(MethodView):
     Delete a redflag
     """
     @token_required
+    @swag_from('../docs/delete_flag.yml')
     def delete(self, flag_id):
         """ This will delete a red-flag specified by id """
         # check if the record exists and delete the record
@@ -131,6 +136,7 @@ class PatchRedflagLocationAPI(MethodView):
     Patch a redflag location
     """
     @token_required
+    @swag_from('../docs/patch_flag_location.yml')
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -177,6 +183,7 @@ class PatchRedflagCommentAPI(MethodView):
     Patch a redflag location
     """
     @token_required
+    @swag_from('../docs/patch_flag_comment.yml')
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
@@ -233,6 +240,7 @@ class UpdateStatusAPI(MethodView):
     Patch a redflag status
     """
     @admin_required
+    @swag_from('../docs/edit_flag_status.yml')
     def patch(self, flag_id):
         # check if request has no json data in its body
         if not request.is_json:
