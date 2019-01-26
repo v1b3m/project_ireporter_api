@@ -1,0 +1,36 @@
+This will edit the status of a given intervention
+---
+tags:
+  - Interventions
+parameters:
+  - in: path
+    name: body
+    required: true
+    type: integer
+    description: Enter intervention id
+  - in: body
+    name: body
+    required: true
+    type: string
+    description: Enter new status
+responses:
+  201:
+    description: Comment updated
+    schema:
+      properties:
+        name:
+          type: string
+          default: status
+  400:
+    description: Failed to update status
+  401:
+    description: Missing authorization header
+  503:
+    description: You are not authorized to access this!
+security:
+  -  bearerAuth:
+        description: Pass the jwt token e.g Bearer <token>
+        type: http
+        scheme: bearer
+        in: header
+        bearerFormat: JWT

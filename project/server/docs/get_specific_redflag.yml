@@ -1,0 +1,22 @@
+This enables a user to get a specific redflag
+---
+tags:
+  - Red-flags
+parameters:
+  - in: path
+    name: redflag_id
+    required: true
+    type: integer
+    description: Enter red-flag id
+responses:
+  200:
+    description: Red-flag retrieved
+  404:
+    description: Red-flag does not exist
+security:
+  -  bearerAuth:
+        description: Pass the jwt token e.g Bearer <token>
+        type: http
+        scheme: bearer
+        in: header
+        bearerFormat: JWT
