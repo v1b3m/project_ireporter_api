@@ -30,7 +30,7 @@ class RegisterAPI(MethodView):
                 "error": "Some information is missing. Try again"
             }
             return make_response(jsonify(response_object)), 400
-            
+
         # validate data
         if validate_registration_input(post_data):
             response_object = {
@@ -80,6 +80,14 @@ class LoginAPI(MethodView):
     def post(self):
         # get the post data
         post_data = request.get_json()
+
+        # check for missing data
+        if (not post_data['email'] or not post_data['password']):
+            response_object = {
+                "status": 400,
+                "error": "Email or password missing. Try again!"
+            }
+            return make_response(jsonify(response_object)), 400
 
         # validate data
         if validate_login_input(post_data):

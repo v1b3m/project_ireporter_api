@@ -34,14 +34,10 @@ def validate_registration_input(data):
 
 def validate_login_input(data):
     try:
-        if not re.match("[^@]+@[^@]+\.[^@]+", data.get('email')):
+        if not email_data(data['email']):
             raise ValueError("This email is not valid.")
-        if (
-            not data['password']
-            or not isinstance(data['password'], (int, str)) 
-            or data['password'].isspace()
-            ): 
-            raise TypeError("Password should be a string or an integer")
+        if not string_data(data['password']): 
+            raise TypeError("Password should be a string")
     except (TypeError, ValueError) as e:
         return str(e)
 

@@ -269,13 +269,31 @@ class TestAuthBlueprint(BaseTestCase):
                 phone_number="070-755-9192",
                 username='v1b3m',
                 email="ttsdf@dffd.dfm",
-                password=[]
+                password=123
             )),
             content_type='application/json'
         )
         data = json.loads(response.data.decode())
         self.assertTrue(data['error'] ==
-                        "Password should be a string or an integer")
+                        "Password should be a string")
+
+        # missing information
+        response = self.client.post(
+            '/auth/login',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password=""
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] ==
+                        "Email or password missing. Try again!")
 
     def test_valid_blacklisted_token_logout(self):
         """ Test for logout after a valid token gets blacklisted """
