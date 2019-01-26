@@ -296,7 +296,7 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
         self.assertTrue(len(data['message']) == 41)
         self.assertEqual(data['error'], 404)
         self.assertIn("doesn't exist", data['message'])
@@ -412,7 +412,7 @@ class TestRedflags(BaseTestCase):
             data=json.dumps(input_data),
             headers=headers)
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(data['error'], 404)
         self.assertTrue(data['message'] ==
                         "Sorry, the red-flag record doesn't exist.")

@@ -36,7 +36,7 @@ class GetRedflagsAPI(MethodView):
         responseObject = ({
             "status": 200,
             "data": [dict(redflag) for redflag in red_flags]
-        }), 200
+        })
         return jsonify(responseObject), 200
 
 
