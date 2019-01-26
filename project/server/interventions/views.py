@@ -21,9 +21,9 @@ class GetInterventionsAPI(MethodView):
     @swag_from('../docs/get_intervention.yml')
     def get(self):
         """
-        get red-flags
+        get interventions
         """
-        interventions = db_name.get_interventions()
+        interventions = db_name.get_incidents('intervention')
         if not interventions:
             return jsonify({
                 'error': 'There are no interventions',

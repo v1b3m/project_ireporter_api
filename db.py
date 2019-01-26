@@ -149,31 +149,10 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def get_incidents(self):
-        try:
-            query = "SELECT * FROM incidents"
-            self.cursor.execute(query)
-            incidents = self.cursor.fetchall()
-            if incidents:
-                return incidents
-            return None
-        except Exception as e:
-            pprint(e)
-
-    def get_interventions(self):
-        try:
-            query = "SELECT * FROM incidents WHERE type = 'intervention'"
-            self.cursor.execute(query)
-            incidents = self.cursor.fetchall()
-            if incidents:
-                return incidents
-            return None
-        except Exception as e:
-            pprint(e)
     
-    def get_redflags(self):
+    def get_incidents(self, type):
         try:
-            query = "SELECT * FROM incidents WHERE type = 'red-flag'"
+            query = "SELECT * FROM incidents WHERE type = '%s'" % type
             self.cursor.execute(query)
             incidents = self.cursor.fetchall()
             if incidents:

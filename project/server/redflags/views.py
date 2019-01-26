@@ -25,7 +25,7 @@ class GetRedflagsAPI(MethodView):
         """
         get red-flags
         """
-        red_flags = db_name.get_redflags()
+        red_flags = db_name.get_incidents('red-flag')
 
         if not red_flags:
             return jsonify({
