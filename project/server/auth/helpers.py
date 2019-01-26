@@ -1,3 +1,4 @@
+""" This script will contain all helper functions for authentication """
 import re
 import jwt
 import datetime
@@ -5,48 +6,27 @@ from db import DatabaseConnection
 from project.server import app
 from functools import wraps
 from flask import request, make_response, jsonify
-""" This script will contain all helper functions for authentication """
+from project.server.validation.validators import (string_data, 
+    string_or_integer_data, email_data, phone_number)
 
 db_name = DatabaseConnection()
 
-
 def validate_registration_input(data):
     try:
-        if (
-            not data['firstname']
-            or not isinstance(data['firstname'], str)
-            or data['firstname'].isspace()
-            ):
+        if not string_data(data['firstname']):
             raise TypeError("Firstname should be a string")
-        if (
-            not data['lastname']
-            or not isinstance(data['lastname'], str)
-            or data['lastname'].isspace()
-        ):
+        if not string_data(data['lastname']):
             raise TypeError("Lastname should be a string")
         if data['othernames']:
-            if (
-                not isinstance(data['othernames'], str)
-                or data['othernames'].isspace()
-                ):
+            if not string_data(data['othernames']):
                 raise TypeError("Othernames should be a string")
-        if (
-            not data['password']
-            or not isinstance(data['password'], (int, str)) 
-            or data['password'].isspace()
-            ):   
-            raise TypeError("Password should be a string or an integer")
-        if (
-            not data['username']
-            or not isinstance(data['username'], (int, str)) 
-            or data['username'].isspace()
-            ):   
+        if not string_data(data['password']):
+            raise TypeError("Password should be a string")
+        if not string_or_integer_data(data['username']):   
             raise TypeError("Username should be a string or an integer")
-        if len(data.get('email')) < 7:
-            raise ValueError("Email too short.")
-        if not re.match("[^@]+@[^@]+\.[^@]+", data.get('email')):
+        if not email_data(data['email']):
             raise ValueError("This email is not valid.")
-        if not re.match("((\(\d{3}\)?)|(\d{3}-))?\d{3}-\d{4}", data.get('phone_number')):
+        if not phone_number(data['phone_number']):
             raise ValueError("Phone Number is invalid")
     except (TypeError, ValueError) as e:
         return str(e)

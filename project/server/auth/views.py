@@ -21,6 +21,16 @@ class RegisterAPI(MethodView):
         # get the post data
         post_data = request.get_json()
 
+        # check for missing data
+        if (not post_data['firstname'] or not post_data['lastname'] or
+            not post_data['password'] or not post_data['username'] or
+            not post_data['email'] or not post_data['phone_number']):
+            response_object = {
+                "status": 400,
+                "error": "Some information is missing. Try again"
+            }
+            return make_response(jsonify(response_object)), 400
+            
         # validate data
         if validate_registration_input(post_data):
             response_object = {

@@ -5,9 +5,6 @@ from project.server import app
 from project.tests.base import BaseTestCase
 from project.tests.helpers import (login_user, register_user,
                                    add_redflag)
-from db import DatabaseConnection
-db_name = DatabaseConnection()
-
 
 class TestRedflags(BaseTestCase):
     """ This class will handle all the tests """
@@ -553,7 +550,7 @@ class TestRedflags(BaseTestCase):
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
 
         # make user an admin
-        db_name.make_admin(user_id)
+        self.db_name.make_admin(user_id)
 
         # send request witn no data
         response = self.client.patch(
@@ -577,7 +574,7 @@ class TestRedflags(BaseTestCase):
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
 
         # make user an admin
-        db_name.make_admin(user_id)
+        self.db_name.make_admin(user_id)
 
         # send request without status data
         input_data = {"statu": "sjkj"}
@@ -626,7 +623,7 @@ class TestRedflags(BaseTestCase):
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
 
         # make user an admin
-        db_name.make_admin(user_id)
+        self.db_name.make_admin(user_id)
 
         # create red-flag record
         input_data = self.input_data
