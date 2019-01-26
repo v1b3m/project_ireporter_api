@@ -139,8 +139,8 @@ def admin_required(func):
                 return make_response(jsonify(responseObject)), 401
         else:
             responseObject = {
-                'status': 'fail',
-                'message': 'Provide a valid auth token.'
+                'status': 403,
+                'error': 'Provide a valid auth token.'
             }
             return make_response(jsonify(responseObject)), 403
     return decorate
