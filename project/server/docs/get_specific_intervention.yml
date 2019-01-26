@@ -11,6 +11,8 @@ parameters:
 responses:
   200:
     description: Intervention retrieved
+  401:
+    description: Missing authorization header
   404:
     description: Intervention does not exist
 security:

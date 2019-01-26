@@ -11,6 +11,8 @@ parameters:
 responses:
   200:
     description: Red-flag retrieved
+  401:
+    description: Missing authorization header
   404:
     description: Red-flag does not exist
 security:

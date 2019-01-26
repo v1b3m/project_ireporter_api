@@ -5,6 +5,8 @@ tags:
 responses:
   201:
     description: Succesfully retrieved redflags
+  401:
+    description: Missing authorization header
   404:
     description: There are no red-flags
 security:

@@ -24,8 +24,6 @@ responses:
           default: 123456
   400:
     description: Failed to Register!
-  401:
-    description: Missing Authorization header
 security:
   -  bearerAuth:
         description: Pass the jwt token e.g Bearer <token>
