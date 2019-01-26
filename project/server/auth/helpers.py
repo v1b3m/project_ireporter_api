@@ -50,7 +50,7 @@ def decode_auth_token(auth_token):
     """
     try:
         payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-        is_blacklisted = db_name.check_blacklist(auth_token)
+        is_blacklisted = db_name.check_item('token' ,auth_token)
         if is_blacklisted:
             return 'Token blacklisted. Please log in again.'
         else:

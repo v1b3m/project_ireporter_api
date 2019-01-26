@@ -40,14 +40,14 @@ class RegisterAPI(MethodView):
             return make_response(jsonify(response_object)), 400
 
         # check if user already exists
-        user = db_name.check_user(email=post_data.get('email'))
+        user = db_name.check_item('user',post_data['email'])
         if not user:
             try:
                 user_id = db_name.create_user(firstname=post_data.get('firstname'),
                                               lastname=post_data.get('lastname'), othernames=post_data.get('othernames'),
                                               username=post_data.get('username'), email=post_data.get('email'),
                                               password=post_data.get('password'), phone_number=post_data.get('phone_number'))
-                user = db_name.check_user(email=post_data.get('email'))
+                user = db_name.check_item('user', post_data['email'])
                 # generate auth token
                 auth_token = generate_auth_token(user_id)
                 responseObject = {
@@ -99,7 +99,7 @@ class LoginAPI(MethodView):
 
         try:
             # fetch the user data
-            user = db_name.check_user(email=post_data.get('email'))
+            user = db_name.check_item('user', post_data['email'])
             if user and bcrypt.check_password_hash(
                 user['password'], post_data.get('password')
             ):

@@ -93,17 +93,25 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def check_user(self, email):
+    def check_item(self, type, data):
+        """ checks if an item exists in the database """
         try:
-            query = "SELECT * FROM users WHERE email = '%s'" % email
-            self.cursor.execute(query)
-            user = self.cursor.fetchone()
-            if user:
-                return dict(user)
-            return None
+            if type == 'token':
+                query = "SELECT * FROM blacklist WHERE token = '%s'" % data
+                self.cursor.execute(query)
+                token = self.cursor.fetchone()
+                if token:
+                    return token
+                return None
+            elif type=="user":
+                query = "SELECT * FROM users WHERE email = '%s'" % data
+                self.cursor.execute(query)
+                user = self.cursor.fetchone()
+                if user:
+                    return dict(user)
+                return None
         except Exception as e:
             pprint(e)
-            return None
 
     def create_incident(self, **kwargs):
         try:
@@ -157,18 +165,6 @@ class DatabaseConnection:
             incidents = self.cursor.fetchall()
             if incidents:
                 return incidents
-            return None
-        except Exception as e:
-            pprint(e)
-
-    def check_blacklist(self, auth_token):
-        """Checks the blacklist table for a token"""
-        try:
-            query = "SELECT * FROM blacklist WHERE token = '%s'" % auth_token
-            self.cursor.execute(query)
-            token = self.cursor.fetchone()
-            if token:
-                return token
             return None
         except Exception as e:
             pprint(e)
