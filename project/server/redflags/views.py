@@ -167,7 +167,7 @@ class PatchRedflagLocationAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.edit_incident_location(flag_id, data['location'])
+            db_name.edit_incident(flag_id, 'location', data['location'])
             return jsonify({
                 "status": 201,
                 "data": [{
@@ -215,7 +215,7 @@ class PatchRedflagCommentAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.edit_incident_comment(flag_id, data['comment'])
+            db_name.edit_incident(flag_id, 'comment', data['comment'])
             return jsonify({
                 "status": 201,
                 "data": [{
@@ -272,7 +272,7 @@ class UpdateStatusAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.update_incident_status(flag_id, data['status'])
+            db_name.edit_incident(flag_id,'status', data['status'])
             return jsonify({
                 "status": 201,
                 "data": [{

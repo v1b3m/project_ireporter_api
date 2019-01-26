@@ -181,15 +181,6 @@ class DatabaseConnection:
             return None
         except Exception as e:
             pprint(e)
-    
-    def edit_incident_location(self, id, location):
-        try:
-            query = """UPDATE incidents SET location = %s
-                    WHERE incident_id = %s"""
-            self.cursor.execute(query, (location, id))
-        except Exception as e:
-            pprint(e)
-
 
     def check_blacklist(self, auth_token):
         """Checks the blacklist table for a token"""
@@ -203,11 +194,20 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def edit_incident_comment(self, id, comment):
+    def edit_incident(self, id, column, data):
         try:
-            query = """UPDATE incidents SET comment = %s
+            if column == 'status':
+                query = """UPDATE incidents SET status = %s
+                        WHERE incident_id = %s"""
+                self.cursor.execute(query, (data, id))
+            elif column == 'comment':
+                query = """UPDATE incidents SET comment = %s
                     WHERE incident_id = %s"""
-            self.cursor.execute(query, (comment, id))
+                self.cursor.execute(query, (data, id))
+            elif column == 'location':
+                query = """UPDATE incidents SET location = %s
+                    WHERE incident_id = %s"""
+                self.cursor.execute(query, (data, id))
         except Exception as e:
             pprint(e)
 
@@ -225,25 +225,10 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
     
-    def drop_user_table(self):
-        try:
-            query = 'DROP TABLE users'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-    
     def delete_all_tokens(self):
         try:
             query = 'DELETE FROM blacklist'
             self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-
-    def update_incident_status(self, incident_id, status):
-        try:
-            query = """UPDATE incidents SET status = %s
-                    WHERE incident_id = %s"""
-            self.cursor.execute(query, (status, incident_id))
         except Exception as e:
             pprint(e)
 
@@ -257,5 +242,4 @@ class DatabaseConnection:
 
 if __name__ == '__main__':
     db_name = DatabaseConnection()
-
     

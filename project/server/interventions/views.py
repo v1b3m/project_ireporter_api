@@ -136,7 +136,7 @@ class UpdateStatusAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(intervention_id)
         if red_flag:
-            db_name.update_incident_status(intervention_id, data['status'])
+            db_name.edit_incident(intervention_id,'status', data['status'])
             return jsonify({
                 "status": 201,
                 "data": [{
