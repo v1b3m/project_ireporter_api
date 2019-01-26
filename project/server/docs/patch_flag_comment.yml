@@ -25,6 +25,8 @@ responses:
     description: Failed to update comment
   401:
     description: Missing authorization header
+  404:
+    description: The red-flag doesn't exist
 security:
   -  bearerAuth:
         description: Pass the jwt token e.g Bearer <token>

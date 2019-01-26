@@ -11,10 +11,10 @@ parameters:
 responses:
   200:
     description: Interventions deleted
-  204:
-    description: The intervention doesn't exist
   401:
     description: Missing Authorization header
+  404:
+    description: The intervention doesn't exist
 security:
   -  bearerAuth:
         description: Pass the jwt token e.g Bearer <token>

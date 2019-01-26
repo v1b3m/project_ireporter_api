@@ -11,10 +11,10 @@ parameters:
 responses:
   200:
     description: Red-flag deleted
-  204:
-    description: The red-flag doesn't exist
   401:
     description: Missing Authorization header
+  404:
+    description: The red-flag doesn't exist
 security:
   -  bearerAuth:
         description: Pass the jwt token e.g Bearer <token>
