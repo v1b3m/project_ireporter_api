@@ -36,7 +36,7 @@ class GetInterventionsAPI(MethodView):
             "status": 200,
             "data": [dict(intervention) for intervention in interventions]
         })
-        return jsonify(responseObject), 20
+        return jsonify(responseObject), 200
 
 
 class GetSpecificInterventionAPI(MethodView):
@@ -117,7 +117,7 @@ class UpdateStatusAPI(MethodView):
             return jsonify({
                 "error": 'Please provide a status',
                 "status": 400
-            })
+            }), 400
         data = request.get_json()
 
         # check for location in missing data
@@ -143,14 +143,13 @@ class UpdateStatusAPI(MethodView):
                     "id": intervention_id,
                     "message": "​Updated intervention record status"
                 }]
-            })
+            }), 201
 
         # this code will run if the red-flag doesn't exist
         return jsonify({
-            "error": 400,
+            "error": 404,
             "message": "Intervention record doesn't exist."
-        })
-
+        }), 404
 
 class DeleteInterventionsAPI(MethodView):
     """
@@ -164,17 +163,17 @@ class DeleteInterventionsAPI(MethodView):
         red_flag = db_name.get_incident(intervention_id)
         if red_flag:
             db_name.delete_incident(intervention_id)
-            return jsonify({"status": 204,
+            return jsonify({"status": 200,
                             "data": [{
                                 "id": intervention_id,
                                 "message": 'intervention record has been deleted'
                             }]
-                            })
+                            }), 200
         # will run if the record doesn't exist
         return jsonify({
-            "status": 204,
+            "status": 404,
             "message": "Oops, looks like the record doesn't exist."
-        })
+        }), 404
 
 
 # define the API resources

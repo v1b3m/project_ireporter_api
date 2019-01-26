@@ -26,7 +26,7 @@ class TestRedflags(BaseTestCase):
 
         response = self.client.get('/api/v2/red-flags', headers=headers)
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
         self.assertTrue(data['status'] == 404)
 
     def test_get_all_redflags_when_there_is_data(self):
@@ -246,7 +246,7 @@ class TestRedflags(BaseTestCase):
 
         response = self.client.delete('/api/v2/red-flags/2', headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(response.status_code == 200)
+        self.assertTrue(response.status_code == 404)
         self.assertIn("Oops", data['message'])
         self.assertEqual(data['status'], 404)
 

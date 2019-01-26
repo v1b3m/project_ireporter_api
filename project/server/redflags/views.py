@@ -31,12 +31,12 @@ class GetRedflagsAPI(MethodView):
             return jsonify({
                 'error': 'There are no redflags',
                 'status': 404
-            })
+            }), 404
 
         responseObject = ({
             "status": 200,
             "data": [dict(redflag) for redflag in red_flags]
-        })
+        }), 200
         return jsonify(responseObject), 200
 
 
@@ -52,13 +52,13 @@ class GetSpecificRedflagAPI(MethodView):
             return jsonify({
                 "status": 200,
                 "data": [dict(redflag)]
-            })
+            }), 200
 
         # this code will run if the red-flag doesn't exist
         return jsonify({
             'error': "The redflag doesn't exist",
             'status': 404
-        })
+        }), 404
 
 
 class CreateRedflagsAPI(MethodView):
@@ -123,12 +123,12 @@ class DeleteRedflagsAPI(MethodView):
                                 "id": flag_id,
                                 "message": 'redflag record has been deleted'
                             }]
-                            })
+                            }), 200
         # will run if the record doesn't exist
         return jsonify({
             "status": 404,
             "message": "Oops, looks like the record doesn't exist."
-        })
+        }), 404
 
 
 class PatchRedflagLocationAPI(MethodView):
@@ -143,7 +143,7 @@ class PatchRedflagLocationAPI(MethodView):
             return jsonify({
                 "error": 'Please provide a location',
                 "status": 400
-            })
+            }), 400
         data = request.get_json()
 
         # check for location in missing data
@@ -169,13 +169,13 @@ class PatchRedflagLocationAPI(MethodView):
                     "id": flag_id,
                     "message": "Updated red-flag record's location"
                 }]
-            })
+            }), 201
 
         # this code will run if the red-flag doesn't exist
         return jsonify({
             "error": 404,
             "message": "Sorry, the red-flag record doesn't exist."
-        })
+        }), 404
 
 
 class PatchRedflagCommentAPI(MethodView):
@@ -190,7 +190,7 @@ class PatchRedflagCommentAPI(MethodView):
             return jsonify({
                 "error": 'Please provide a comment',
                 "status": 400
-            })
+            }), 400
         data = request.get_json()
 
         # check for location in missing data
@@ -216,13 +216,13 @@ class PatchRedflagCommentAPI(MethodView):
                     "id": flag_id,
                     "message": "Updated red-flag record's comment"
                 }]
-            })
+            }), 201
 
         # this code will run if the red-flag doesn't exist
         return jsonify({
             "error": 404,
             "message": "Sorry, the red-flag record doesn't exist."
-        })
+        }), 404
 
 
 class WelcomeAPI(MethodView):
@@ -247,7 +247,7 @@ class UpdateStatusAPI(MethodView):
             return jsonify({
                 "error": 'Please provide a status',
                 "status": 400
-            })
+            }), 400
         data = request.get_json()
 
         # check for location in missing data
@@ -273,13 +273,13 @@ class UpdateStatusAPI(MethodView):
                     "id": flag_id,
                     "message": "​Updated red-flag record status"
                 }]
-            })
+            }), 201
 
         # this code will run if the red-flag doesn't exist
         return jsonify({
             "error": 404,
             "message": "Red-flag record doesn't exist."
-        })
+        }), 404
 
 
 # define the API resources

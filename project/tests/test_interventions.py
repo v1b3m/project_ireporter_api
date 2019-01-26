@@ -231,9 +231,9 @@ class TestRedflags(BaseTestCase):
         response = self.client.delete(
             '/api/v2/interventions/2', headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(response.status_code == 200)
+        self.assertTrue(response.status_code == 404)
         self.assertIn("Oops", data['message'])
-        self.assertEqual(data['status'], 204)
+        self.assertEqual(data['status'], 404)
 
     def test_delete_intervention_when_record_exists(self):
         """ Test for deleting existent red-flag """
@@ -417,4 +417,4 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(data["error"] == 400)
+        self.assertTrue(data["error"] == 404)
