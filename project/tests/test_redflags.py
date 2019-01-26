@@ -248,7 +248,7 @@ class TestRedflags(BaseTestCase):
         data = json.loads(response.data)
         self.assertTrue(response.status_code == 200)
         self.assertIn("Oops", data['message'])
-        self.assertEqual(data['status'], 204)
+        self.assertEqual(data['status'], 404)
 
     def test_delete_redflag_when_record_exists(self):
         """ Test for deleting existent red-flag """
@@ -298,7 +298,7 @@ class TestRedflags(BaseTestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(data['message']) == 41)
-        self.assertEqual(data['error'], 400)
+        self.assertEqual(data['error'], 404)
         self.assertIn("doesn't exist", data['message'])
 
     def test_patch_redflag_when_request_has_no_data(self):
@@ -413,7 +413,7 @@ class TestRedflags(BaseTestCase):
             headers=headers)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['error'], 400)
+        self.assertEqual(data['error'], 404)
         self.assertTrue(data['message'] ==
                         "Sorry, the red-flag record doesn't exist.")
 
@@ -653,4 +653,4 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(data["error"] == 400)
+        self.assertTrue(data["error"] == 404)

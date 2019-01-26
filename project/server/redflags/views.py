@@ -118,7 +118,7 @@ class DeleteRedflagsAPI(MethodView):
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
             db_name.delete_incident(flag_id)
-            return jsonify({"status": 204,
+            return jsonify({"status": 200,
                             "data": [{
                                 "id": flag_id,
                                 "message": 'redflag record has been deleted'
@@ -126,7 +126,7 @@ class DeleteRedflagsAPI(MethodView):
                             })
         # will run if the record doesn't exist
         return jsonify({
-            "status": 204,
+            "status": 404,
             "message": "Oops, looks like the record doesn't exist."
         })
 
@@ -173,7 +173,7 @@ class PatchRedflagLocationAPI(MethodView):
 
         # this code will run if the red-flag doesn't exist
         return jsonify({
-            "error": 400,
+            "error": 404,
             "message": "Sorry, the red-flag record doesn't exist."
         })
 
@@ -220,7 +220,7 @@ class PatchRedflagCommentAPI(MethodView):
 
         # this code will run if the red-flag doesn't exist
         return jsonify({
-            "error": 400,
+            "error": 404,
             "message": "Sorry, the red-flag record doesn't exist."
         })
 
@@ -277,7 +277,7 @@ class UpdateStatusAPI(MethodView):
 
         # this code will run if the red-flag doesn't exist
         return jsonify({
-            "error": 400,
+            "error": 404,
             "message": "Red-flag record doesn't exist."
         })
 
