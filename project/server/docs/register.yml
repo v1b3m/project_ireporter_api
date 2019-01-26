@@ -22,8 +22,12 @@ responses:
         password:
           type: string
           default: 123456
+  202:
+    description: User already exists.
   400:
     description: Failed to Register!
+  401:
+    description: Some error occurred. Please try again.
 security:
   -  bearerAuth:
         description: Pass the jwt token e.g Bearer <token>

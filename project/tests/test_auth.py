@@ -13,7 +13,7 @@ class TestAuthBlueprint(BaseTestCase):
     def test_registration(self):
         response = register_user(self)
         data = json.loads(response.data.decode())
-        self.assertEqual(int(data['status']), 200)
+        self.assertEqual(int(data['status']), 201)
         self.assertTrue(data['data'][0]['user'])
         self.assertTrue(data['data'][0]['token'])
         self.assertTrue(response.content_type == 'application/json')
@@ -150,9 +150,9 @@ class TestAuthBlueprint(BaseTestCase):
         with self.client:
             response = register_user(self)
         data = json.loads(response.data.decode())
-        self.assertTrue(data['status'] == 'fail')
+        self.assertTrue(data['status'] == 202)
         self.assertTrue(
-            data['message'] == 'User already exists. Please Log in.'
+            data['error'] == 'User already exists. Please Log in.'
         )
         self.assertTrue(response.content_type == 'application/json')
         self.assertEqual(response.status_code, 202)
@@ -163,7 +163,7 @@ class TestAuthBlueprint(BaseTestCase):
             # user registration
             response = register_user(self)
             data = json.loads(response.data.decode())
-            self.assertEqual(int(data['status']), 200)
+            self.assertEqual(int(data['status']), 201)
             self.assertTrue(data['data'][0]['user'])
             self.assertTrue(data['data'][0]['token'])
             self.assertTrue(response.content_type == 'application/json')
@@ -183,8 +183,8 @@ class TestAuthBlueprint(BaseTestCase):
         with self.client:
             response = login_user(self)
             data = json.loads(response.data.decode())
-            self.assertTrue(data['status'] == 'fail')
-            self.assertTrue(data['message'] == "User does not exist.")
+            self.assertTrue(data['status'] == 404)
+            self.assertTrue(data['error'] == "User does not exist.")
             self.assertTrue(response.content_type == 'application/json')
             self.assertEqual(response.status_code, 404)
 
@@ -194,7 +194,7 @@ class TestAuthBlueprint(BaseTestCase):
             # user registration
             response = register_user(self)
             data = json.loads(response.data)
-            self.assertEqual(int(data['status']), 200)
+            self.assertEqual(int(data['status']), 201)
             self.assertTrue(data['data'][0]['user'])
             self.assertTrue(data['data'][0]['token'])
             self.assertTrue(response.content_type == 'application/json')
@@ -212,7 +212,7 @@ class TestAuthBlueprint(BaseTestCase):
             # valid token logout
             response = logout_user(self, response)
             data = json.loads(response.data)
-            self.assertTrue(data['status'] == 'success')
+            self.assertTrue(data['status'] == 200)
             self.assertTrue(data['message'] == 'Successfully logged out.')
             self.assertEqual(response.status_code, 200)
 
@@ -222,7 +222,7 @@ class TestAuthBlueprint(BaseTestCase):
             # user registration
             response = register_user(self)
             data = json.loads(response.data.decode())
-            self.assertEqual(int(data['status']), 200)
+            self.assertEqual(int(data['status']), 201)
             self.assertTrue(data['data'][0]['user'])
             self.assertTrue(data['data'][0]['token'])
             self.assertTrue(response.content_type == 'application/json')
@@ -285,7 +285,7 @@ class TestAuthBlueprint(BaseTestCase):
             # user registration
             response = register_user(self)
             data = json.loads(response.data.decode())
-            self.assertEqual(int(data['status']), 200)
+            self.assertEqual(int(data['status']), 201)
             self.assertTrue(data['data'][0]['user'])
             self.assertTrue(data['data'][0]['token'])
             self.assertTrue(response.content_type == 'application/json')

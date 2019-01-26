@@ -127,10 +127,10 @@ class LogoutAPI(MethodView):
             return make_response(jsonify(responseObject)), 200
         except Exception as e:
             responseObject = {
-                'status': 200,
+                'status': 400,
                 'message': e
             }
-            return make_response(jsonify(responseObject)), 200
+            return make_response(jsonify(responseObject)), 400
 
 
 # define the API resources

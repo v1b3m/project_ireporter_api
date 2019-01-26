@@ -21,6 +21,10 @@ responses:
           default: 123456
   400:
     description: Failed to Log in
+  404:
+    description: User does not exist
+  500:
+    description: Some error occurred. Please try again.
 security:
   -  bearerAuth:
         description: Pass the jwt token e.g Bearer <token>
