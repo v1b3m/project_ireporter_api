@@ -23,11 +23,7 @@ class DatabaseConnection:
             self.connection.autocommit = True
             self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
-        except:
-            pprint('Failed to connect to the database.')
-
-    def create_user_table(self):
-        try:
+            # create users table
             query = """CREATE TABLE IF NOT EXISTS users (userId SERIAL PRIMARY KEY,
                         firstname varchar(32) NOT NULL,
                         lastname varchar(32) NOT NULL,
@@ -40,12 +36,8 @@ class DatabaseConnection:
                         is_admin boolean NOT NULL DEFAULT '0');
                     """
             self.cursor.execute(query)
-            print("Succesfully created users table.")
-        except Exception as e:
-            pprint(e)
 
-    def create_incidents_table(self):
-        try:
+            # create incidents table
             query = """
                     CREATE TABLE IF NOT EXISTS incidents (
                         incident_id SERIAL PRIMARY KEY,
@@ -61,30 +53,23 @@ class DatabaseConnection:
                     )
                     """
             self.cursor.execute(query)
-            print("Successfully created incidents table.")
-        except Exception as e:
-            pprint(e)
 
-    def create_blacklist_table(self):
-        try:
-            query = """
-                    CREATE TABLE IF NOT EXISTS blacklist (
-                        token_id SERIAL PRIMARY KEY,
-                        token varchar(500) NOT NULL UNIQUE,
-                        blacklisted_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-                    )
-                    """
+            # create blacklist table
+            query = """CREATE TABLE IF NOT EXISTS blacklist (
+                    token_id SERIAL PRIMARY KEY,
+                    token varchar(500) NOT NULL UNIQUE,
+                    blacklisted_on TIMESTAMP NOT NULL DEFAULT
+                    CURRENT_TIMESTAMP)"""
             self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
+        except:
+            pprint('Failed to connect to the database.')
 
     def blacklist_token(self, token):
         """
         This module will blacklist a token
         """
         try:
-            query = """
-                    INSERT INTO blacklist (token) VALUES ('%s')
+            query = """INSERT INTO blacklist (token) VALUES ('%s')
                     """ % token
             self.cursor.execute(query)
             return True
@@ -93,12 +78,10 @@ class DatabaseConnection:
 
     def create_user(self, **kwargs):
         try:
-            query = """
-                    INSERT INTO users (firstname, lastname, othernames, username,
-                    email, password, phone_number)
+            query = """INSERT INTO users (firstname, lastname, othernames,
+                    username,email, password, phone_number)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
-                    RETURNING userid
-                    """
+                    RETURNING userid"""
             password = bcrypt.generate_password_hash(
                 kwargs['password'], app.config.get('BCRYPT_LOG_ROUNDS')
             ).decode()
@@ -124,11 +107,9 @@ class DatabaseConnection:
 
     def create_incident(self, **kwargs):
         try:
-            query = """
-                    INSERT INTO incidents (created_by, type, location,
+            query = """INSERT INTO incidents (created_by, type, location,
                     images, videos, comment) VALUES (%s, %s, %s, %s, %s, %s)
-                    RETURNING incident_id
-                    """
+                    RETURNING incident_id"""
             self.cursor.execute(query, (kwargs['created_by'], kwargs['type'],
                 kwargs['location'], kwargs['images'],
                 kwargs['videos'], kwargs['comment']))
@@ -203,20 +184,15 @@ class DatabaseConnection:
     
     def edit_incident_location(self, id, location):
         try:
-            query = """
-                    UPDATE incidents
-                    SET location = %s
-                    WHERE incident_id = %s
-                    """
+            query = """UPDATE incidents SET location = %s
+                    WHERE incident_id = %s"""
             self.cursor.execute(query, (location, id))
         except Exception as e:
             pprint(e)
 
 
     def check_blacklist(self, auth_token):
-        """
-        Checks the blacklist table for a token
-        """
+        """Checks the blacklist table for a token"""
         try:
             query = "SELECT * FROM blacklist WHERE token = '%s'" % auth_token
             self.cursor.execute(query)
@@ -229,11 +205,8 @@ class DatabaseConnection:
 
     def edit_incident_comment(self, id, comment):
         try:
-            query = """
-                    UPDATE incidents
-                    SET comment = %s
-                    WHERE incident_id = %s
-                    """
+            query = """UPDATE incidents SET comment = %s
+                    WHERE incident_id = %s"""
             self.cursor.execute(query, (comment, id))
         except Exception as e:
             pprint(e)
@@ -266,38 +239,18 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def drop_incident_table(self):
-        try:
-            query = 'DROP TABLE incidents'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-
-    def drop_blacklist_table(self):
-        try:
-            query = 'DROP TABLE blacklist'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-
     def update_incident_status(self, incident_id, status):
         try:
-            query = """
-                    UPDATE incidents
-                    SET status = %s
-                    WHERE incident_id = %s
-                    """
+            query = """UPDATE incidents SET status = %s
+                    WHERE incident_id = %s"""
             self.cursor.execute(query, (status, incident_id))
         except Exception as e:
             pprint(e)
 
     def make_admin(self, id):
         try:
-            query="""
-                UPDATE users
-                SET is_admin='t'
-                WHERE userid = %d
-                """ % id
+            query="""UPDATE users SET is_admin='t'
+                    WHERE userid = %d""" % id
             self.cursor.execute(query)
         except Exception as e:
             pprint(e)
