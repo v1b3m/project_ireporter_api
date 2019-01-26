@@ -9,6 +9,7 @@ from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_comment_data,
                                              validate_edit_location_data,
                                              validate_edit_status_data)
+from project.server.validation.validators import missing_location_data
 
 redflags_blueprint = Blueprint('redflags', __name__)
 
@@ -138,25 +139,28 @@ class PatchRedflagLocationAPI(MethodView):
     @token_required
     @swag_from('../docs/patch_flag_location.yml')
     def patch(self, flag_id):
-        # check if request has no json data in its body
+
+        # check for empty request
         if not request.is_json:
             return jsonify({
-                "error": 'Please provide a location',
-                "status": 400
+                'error': 'Request Cannot Be Empty',
+                'status': 400
             }), 400
+
+        # check if request has no json data in its body
         data = request.get_json()
 
-        # check for location in missing data
-        if 'location' not in data:
-            return jsonify({
-                'error': "Location data not found",
-                "status": 400
-            }), 400
-
+        # check for errors in data
+        error = None
+        if missing_location_data(data):
+            error = missing_location_data(data)
+        elif validate_edit_location_data(data):
+            error = validate_edit_location_data(data)
+        
         # validate the data
-        if validate_edit_location_data(data):
-            return jsonify({"error": 400,
-                            "message": validate_edit_location_data(data)
+        if error:
+            return jsonify({"status": 400,
+                            "error": error
                             }), 400
 
         # check if record exists

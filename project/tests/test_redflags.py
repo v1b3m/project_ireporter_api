@@ -315,7 +315,7 @@ class TestRedflags(BaseTestCase):
         response = self.client.patch(
             '/api/v2/red-flags/1/location', headers=headers)
         data = json.loads(response.data)
-        self.assertEqual(data['error'], 'Please provide a location')
+        self.assertEqual(data['error'], 'Request Cannot Be Empty')
 
     def test_patch_redflag_record_when_it_exists(self):
         """ Here we'll test patching an existent red-flag """
@@ -378,7 +378,7 @@ class TestRedflags(BaseTestCase):
                                      headers=headers)
         data = json.loads(response.data)
         self.assertEqual(len(data), 2)
-        self.assertIn("location must be", data['message'])
+        self.assertIn("location must be", data['error'])
 
         # patch red-flag without location data in request
         input_data = {"locatio": "0.12, 3.22"}

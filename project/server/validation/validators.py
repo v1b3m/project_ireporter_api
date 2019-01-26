@@ -31,3 +31,10 @@ def phone_number(data):
     if re.match("((\(\d{3}\)?)|(\d{3}-))?\d{3}-\d{4}", data):
         return True
     return False
+
+def missing_location_data(data):
+    """ This will check if location data is missing from the request """
+    if 'location' not in data:
+        return "Location data not found"
+    return None
+        
