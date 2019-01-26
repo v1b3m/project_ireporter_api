@@ -31,50 +31,34 @@ def validate_add_redflag_data(data):
         return str(error)
     return None
 
-
-def validate_edit_location_data(data):
-    """ This function will validate the data
-        used to edit a location """
+def validate_edit_data(data, type):
     try:
-        if(
-            not data['location']
-            or not isinstance(data['location'], str)
-            or data['location'].isspace()
-        ):
-            raise TypeError('location must be a string')
-    except TypeError as error:
-        return str(error)
-    return None
-
-
-def validate_edit_comment_data(data):
-    """ This function will validate the data
-        used to edit a comment """
-    try:
-        if(
-            not data['comment']
-            or not isinstance(data['comment'], str)
-            or data['comment'].isspace()
-        ) :
-            raise TypeError("comment must be a string")
-    except TypeError as error:
-        return str(error)
-    return None
-
-
-def validate_edit_status_data(data):
-    """ This function will validate the data
-        used to edit a status """
-    try:
-        if(
-            not data['status']
-            or not isinstance(data['status'], str)
-            or data['status'].isspace()
-        ):
-            raise TypeError('status must be a string')
-        if data['status'] not in ['​under investigation', 'rejected', 'resolved']:
-            raise ValueError(
+        if type == 'location':
+            if(
+                not data['location']
+                or not isinstance(data['location'], str)
+                or data['location'].isspace()
+            ):
+                raise TypeError('location must be a string')
+        elif type=='comment':
+            if(
+                not data['comment']
+                or not isinstance(data['comment'], str)
+                or data['comment'].isspace()
+            ):
+                raise TypeError("comment must be a string")
+        elif type=='status':
+            if(
+                not data['status']
+                or not isinstance(data['status'], str)
+                or data['status'].isspace()
+            ):
+                raise TypeError('status must be a string')
+            if data['status'] not in ['​under investigation', 'rejected', 'resolved']:
+                raise ValueError(
                 "status can only be `​under investigation`,`rejected` or `resolved` ")
-    except (TypeError, ValueError) as error:
-        return str(error)
+    except (ValueError, TypeError) as e:
+        return str(e)
     return None
+
+

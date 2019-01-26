@@ -5,9 +5,7 @@ from flask.views import MethodView
 
 from project.server.auth.helpers import token_required, admin_required
 from project.server.redflags.helpers import (validate_add_redflag_data,
-                                             validate_edit_comment_data,
-                                             validate_edit_location_data,
-                                             validate_edit_status_data)
+                                             validate_edit_data)
 from flasgger import swag_from                                            
 
 interventions_blueprint = Blueprint('interventions', __name__)
@@ -61,7 +59,7 @@ class GetSpecificInterventionAPI(MethodView):
 
 
 class CreateInterventionsAPI(MethodView):
-    """
+    """
     Create interventions here
     """
     @token_required
@@ -128,9 +126,9 @@ class UpdateStatusAPI(MethodView):
             }), 400
 
         # validate the data
-        if validate_edit_status_data(data):
+        if validate_edit_data(data, 'status'):
             return jsonify({"error": 400,
-                            "message": validate_edit_status_data(data)
+                            "message": validate_edit_data(data, 'status')
                             }), 400
 
         # check if record exists
