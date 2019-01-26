@@ -283,8 +283,8 @@ class TestRedflags(BaseTestCase):
         data = json.loads(response.data)
 
         self.assertEqual(
-            data['message'], "You need to be an admin to access this route")
-        self.assertTrue(data['status'] == 'fail')
+            data['error'], "You need to be an admin to access this route")
+        self.assertTrue(data['status'] == 403)
 
     def test_edit_status_while_admin(self):
         """ This will test editing status while user is admin """

@@ -241,9 +241,9 @@ class TestAuthBlueprint(BaseTestCase):
             time.sleep(6)
             response = logout_user(self, response)
             data = json.loads(response.data.decode())
-            self.assertTrue(data['status'] == 'fail')
+            self.assertTrue(data['status'] == 401)
             self.assertTrue(
-                data['message'] == 'Signature expired. Please log in again.'
+                data['error'] == 'Signature expired. Please log in again.'
             )
             self.assertEqual(response.status_code, 401)
 
@@ -318,7 +318,7 @@ class TestAuthBlueprint(BaseTestCase):
         # logout with wrong token
         response = self.client.post('/auth/logout', headers="")
         data = json.loads(response.data.decode())
-        self.assertEqual(data['status'], 'fail')
+        self.assertEqual(data['status'], 401)
 
         # invalid admin token
         input_data = ""
@@ -327,7 +327,7 @@ class TestAuthBlueprint(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers="")
         data = json.loads(response.data.decode())
-        self.assertEqual(data['status'], 'fail')
+        self.assertEqual(data['status'], 401)
 
         # invalid token
         response = self.client.post(
@@ -336,4 +336,4 @@ class TestAuthBlueprint(BaseTestCase):
                 Authorization='Bearer 1234'
             )
         )
-        self.assertEqual(data['status'], 'fail')
+        self.assertEqual(data['status'], 401)
