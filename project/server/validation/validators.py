@@ -38,3 +38,8 @@ def missing_location_data(data):
         return "Location data not found"
     return None
         
+def missing_comment_data(data):
+    """ This will check if comment data is missing from the request """
+    if 'comment' not in data:
+        return "Comment data not found"
+    return None   

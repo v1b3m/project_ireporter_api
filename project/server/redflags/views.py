@@ -9,7 +9,8 @@ from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_comment_data,
                                              validate_edit_location_data,
                                              validate_edit_status_data)
-from project.server.validation.validators import missing_location_data
+from project.server.validation.validators import (missing_location_data,
+        missing_comment_data)
 
 redflags_blueprint = Blueprint('redflags', __name__)
 
@@ -157,7 +158,7 @@ class PatchRedflagLocationAPI(MethodView):
         elif validate_edit_location_data(data):
             error = validate_edit_location_data(data)
         
-        # validate the data
+        # return the error message
         if error:
             return jsonify({"status": 400,
                             "error": error
@@ -184,7 +185,7 @@ class PatchRedflagLocationAPI(MethodView):
 
 class PatchRedflagCommentAPI(MethodView):
     """
-    Patch a redflag location
+    Patch a redflag comment
     """
     @token_required
     @swag_from('../docs/patch_flag_comment.yml')
@@ -197,18 +198,19 @@ class PatchRedflagCommentAPI(MethodView):
             }), 400
         data = request.get_json()
 
-        # check for location in missing data
-        if 'comment' not in data:
+        # check for errors in data
+        error = None
+        if missing_comment_data(data):
+            error = missing_comment_data(data)
+        elif validate_edit_comment_data(data):
+            error = validate_edit_comment_data(data)
+        
+        # return the error
+        if error:
             return jsonify({
-                'error': "Comment data not found",
+                'error': error,
                 "status": 400
             }), 400
-
-        # validate the data
-        if validate_edit_comment_data(data):
-            return jsonify({"error": 400,
-                            "message": validate_edit_comment_data(data)
-                            }), 400
 
         # check if record exists
         red_flag = db_name.get_incident(flag_id)

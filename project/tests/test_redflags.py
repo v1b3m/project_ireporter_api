@@ -492,7 +492,7 @@ class TestRedflags(BaseTestCase):
                                      headers=headers)
         data = json.loads(response.data)
         self.assertEqual(len(data), 2)
-        self.assertIn("comment must be", data['message'])
+        self.assertIn("comment must be", data['error'])
 
         # patch red-flag without comment data
         input_data = {"sdfjdk": "This is a new comment"}
