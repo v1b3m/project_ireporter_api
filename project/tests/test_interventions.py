@@ -176,7 +176,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('location must be', data['message'])
+        self.assertIn('location must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # integer redflag type
@@ -187,7 +187,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('type must be', data['message'])
+        self.assertIn('type must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # integer comment in request
@@ -198,7 +198,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('comment must be', data['message'])
+        self.assertIn('comment must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # request containing created_by as a string
@@ -209,7 +209,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('created_by must be', data['message'])
+        self.assertIn('created_by must be', data['error'])
         self.assertTrue(len(data) == 2)
 
     def test_delete_intervention_when_record_is_not_there(self):

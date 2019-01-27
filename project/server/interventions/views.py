@@ -6,6 +6,7 @@ from flask.views import MethodView
 from project.server.auth.helpers import token_required, admin_required
 from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_data)
+from project.server.validation.validators import  valid_create_data                                             
 from flasgger import swag_from                                            
 
 interventions_blueprint = Blueprint('interventions', __name__)
@@ -78,17 +79,14 @@ class CreateInterventionsAPI(MethodView):
         data = request.get_json()
 
         # check for missing data in request
-        if ('created_by' not in data or 'type' not in data or
-                'comment' not in data or 'location' not in data):
-            return jsonify({
-                'status': 400,
-                'error': 'Some Information is missing from the request'
-            }), 400
+        error = None
+        if valid_create_data(data):
+            error = valid_create_data(data)
 
         # validate the input data
-        if validate_add_redflag_data(data):
-            return jsonify({"error": 400,
-                            "message": validate_add_redflag_data(data)
+        if error:
+            return jsonify({"status": 400,
+                            "error": error
                             }), 400
 
         # return if request has no missing data

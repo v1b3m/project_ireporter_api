@@ -183,7 +183,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_redflag(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('location must be', data['message'])
+        self.assertIn('location must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # wrong type
@@ -194,7 +194,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_redflag(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('types can only', data['message'])
+        self.assertIn('types can only', data['error'])
 
         # integer redflag type
         input_data = {
@@ -204,7 +204,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_redflag(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('type must be', data['message'])
+        self.assertIn('type must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # integer comment in request
@@ -215,7 +215,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_redflag(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('comment must be', data['message'])
+        self.assertIn('comment must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # request containing created_by as a string
@@ -226,7 +226,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_redflag(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('created_by must be', data['message'])
+        self.assertIn('created_by must be', data['error'])
         self.assertTrue(len(data) == 2)
 
     def test_delete_redflag_when_record_is_not_there(self):
@@ -585,7 +585,7 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(data["error"] == 'Status data not found')
+        self.assertEqual(data["error"],'Status data not found')
 
         # send request with integer status
         input_data = {"status": 1}
@@ -596,7 +596,7 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(data["error"] == 400)
+        self.assertTrue(data["status"] == 400)
 
         # send request with wrong status format
         input_data = {"status": "hey"}
@@ -605,7 +605,7 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(data["error"] == 400)
+        self.assertTrue(data["status"] == 400)
 
     def test_edit_redflag_with_correct_data(self):
         """ Test correct data to update status """

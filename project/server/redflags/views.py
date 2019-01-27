@@ -8,7 +8,7 @@ from project.server.auth.helpers import token_required, admin_required
 from project.server.redflags.helpers import (validate_add_redflag_data,
                                              validate_edit_data)
 from project.server.validation.validators import (missing_location_data,
-        missing_comment_data)
+        missing_comment_data, string_data, wrong_status_data, valid_create_data)
 
 redflags_blueprint = Blueprint('redflags', __name__)
 
@@ -81,17 +81,14 @@ class CreateRedflagsAPI(MethodView):
         data = request.get_json()
 
         # check for missing data in request
-        if ('created_by' not in data or 'type' not in data or
-                'comment' not in data or 'location' not in data):
-            return jsonify({
-                'status': 400,
-                'error': 'Some Information is missing from the request'
-            }), 400
+        error = None
+        if valid_create_data(data):
+            error = valid_create_data(data)
 
         # validate the input data
-        if validate_add_redflag_data(data):
-            return jsonify({"error": 400,
-                            "message": validate_add_redflag_data(data)
+        if error:
+            return jsonify({"status": 400,
+                            "error": error
                             }), 400
 
         # return if request has no missing data
@@ -153,8 +150,6 @@ class PatchRedflagLocationAPI(MethodView):
         error = None
         if missing_location_data(data):
             error = missing_location_data(data)
-        elif validate_edit_data(data,'location'):
-            error = validate_edit_data(data, 'location')
         
         # return the error message
         if error:
@@ -200,8 +195,6 @@ class PatchRedflagCommentAPI(MethodView):
         error = None
         if missing_comment_data(data):
             error = missing_comment_data(data)
-        elif validate_edit_data(data,'comment'):
-            error = validate_edit_data(data, 'comment')
         
         # return the error
         if error:
@@ -255,16 +248,14 @@ class UpdateStatusAPI(MethodView):
         data = request.get_json()
 
         # check for location in missing data
-        if 'status' not in data:
-            return jsonify({
-                'error': "Status data not found",
-                "status": 400
-            }), 400
+        error = None
+        if wrong_status_data(data):
+            error = wrong_status_data(data)
 
         # validate the data
-        if validate_edit_data(data, 'status'):
-            return jsonify({"error": 400,
-                            "message": validate_edit_data(data, 'status')
+        if error:
+            return jsonify({"status": 400,
+                            "error": error
                             }), 400
 
         # check if record exists
