@@ -1,7 +1,6 @@
 """ This script will have all the validation functions """
 
 import re
-from project.server.redflags.helpers import validate_add_redflag_data
 
 def email_data(data):
     """ This function will validate an email address """
@@ -67,4 +66,34 @@ def valid_create_data(data):
         return "Some Information is missing from the request"
     elif validate_add_redflag_data(data):
         return validate_add_redflag_data(data)
+    return None
+
+def validate_add_redflag_data(data):
+    """ This function will be used to
+        validate input_data """
+    try:
+        if(
+            not data['location']
+            or not isinstance(data['location'], str)
+            or data['location'].isspace()
+        ):
+            raise TypeError("location must be a string")
+        if (
+            not data['type']
+            or not isinstance(data['type'], str)
+            or data['type'].isspace()
+        ):
+            raise TypeError("type must be a string")
+        if (
+            not data['comment']
+            or not isinstance(data['comment'], str)
+            or data['comment'].isspace()
+        ):
+            raise TypeError("comment must be a string")
+        if not isinstance(data['created_by'], int):
+            raise TypeError("created_by must be an integer")
+        if data['type'] not in ['red-flag', 'intervention']:
+            raise ValueError("types can only be `red-flag` or `intervention`")
+    except (TypeError, ValueError) as error:
+        return str(error)
     return None
