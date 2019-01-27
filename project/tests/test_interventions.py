@@ -344,7 +344,7 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(data["error"] == 400)
+        self.assertTrue(data["status"] == 400)
 
     def test_edit_status_with_no_request_data(self):
         """ This will test editing status while user is admin """

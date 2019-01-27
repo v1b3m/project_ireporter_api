@@ -5,8 +5,6 @@ from flask.views import MethodView
 from flasgger import swag_from
 
 from project.server.auth.helpers import token_required, admin_required
-from project.server.redflags.helpers import (validate_add_redflag_data,
-                                             validate_edit_data)
 from project.server.validation.validators import (missing_location_data,
         missing_comment_data, string_data, wrong_status_data, valid_create_data)
 
@@ -251,8 +249,6 @@ class UpdateStatusAPI(MethodView):
         error = None
         if wrong_status_data(data):
             error = wrong_status_data(data)
-
-        # validate the data
         if error:
             return jsonify({"status": 400,
                             "error": error

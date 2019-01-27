@@ -4,9 +4,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server.auth.helpers import token_required, admin_required
-from project.server.redflags.helpers import (validate_add_redflag_data,
-                                             validate_edit_data)
-from project.server.validation.validators import  valid_create_data                                             
+from project.server.validation.validators import  valid_create_data, wrong_status_data                                            
 from flasgger import swag_from                                            
 
 interventions_blueprint = Blueprint('interventions', __name__)
@@ -82,8 +80,6 @@ class CreateInterventionsAPI(MethodView):
         error = None
         if valid_create_data(data):
             error = valid_create_data(data)
-
-        # validate the input data
         if error:
             return jsonify({"status": 400,
                             "error": error
@@ -117,16 +113,14 @@ class UpdateStatusAPI(MethodView):
         data = request.get_json()
 
         # check for location in missing data
-        if 'status' not in data:
-            return jsonify({
-                'error': "Status data not found",
-                "status": 400
-            }), 400
+        error = None
+        if wrong_status_data(data):
+            error = wrong_status_data(data)
 
         # validate the data
-        if validate_edit_data(data, 'status'):
-            return jsonify({"error": 400,
-                            "message": validate_edit_data(data, 'status')
+        if error:
+            return jsonify({"status": 400,
+                            "error": error
                             }), 400
 
         # check if record exists
