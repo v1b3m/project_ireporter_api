@@ -6,7 +6,7 @@ from flasgger import swag_from
 
 from project.server.auth.helpers import token_required, admin_required
 from project.server.validation.validators import (missing_location_data,
-        missing_comment_data, string_data, wrong_status_data, valid_create_data)
+                                                  missing_comment_data, string_data, wrong_status_data, valid_create_data)
 
 redflags_blueprint = Blueprint('redflags', __name__)
 
@@ -14,15 +14,11 @@ db_name = DatabaseConnection()
 
 
 class GetRedflagsAPI(MethodView):
-    """
-    Redflag and Intervention resource
-    """
+    """Redflag and Intervention resource"""
     @token_required
     @swag_from('../docs/get_redflag.yml')
     def get(self):
-        """
-        get red-flags
-        """
+        """get red-flags"""
         red_flags = db_name.get_incidents('red-flag')
 
         if not red_flags:
@@ -39,9 +35,7 @@ class GetRedflagsAPI(MethodView):
 
 
 class GetSpecificRedflagAPI(MethodView):
-    """
-    Get a specific red-flag
-    """
+    """Get a specific red-flag"""
     @token_required
     @swag_from('../docs/get_specific_redflag.yml')
     def get(self, flag_id):
@@ -60,9 +54,7 @@ class GetSpecificRedflagAPI(MethodView):
 
 
 class CreateRedflagsAPI(MethodView):
-    """
-    Create redflags here
-    """
+    """Create redflags here"""
     @token_required
     @swag_from('../docs/add_redflag.yml')
     def post(self):
@@ -94,17 +86,13 @@ class CreateRedflagsAPI(MethodView):
                                               location=data['location'], comment=data['comment'],
                                               videos="a.mp4", images="a.jpg")
         return jsonify({"status": 201,
-                        "data": [{
-                            "id": incident_id,
-                            "message": "Created red-flag record"
-                        }]
-                        }), 201
+                        "data": [{"id": incident_id,
+                                  "message": "Created red-flag record"
+                                  }]}), 201
 
 
 class DeleteRedflagsAPI(MethodView):
-    """
-    Delete a redflag
-    """
+    """Delete a redflag"""
     @token_required
     @swag_from('../docs/delete_flag.yml')
     def delete(self, flag_id):
@@ -114,26 +102,20 @@ class DeleteRedflagsAPI(MethodView):
         if red_flag:
             db_name.delete_incident(flag_id)
             return jsonify({"status": 200,
-                            "data": [{
-                                "id": flag_id,
-                                "message": 'redflag record has been deleted'
-                            }]
-                            }), 200
+                            "data": [{"id": flag_id,
+                                      "message": 'redflag record has been deleted'
+                                      }]}), 200
         # will run if the record doesn't exist
-        return jsonify({
-            "status": 404,
-            "message": "Oops, looks like the record doesn't exist."
-        }), 404
+        return jsonify({"status": 404,
+                        "message": "Oops, looks like the record doesn't exist."
+                        }), 404
 
 
 class PatchRedflagLocationAPI(MethodView):
-    """
-    Patch a redflag location
-    """
+    """Patch a redflag location"""
     @token_required
     @swag_from('../docs/patch_flag_location.yml')
     def patch(self, flag_id):
-
         # check for empty request
         if not request.is_json:
             return jsonify({
@@ -148,7 +130,7 @@ class PatchRedflagLocationAPI(MethodView):
         error = None
         if missing_location_data(data):
             error = missing_location_data(data)
-        
+
         # return the error message
         if error:
             return jsonify({"status": 400,
@@ -161,23 +143,18 @@ class PatchRedflagLocationAPI(MethodView):
             db_name.edit_incident(flag_id, 'location', data['location'])
             return jsonify({
                 "status": 201,
-                "data": [{
-                    "id": flag_id,
-                    "message": "Updated red-flag record's location"
-                }]
-            }), 201
+                "data": [{"id": flag_id,
+                          "message": "Updated red-flag record's location"
+                          }]}), 201
 
         # this code will run if the red-flag doesn't exist
-        return jsonify({
-            "error": 404,
-            "message": "Sorry, the red-flag record doesn't exist."
-        }), 404
+        return jsonify({"error": 404,
+                        "message": "Sorry, the red-flag record doesn't exist."
+                        }), 404
 
 
 class PatchRedflagCommentAPI(MethodView):
-    """
-    Patch a redflag comment
-    """
+    """Patch a redflag comment"""
     @token_required
     @swag_from('../docs/patch_flag_comment.yml')
     def patch(self, flag_id):
@@ -193,7 +170,7 @@ class PatchRedflagCommentAPI(MethodView):
         error = None
         if missing_comment_data(data):
             error = missing_comment_data(data)
-        
+
         # return the error
         if error:
             return jsonify({
@@ -207,23 +184,18 @@ class PatchRedflagCommentAPI(MethodView):
             db_name.edit_incident(flag_id, 'comment', data['comment'])
             return jsonify({
                 "status": 201,
-                "data": [{
-                    "id": flag_id,
-                    "message": "Updated red-flag record's comment"
-                }]
-            }), 201
+                "data": [{"id": flag_id,
+                          "message": "Updated red-flag record's comment"
+                          }]}), 201
 
         # this code will run if the red-flag doesn't exist
-        return jsonify({
-            "error": 404,
-            "message": "Sorry, the red-flag record doesn't exist."
-        }), 404
+        return jsonify({"error": 404,
+                        "message": "Sorry, the red-flag record doesn't exist."
+                        }), 404
 
 
 class WelcomeAPI(MethodView):
-    """
-    Welcome API
-    """
+    """Welcome API"""
 
     def get(self):
         """ This route will return the message "Hello, World" """
@@ -231,9 +203,7 @@ class WelcomeAPI(MethodView):
 
 
 class UpdateStatusAPI(MethodView):
-    """
-    Patch a redflag status
-    """
+    """Patch a redflag status"""
     @admin_required
     @swag_from('../docs/edit_flag_status.yml')
     def patch(self, flag_id):
@@ -257,20 +227,17 @@ class UpdateStatusAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.edit_incident(flag_id,'status', data['status'])
+            db_name.edit_incident(flag_id, 'status', data['status'])
             return jsonify({
                 "status": 201,
-                "data": [{
-                    "id": flag_id,
-                    "message": "​Updated red-flag record status"
-                }]
-            }), 201
+                "data": [{"id": flag_id,
+                          "message": "​Updated red-flag record status"
+                          }]}), 201
 
         # this code will run if the red-flag doesn't exist
-        return jsonify({
-            "error": 404,
-            "message": "Red-flag record doesn't exist."
-        }), 404
+        return jsonify({"error": 404,
+                        "message": "Red-flag record doesn't exist."
+                        }), 404
 
 
 # define the API resources

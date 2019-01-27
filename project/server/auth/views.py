@@ -2,9 +2,8 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server import bcrypt, app
-from project.server.auth.helpers import (token_required, 
-            generate_auth_token, validate_registration_input,
-            validate_login_input)
+from project.server.auth.helpers import token_required, generate_auth_token
+from project.server.validation.validators import validate_login_input, validate_registration_input
 from db import DatabaseConnection
 from flasgger import swag_from
 
@@ -21,18 +20,10 @@ class RegisterAPI(MethodView):
         # get the post data
         post_data = request.get_json()
 
-        # check for missing data
-        if (not post_data['firstname'] or not post_data['lastname'] or
-            not post_data['password'] or not post_data['username'] or
-            not post_data['email'] or not post_data['phone_number']):
-            response_object = {
-                "status": 400,
-                "error": "Some information is missing. Try again"
-            }
-            return make_response(jsonify(response_object)), 400
-
         # validate data
-        if validate_registration_input(post_data):
+        error = None
+        error = validate_registration_input(post_data)
+        if error:
             response_object = {
                 "status": 400,
                 "error": validate_registration_input(post_data)
@@ -40,7 +31,7 @@ class RegisterAPI(MethodView):
             return make_response(jsonify(response_object)), 400
 
         # check if user already exists
-        user = db_name.check_item('user',post_data['email'])
+        user = db_name.check_item('user', post_data['email'])
         if not user:
             try:
                 user_id = db_name.create_user(firstname=post_data.get('firstname'),

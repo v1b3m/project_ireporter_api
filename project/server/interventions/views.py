@@ -4,8 +4,8 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server.auth.helpers import token_required, admin_required
-from project.server.validation.validators import  valid_create_data, wrong_status_data                                            
-from flasgger import swag_from                                            
+from project.server.validation.validators import valid_create_data, wrong_status_data
+from flasgger import swag_from
 
 interventions_blueprint = Blueprint('interventions', __name__)
 
@@ -126,7 +126,7 @@ class UpdateStatusAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(intervention_id)
         if red_flag:
-            db_name.edit_incident(intervention_id,'status', data['status'])
+            db_name.edit_incident(intervention_id, 'status', data['status'])
             return jsonify({
                 "status": 201,
                 "data": [{
@@ -140,6 +140,7 @@ class UpdateStatusAPI(MethodView):
             "error": 404,
             "message": "Intervention record doesn't exist."
         }), 404
+
 
 class DeleteInterventionsAPI(MethodView):
     """

@@ -5,6 +5,7 @@ import time
 from project.tests.base import BaseTestCase
 from project.tests.helpers import register_user, login_user, logout_user
 
+
 class TestAuthBlueprint(BaseTestCase):
     def test_registration(self):
         response = register_user(self)
@@ -118,7 +119,7 @@ class TestAuthBlueprint(BaseTestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(data['error'],
-                        "Password should be a string")
+                         "Password should be a string")
 
         # missing information
         response = self.client.post(
@@ -136,15 +137,14 @@ class TestAuthBlueprint(BaseTestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(data['error'],
-            "Some information is missing. Try again")
-
+                         "Password should be a string")
 
     def test_registration_with_alredy_registered_user(self):
         """ Test registration with aready registered email """
         # create user
         self.db_name.create_user(firstname='Benjamin', lastname='Mayanja',
-                            othernames='', username='v1b3m', email='test@test.com',
-                            password='123456', phone_number='0703-755-919')
+                                 othernames='', username='v1b3m', email='test@test.com',
+                                 password='123456', phone_number='0703-755-919')
         with self.client:
             response = register_user(self)
         data = json.loads(response.data.decode())
@@ -325,7 +325,6 @@ class TestAuthBlueprint(BaseTestCase):
             response = logout_user(self, response)
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 401)
-            
 
     def test_decode_invalid_token(self):
         """ Test for decoding an invalid token """

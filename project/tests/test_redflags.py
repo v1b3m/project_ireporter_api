@@ -6,6 +6,7 @@ from project.tests.base import BaseTestCase
 from project.tests.helpers import (login_user, register_user,
                                    add_redflag)
 
+
 class TestRedflags(BaseTestCase):
     """ This class will handle all the tests """
 
@@ -585,7 +586,7 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertEqual(data["error"],'Status data not found')
+        self.assertEqual(data["error"], 'Status data not found')
 
         # send request with integer status
         input_data = {"status": 1}

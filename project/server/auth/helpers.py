@@ -6,41 +6,8 @@ from db import DatabaseConnection
 from project.server import app
 from functools import wraps
 from flask import request, make_response, jsonify
-from project.server.validation.validators import (string_data, 
-    string_or_integer_data, email_data, phone_number)
 
 db_name = DatabaseConnection()
-
-def validate_registration_input(data):
-    try:
-        if not string_data(data['firstname']):
-            raise TypeError("Firstname should be a string")
-        if not string_data(data['lastname']):
-            raise TypeError("Lastname should be a string")
-        if data['othernames']:
-            if not string_data(data['othernames']):
-                raise TypeError("Othernames should be a string")
-        if not string_data(data['password']):
-            raise TypeError("Password should be a string")
-        if not string_or_integer_data(data['username']):   
-            raise TypeError("Username should be a string or an integer")
-        if not email_data(data['email']):
-            raise ValueError("This email is not valid.")
-        if not phone_number(data['phone_number']):
-            raise ValueError("Phone Number is invalid")
-    except (TypeError, ValueError) as e:
-        return str(e)
-
-
-def validate_login_input(data):
-    try:
-        if not email_data(data['email']):
-            raise ValueError("This email is not valid.")
-        if not string_data(data['password']): 
-            raise TypeError("Password should be a string")
-    except (TypeError, ValueError) as e:
-        return str(e)
-
 
 def decode_auth_token(auth_token):
     """
@@ -50,7 +17,7 @@ def decode_auth_token(auth_token):
     """
     try:
         payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-        is_blacklisted = db_name.check_item('token' ,auth_token)
+        is_blacklisted = db_name.check_item('token', auth_token)
         if is_blacklisted:
             return 'Token blacklisted. Please log in again.'
         else:

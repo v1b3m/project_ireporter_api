@@ -6,6 +6,7 @@ from project.tests.base import BaseTestCase
 from project.tests.helpers import (login_user, register_user,
                                    add_intervention)
 
+
 class TestRedflags(BaseTestCase):
     """ This class will handle all the tests """
 
@@ -46,7 +47,6 @@ class TestRedflags(BaseTestCase):
         self.assertEqual(data['status'], 200)
         self.assertIsNotNone(data['data'][0])
         self.assertTrue(len(data) == 2)
-    
 
     def test_get_specific_intervention_when_list_empty(self):
         """ Test for getting non-existent intervention """
