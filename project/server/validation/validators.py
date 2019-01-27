@@ -27,24 +27,20 @@ def phone_number(data):
         return True
     return False
 
-
-def missing_location_data(data):
-    """ This will check if location data is missing from the request """
-    if 'location' not in data:
-        return "Location data not found"
-    elif not string_data(data['location']):
-        return "location must be a string"
-    return None
-
-
-def missing_comment_data(data):
-    """ This will check if comment data is missing from the request """
-    if 'comment' not in data:
-        return "Comment data not found"
-    elif not string_data(data['comment']):
-        return "comment must be a string"
-    return None
-
+def missing_data(data, type):
+    """ This will check for missing data in a request """
+    if type == 'comment':
+        if 'comment' not in data:
+            return "Comment data not found"
+        elif not string_data(data['comment']):
+            return "comment must be a string"
+        return None
+    if type == 'location':
+        if 'location' not in data:
+            return "Location data not found"
+        elif not string_data(data['location']):
+            return "location must be a string"
+        return None
 
 def wrong_status_data(data):
     """ This will verify status data """

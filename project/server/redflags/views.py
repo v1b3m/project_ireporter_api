@@ -5,8 +5,8 @@ from flask.views import MethodView
 from flasgger import swag_from
 
 from project.server.auth.helpers import token_required, admin_required
-from project.server.validation.validators import (missing_location_data,
-                                                  missing_comment_data, string_data, wrong_status_data, valid_create_data)
+from project.server.validation.validators import (missing_data,
+                                                  string_data, wrong_status_data, valid_create_data)
 
 redflags_blueprint = Blueprint('redflags', __name__)
 
@@ -128,8 +128,8 @@ class PatchRedflagLocationAPI(MethodView):
 
         # check for errors in data
         error = None
-        if missing_location_data(data):
-            error = missing_location_data(data)
+        if missing_data(data, 'location'):
+            error = missing_data(data,'location')
 
         # return the error message
         if error:
@@ -168,8 +168,8 @@ class PatchRedflagCommentAPI(MethodView):
 
         # check for errors in data
         error = None
-        if missing_comment_data(data):
-            error = missing_comment_data(data)
+        if missing_data(data, 'comment'):
+            error = missing_data(data,'comment')
 
         # return the error
         if error:
