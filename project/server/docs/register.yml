@@ -1,0 +1,37 @@
+This is used to register a user
+---
+tags:
+  - User Authentication
+paramaeters:
+  - in: body
+    name: body
+    required: true
+    type: string
+    description: Enables a user to create an account
+responses:
+  201:
+    description: Succesfully registered!
+    schema:
+      properties:
+        username:
+          type: string
+          default: v1b3m
+        email:
+          type: string
+          default: test@test.com
+        password:
+          type: string
+          default: 123456
+  202:
+    description: User already exists.
+  400:
+    description: Failed to Register!
+  401:
+    description: Some error occurred. Please try again.
+security:
+  -  bearerAuth:
+        description: Pass the jwt token e.g Bearer <token>
+        type: http
+        scheme: bearer
+        in: header
+        bearerFormat: JWT

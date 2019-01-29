@@ -1,0 +1,24 @@
+This is used to delete a intervention
+---
+tags:
+  - Interventions
+parameters:
+  - in: path
+    name: body
+    required: true
+    type: integer
+    description: Enter intervention id
+responses:
+  200:
+    description: Interventions deleted
+  401:
+    description: Missing Authorization header
+  404:
+    description: The intervention doesn't exist
+security:
+  -  bearerAuth:
+        description: Pass the jwt token e.g Bearer <token>
+        type: http
+        scheme: bearer
+        in: header
+        bearerFormat: JWT
