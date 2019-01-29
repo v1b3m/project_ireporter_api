@@ -2,9 +2,8 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server import bcrypt, app
-from project.server.auth.helpers import (token_required, 
-            generate_auth_token, validate_registration_input,
-            validate_login_input)
+from project.server.auth.helpers import token_required, generate_auth_token
+from project.server.validation.validators import validate_login_input, validate_registration_input
 from db import DatabaseConnection
 from flasgger import swag_from
 
@@ -22,7 +21,9 @@ class RegisterAPI(MethodView):
         post_data = request.get_json()
 
         # validate data
-        if validate_registration_input(post_data):
+        error = None
+        error = validate_registration_input(post_data)
+        if error:
             response_object = {
                 "status": 400,
                 "error": validate_registration_input(post_data)
@@ -30,14 +31,14 @@ class RegisterAPI(MethodView):
             return make_response(jsonify(response_object)), 400
 
         # check if user already exists
-        user = db_name.check_user(email=post_data.get('email'))
+        user = db_name.check_item('user', post_data['email'])
         if not user:
             try:
                 user_id = db_name.create_user(firstname=post_data.get('firstname'),
                                               lastname=post_data.get('lastname'), othernames=post_data.get('othernames'),
                                               username=post_data.get('username'), email=post_data.get('email'),
                                               password=post_data.get('password'), phone_number=post_data.get('phone_number'))
-                user = db_name.check_user(email=post_data.get('email'))
+                user = db_name.check_item('user', post_data['email'])
                 # generate auth token
                 auth_token = generate_auth_token(user_id)
                 responseObject = {
@@ -71,6 +72,14 @@ class LoginAPI(MethodView):
         # get the post data
         post_data = request.get_json()
 
+        # check for missing data
+        if (not post_data['email'] or not post_data['password']):
+            response_object = {
+                "status": 400,
+                "error": "Email or password missing. Try again!"
+            }
+            return make_response(jsonify(response_object)), 400
+
         # validate data
         if validate_login_input(post_data):
             response_object = {
@@ -81,7 +90,7 @@ class LoginAPI(MethodView):
 
         try:
             # fetch the user data
-            user = db_name.check_user(email=post_data.get('email'))
+            user = db_name.check_item('user', post_data['email'])
             if user and bcrypt.check_password_hash(
                 user['password'], post_data.get('password')
             ):
@@ -132,12 +141,19 @@ class LogoutAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 400
 
+class WelcomeAPI(MethodView):
+    """Welcome API"""
+
+    def get(self):
+        """ This route will return the message "Hello, World" """
+        return "Hello, World!"
+
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
 login_view = LoginAPI.as_view('login_api')
 logout_view = LogoutAPI.as_view('logout_api')
-
+welome_view = WelcomeAPI.as_view('welcome_api')
 
 # add Rules for API Endpoints
 auth_blueprint.add_url_rule(
@@ -154,4 +170,9 @@ auth_blueprint.add_url_rule(
     '/auth/logout',
     view_func=logout_view,
     methods=['POST']
+)
+auth_blueprint.add_url_rule(
+    '/',
+    view_func=welome_view,
+    methods=['GET']
 )

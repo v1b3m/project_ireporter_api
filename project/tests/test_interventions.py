@@ -6,9 +6,6 @@ from project.tests.base import BaseTestCase
 from project.tests.helpers import (login_user, register_user,
                                    add_intervention)
 
-from db import DatabaseConnection
-db_name = DatabaseConnection()
-
 
 class TestRedflags(BaseTestCase):
     """ This class will handle all the tests """
@@ -50,7 +47,6 @@ class TestRedflags(BaseTestCase):
         self.assertEqual(data['status'], 200)
         self.assertIsNotNone(data['data'][0])
         self.assertTrue(len(data) == 2)
-    
 
     def test_get_specific_intervention_when_list_empty(self):
         """ Test for getting non-existent intervention """
@@ -180,7 +176,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('location must be', data['message'])
+        self.assertIn('location must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # integer redflag type
@@ -191,7 +187,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('type must be', data['message'])
+        self.assertIn('type must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # integer comment in request
@@ -202,7 +198,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('comment must be', data['message'])
+        self.assertIn('comment must be', data['error'])
         self.assertTrue(len(data) == 2)
 
         # request containing created_by as a string
@@ -213,7 +209,7 @@ class TestRedflags(BaseTestCase):
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
-        self.assertIn('created_by must be', data['message'])
+        self.assertIn('created_by must be', data['error'])
         self.assertTrue(len(data) == 2)
 
     def test_delete_intervention_when_record_is_not_there(self):
@@ -302,7 +298,7 @@ class TestRedflags(BaseTestCase):
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
 
         # make user an admin
-        db_name.make_admin(user_id)
+        self.db_name.make_admin(user_id)
 
         # send request witn no data
         response = self.client.patch(
@@ -326,7 +322,7 @@ class TestRedflags(BaseTestCase):
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
 
         # make user an admin
-        db_name.make_admin(user_id)
+        self.db_name.make_admin(user_id)
 
         # send request without status data
         input_data = {"statu": "sjkj"}
@@ -348,7 +344,7 @@ class TestRedflags(BaseTestCase):
                                      data=json.dumps(input_data),
                                      headers=headers)
         data = json.loads(response.data)
-        self.assertTrue(data["error"] == 400)
+        self.assertTrue(data["status"] == 400)
 
     def test_edit_status_with_no_request_data(self):
         """ This will test editing status while user is admin """
@@ -366,7 +362,7 @@ class TestRedflags(BaseTestCase):
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
 
         # make user an admin
-        db_name.make_admin(user_id)
+        self.db_name.make_admin(user_id)
 
         # send request witn no data
         response = self.client.patch(
@@ -390,7 +386,7 @@ class TestRedflags(BaseTestCase):
         user_id = json.loads(login_response.data)['data'][0]['user']['userid']
 
         # make user an admin
-        db_name.make_admin(user_id)
+        self.db_name.make_admin(user_id)
 
         # create intervention record
         input_data = self.intervention_data
