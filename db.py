@@ -23,11 +23,7 @@ class DatabaseConnection:
             self.connection.autocommit = True
             self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
-        except:
-            pprint('Failed to connect to the database.')
-
-    def create_user_table(self):
-        try:
+            # create users table
             query = """CREATE TABLE IF NOT EXISTS users (userId SERIAL PRIMARY KEY,
                         firstname varchar(32) NOT NULL,
                         lastname varchar(32) NOT NULL,
@@ -40,12 +36,8 @@ class DatabaseConnection:
                         is_admin boolean NOT NULL DEFAULT '0');
                     """
             self.cursor.execute(query)
-            print("Succesfully created users table.")
-        except Exception as e:
-            pprint(e)
 
-    def create_incidents_table(self):
-        try:
+            # create incidents table
             query = """
                     CREATE TABLE IF NOT EXISTS incidents (
                         incident_id SERIAL PRIMARY KEY,
@@ -61,30 +53,23 @@ class DatabaseConnection:
                     )
                     """
             self.cursor.execute(query)
-            print("Successfully created incidents table.")
-        except Exception as e:
-            pprint(e)
 
-    def create_blacklist_table(self):
-        try:
-            query = """
-                    CREATE TABLE IF NOT EXISTS blacklist (
-                        token_id SERIAL PRIMARY KEY,
-                        token varchar(500) NOT NULL UNIQUE,
-                        blacklisted_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-                    )
-                    """
+            # create blacklist table
+            query = """CREATE TABLE IF NOT EXISTS blacklist (
+                    token_id SERIAL PRIMARY KEY,
+                    token varchar(500) NOT NULL UNIQUE,
+                    blacklisted_on TIMESTAMP NOT NULL DEFAULT
+                    CURRENT_TIMESTAMP)"""
             self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
+        except:
+            pprint('Failed to connect to the database.')
 
     def blacklist_token(self, token):
         """
         This module will blacklist a token
         """
         try:
-            query = """
-                    INSERT INTO blacklist (token) VALUES ('%s')
+            query = """INSERT INTO blacklist (token) VALUES ('%s')
                     """ % token
             self.cursor.execute(query)
             return True
@@ -93,12 +78,10 @@ class DatabaseConnection:
 
     def create_user(self, **kwargs):
         try:
-            query = """
-                    INSERT INTO users (firstname, lastname, othernames, username,
-                    email, password, phone_number)
+            query = """INSERT INTO users (firstname, lastname, othernames,
+                    username,email, password, phone_number)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
-                    RETURNING userid
-                    """
+                    RETURNING userid"""
             password = bcrypt.generate_password_hash(
                 kwargs['password'], app.config.get('BCRYPT_LOG_ROUNDS')
             ).decode()
@@ -110,25 +93,31 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def check_user(self, email):
+    def check_item(self, type, data):
+        """ checks if an item exists in the database """
         try:
-            query = "SELECT * FROM users WHERE email = '%s'" % email
-            self.cursor.execute(query)
-            user = self.cursor.fetchone()
-            if user:
-                return dict(user)
-            return None
+            if type == 'token':
+                query = "SELECT * FROM blacklist WHERE token = '%s'" % data
+                self.cursor.execute(query)
+                token = self.cursor.fetchone()
+                if token:
+                    return token
+                return None
+            elif type=="user":
+                query = "SELECT * FROM users WHERE email = '%s'" % data
+                self.cursor.execute(query)
+                user = self.cursor.fetchone()
+                if user:
+                    return dict(user)
+                return None
         except Exception as e:
             pprint(e)
-            return None
 
     def create_incident(self, **kwargs):
         try:
-            query = """
-                    INSERT INTO incidents (created_by, type, location,
+            query = """INSERT INTO incidents (created_by, type, location,
                     images, videos, comment) VALUES (%s, %s, %s, %s, %s, %s)
-                    RETURNING incident_id
-                    """
+                    RETURNING incident_id"""
             self.cursor.execute(query, (kwargs['created_by'], kwargs['type'],
                 kwargs['location'], kwargs['images'],
                 kwargs['videos'], kwargs['comment']))
@@ -168,9 +157,10 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def get_incidents(self):
+    
+    def get_incidents(self, type):
         try:
-            query = "SELECT * FROM incidents"
+            query = "SELECT * FROM incidents WHERE type = '%s'" % type
             self.cursor.execute(query)
             incidents = self.cursor.fetchall()
             if incidents:
@@ -179,130 +169,41 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def get_interventions(self):
+    def edit_incident(self, id, column, data):
         try:
-            query = "SELECT * FROM incidents WHERE type = 'intervention'"
-            self.cursor.execute(query)
-            incidents = self.cursor.fetchall()
-            if incidents:
-                return incidents
-            return None
-        except Exception as e:
-            pprint(e)
-    
-    def get_redflags(self):
-        try:
-            query = "SELECT * FROM incidents WHERE type = 'red-flag'"
-            self.cursor.execute(query)
-            incidents = self.cursor.fetchall()
-            if incidents:
-                return incidents
-            return None
-        except Exception as e:
-            pprint(e)
-    
-    def edit_incident_location(self, id, location):
-        try:
-            query = """
-                    UPDATE incidents
-                    SET location = %s
-                    WHERE incident_id = %s
-                    """
-            self.cursor.execute(query, (location, id))
+            if column == 'status':
+                query = """UPDATE incidents SET status = %s
+                        WHERE incident_id = %s"""
+            elif column == 'comment':
+                query = """UPDATE incidents SET comment = %s
+                    WHERE incident_id = %s"""
+            elif column == 'location':
+                query = """UPDATE incidents SET location = %s
+                    WHERE incident_id = %s"""
+            self.cursor.execute(query, (data, id))
         except Exception as e:
             pprint(e)
 
-
-    def check_blacklist(self, auth_token):
-        """
-        Checks the blacklist table for a token
-        """
+    def delete_from_table(self, table):
         try:
-            query = "SELECT * FROM blacklist WHERE token = '%s'" % auth_token
+            if table == 'users':
+                query = "DELETE FROM  users"
+            elif table == 'incidents':
+                query = 'DELETE FROM incidents'
+            elif table == 'blacklist':
+                query = 'DELETE FROM blacklist'
             self.cursor.execute(query)
-            token = self.cursor.fetchone()
-            if token:
-                return token
-            return None
-        except Exception as e:
-            pprint(e)
-
-    def edit_incident_comment(self, id, comment):
-        try:
-            query = """
-                    UPDATE incidents
-                    SET comment = %s
-                    WHERE incident_id = %s
-                    """
-            self.cursor.execute(query, (comment, id))
-        except Exception as e:
-            pprint(e)
-
-    def delete_all_users(self):
-        try:
-            query = "DELETE FROM  users"
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-
-    def delete_all_incidents(self):
-        try:
-            query = 'DELETE FROM incidents'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-    
-    def drop_user_table(self):
-        try:
-            query = 'DROP TABLE users'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-    
-    def delete_all_tokens(self):
-        try:
-            query = 'DELETE FROM blacklist'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-
-    def drop_incident_table(self):
-        try:
-            query = 'DROP TABLE incidents'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-
-    def drop_blacklist_table(self):
-        try:
-            query = 'DROP TABLE blacklist'
-            self.cursor.execute(query)
-        except Exception as e:
-            pprint(e)
-
-    def update_incident_status(self, incident_id, status):
-        try:
-            query = """
-                    UPDATE incidents
-                    SET status = %s
-                    WHERE incident_id = %s
-                    """
-            self.cursor.execute(query, (status, incident_id))
         except Exception as e:
             pprint(e)
 
     def make_admin(self, id):
         try:
-            query="""
-                UPDATE users
-                SET is_admin='t'
-                WHERE userid = %d
-                """ % id
+            query="""UPDATE users SET is_admin='t'
+                    WHERE userid = %d""" % id
             self.cursor.execute(query)
         except Exception as e:
             pprint(e)
 
 if __name__ == '__main__':
     db_name = DatabaseConnection()
-
     

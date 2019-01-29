@@ -5,9 +5,6 @@ import time
 from project.tests.base import BaseTestCase
 from project.tests.helpers import register_user, login_user, logout_user
 
-from db import DatabaseConnection
-db_name = DatabaseConnection()
-
 
 class TestAuthBlueprint(BaseTestCase):
     def test_registration(self):
@@ -89,23 +86,6 @@ class TestAuthBlueprint(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertTrue(data['error'] == "This email is not valid.")
 
-        # short email
-        response = self.client.post(
-            '/auth/register',
-            data=json.dumps(dict(
-                firstname="Benjamin",
-                lastname="Mayabja",
-                othernames="",
-                phone_number="070-755-9192",
-                username='v1b3m',
-                email="tt@t.m",
-                password='123456'
-            )),
-            content_type='application/json'
-        )
-        data = json.loads(response.data.decode())
-        self.assertTrue(data['error'] == "Email too short.")
-
         # wrong phone number
         response = self.client.post(
             '/auth/register',
@@ -133,20 +113,38 @@ class TestAuthBlueprint(BaseTestCase):
                 phone_number="070-755-9192",
                 username='v1b3m',
                 email="ttsdf@dffd.dfm",
-                password=[]
+                password=123
             )),
             content_type='application/json'
         )
         data = json.loads(response.data.decode())
-        self.assertTrue(data['error'] ==
-                        "Password should be a string or an integer")
+        self.assertEqual(data['error'],
+                         "Password should be a string")
+
+        # missing information
+        response = self.client.post(
+            '/auth/register',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password=""
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertEqual(data['error'],
+                         "Password should be a string")
 
     def test_registration_with_alredy_registered_user(self):
         """ Test registration with aready registered email """
         # create user
-        db_name.create_user(firstname='Benjamin', lastname='Mayanja',
-                            othernames='', username='v1b3m', email='test@test.com',
-                            password='123456', phone_number='0703-755-919')
+        self.db_name.create_user(firstname='Benjamin', lastname='Mayanja',
+                                 othernames='', username='v1b3m', email='test@test.com',
+                                 password='123456', phone_number='0703-755-919')
         with self.client:
             response = register_user(self)
         data = json.loads(response.data.decode())
@@ -271,13 +269,31 @@ class TestAuthBlueprint(BaseTestCase):
                 phone_number="070-755-9192",
                 username='v1b3m',
                 email="ttsdf@dffd.dfm",
-                password=[]
+                password=123
             )),
             content_type='application/json'
         )
         data = json.loads(response.data.decode())
         self.assertTrue(data['error'] ==
-                        "Password should be a string or an integer")
+                        "Password should be a string")
+
+        # missing information
+        response = self.client.post(
+            '/auth/login',
+            data=json.dumps(dict(
+                firstname="Benjamin",
+                lastname="Mayabja",
+                othernames="",
+                phone_number="070-755-9192",
+                username='v1b3m',
+                email="ttsdf@dffd.dfm",
+                password=""
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['error'] ==
+                        "Email or password missing. Try again!")
 
     def test_valid_blacklisted_token_logout(self):
         """ Test for logout after a valid token gets blacklisted """
@@ -301,7 +317,7 @@ class TestAuthBlueprint(BaseTestCase):
             self.assertEqual(response.status_code, 200)
 
             # blacklist a valid token
-            db_name.blacklist_token(
+            self.db_name.blacklist_token(
                 token=json.loads(response.data.decode())['data'][0]['token']
             )
 
@@ -309,7 +325,6 @@ class TestAuthBlueprint(BaseTestCase):
             response = logout_user(self, response)
             data = json.loads(response.data.decode())
             self.assertTrue(data['status'] == 401)
-            
 
     def test_decode_invalid_token(self):
         """ Test for decoding an invalid token """
