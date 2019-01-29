@@ -7,7 +7,7 @@ from project.server.auth.helpers import token_required, admin_required
 from project.server.validation.validators import valid_create_data, wrong_status_data
 from flasgger import swag_from
 
-interventions_blueprint = Blueprint('interventions', __name__)
+interventions_blueprint = Blueprint('interventions', __name__, url_prefix="/api/v2")
 
 db_name = DatabaseConnection()
 
@@ -167,6 +167,8 @@ class DeleteInterventionsAPI(MethodView):
         }), 404
 
 
+
+
 # define the API resources
 get_interventions_view = GetInterventionsAPI.as_view('get_interventions_api')
 get_specific_intervention_view = GetSpecificInterventionAPI.as_view(
@@ -179,27 +181,27 @@ update_intervention_status = UpdateStatusAPI.as_view('update_status_api')
 
 # add rules for API endpoints
 interventions_blueprint.add_url_rule(
-    '/api/v2/interventions',
+    '/interventions',
     view_func=get_interventions_view,
     methods=['GET']
 )
 interventions_blueprint.add_url_rule(
-    '/api/v2/interventions/<int:intervention_id>',
+    '/interventions/<int:intervention_id>',
     view_func=get_specific_intervention_view,
     methods=['GET']
 )
 interventions_blueprint.add_url_rule(
-    '/api/v2/interventions',
+    '/interventions',
     view_func=add_interventions_view,
     methods=['POST']
 )
 interventions_blueprint.add_url_rule(
-    '/api/v2/interventions/<int:intervention_id>',
+    '/interventions/<int:intervention_id>',
     view_func=delete_interventions_view,
     methods=['DELETE']
 )
 interventions_blueprint.add_url_rule(
-    '/api/v2/interventions/<int:intervention_id>/status',
+    '/interventions/<int:intervention_id>/status',
     view_func=update_intervention_status,
     methods=['PATCH']
 )

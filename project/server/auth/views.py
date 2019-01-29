@@ -141,12 +141,19 @@ class LogoutAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 400
 
+class WelcomeAPI(MethodView):
+    """Welcome API"""
+
+    def get(self):
+        """ This route will return the message "Hello, World" """
+        return "Hello, World!"
+
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
 login_view = LoginAPI.as_view('login_api')
 logout_view = LogoutAPI.as_view('logout_api')
-
+welome_view = WelcomeAPI.as_view('welcome_api')
 
 # add Rules for API Endpoints
 auth_blueprint.add_url_rule(
@@ -163,4 +170,9 @@ auth_blueprint.add_url_rule(
     '/auth/logout',
     view_func=logout_view,
     methods=['POST']
+)
+auth_blueprint.add_url_rule(
+    '/',
+    view_func=welome_view,
+    methods=['GET']
 )

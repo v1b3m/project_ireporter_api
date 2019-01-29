@@ -1,7 +1,5 @@
 """ This script will have all the validation functions """
-
 import re
-
 
 def email_data(data):
     """ This function will validate an email address """
@@ -20,6 +18,11 @@ def string_data(data):
         return False
     return True
 
+def number_data(data):
+    if (not data or
+        not isinstance(data, int)):
+        return False
+    return True
 
 def phone_number(data):
     """ This will check for a valid phone number """
@@ -52,7 +55,6 @@ def wrong_status_data(data):
         return "status can only be `​under investigation`,`rejected` or `resolved`"
     return None
 
-
 def wrong_type_data(data):
     """ This will verify type data """
     if not string_data(data['type']):
@@ -60,7 +62,6 @@ def wrong_type_data(data):
     elif data['type'] not in ['red-flag', 'intervention']:
         return "types can only be `red-flag` or `intervention`"
     return None
-
 
 def valid_create_data(data):
     """ This will verify data required to create an incident """
@@ -71,18 +72,18 @@ def valid_create_data(data):
         return validate_add_redflag_data(data)
     return None
 
-
 def validate_add_redflag_data(data):
     """ This function will be used to
         validate input_data """
+    errors = {}
     try:
-        if missing_location_data(data):
-            raise TypeError(missing_location_data(data))
+        if missing_data(data, 'location'):
+            raise TypeError(missing_data(data, 'location'))
         if wrong_type_data(data):
             raise TypeError(wrong_type_data(data))
-        if missing_comment_data(data):
-            raise TypeError(missing_comment_data(data))
-        if not isinstance(data['created_by'], int):
+        if missing_data(data, 'comment'):
+            raise TypeError(missing_data(data, 'comment'))
+        if not number_data(data['created_by']):
             raise TypeError("created_by must be an integer")
     except (TypeError, ValueError) as error:
         return str(error)
@@ -119,7 +120,6 @@ def validate_registration_input(data):
             raise ValueError("Phone Number is invalid")
     except (TypeError, ValueError, KeyError) as e:
         return str(e)
-
 
 def validate_login_input(data):
     try:

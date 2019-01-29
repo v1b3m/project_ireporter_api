@@ -8,7 +8,7 @@ from project.server.auth.helpers import token_required, admin_required
 from project.server.validation.validators import (missing_data,
                                                   string_data, wrong_status_data, valid_create_data)
 
-redflags_blueprint = Blueprint('redflags', __name__)
+redflags_blueprint = Blueprint('redflags', __name__, url_prefix='/api/v2')
 
 db_name = DatabaseConnection()
 
@@ -193,15 +193,6 @@ class PatchRedflagCommentAPI(MethodView):
                         "message": "Sorry, the red-flag record doesn't exist."
                         }), 404
 
-
-class WelcomeAPI(MethodView):
-    """Welcome API"""
-
-    def get(self):
-        """ This route will return the message "Hello, World" """
-        return "Hello, World!"
-
-
 class UpdateStatusAPI(MethodView):
     """Patch a redflag status"""
     @admin_required
@@ -250,47 +241,41 @@ edit_redflag_location_view = PatchRedflagLocationAPI.as_view(
     'patch_redflag_location_api')
 edit_redflag_comment_view = PatchRedflagCommentAPI.as_view(
     'patch_redflag_comment_api')
-welome_view = WelcomeAPI.as_view('welcome_api')
 update_redflag_status = UpdateStatusAPI.as_view('update_status_api')
 
 # add rules for API endpoints
 redflags_blueprint.add_url_rule(
-    '/',
-    view_func=welome_view,
-    methods=['GET']
-)
-redflags_blueprint.add_url_rule(
-    '/api/v2/red-flags',
+    '/red-flags',
     view_func=get_redflags_view,
     methods=['GET']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v2/red-flags/<int:flag_id>',
+    '/red-flags/<int:flag_id>',
     view_func=get_specific_redflag_view,
     methods=['GET']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v2/red-flags',
+    '/red-flags',
     view_func=add_redflags_view,
     methods=['POST']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v2/red-flags/<int:flag_id>',
+    '/red-flags/<int:flag_id>',
     view_func=delete_redflags_view,
     methods=['DELETE']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v2/red-flags/<int:flag_id>/location',
+    '/red-flags/<int:flag_id>/location',
     view_func=edit_redflag_location_view,
     methods=['PATCH']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v2/red-flags/<int:flag_id>/comment',
+    '/red-flags/<int:flag_id>/comment',
     view_func=edit_redflag_comment_view,
     methods=['PATCH']
 )
 redflags_blueprint.add_url_rule(
-    '/api/v2/red-flags/<int:flag_id>/status',
+    '/red-flags/<int:flag_id>/status',
     view_func=update_redflag_status,
     methods=['PATCH']
 )

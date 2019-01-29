@@ -9,6 +9,24 @@ from flask import request, make_response, jsonify
 
 db_name = DatabaseConnection()
 
+def generate_auth_token(user_id):
+    """
+    Generates the auth token string
+    """
+    try:
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+            'iat': datetime.datetime.utcnow(),
+            'sub': user_id
+        }
+        return jwt.encode(
+            payload,
+            app.config.get('SECRET_KEY'),
+            algorithm='HS256'
+        )
+    except Exception as e:
+        return e
+
 def decode_auth_token(auth_token):
     """
     Decodes the auth token
@@ -27,15 +45,18 @@ def decode_auth_token(auth_token):
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
 
+def extract_token():
+    auth_header = request.headers.get('Authorization')
+    if auth_header:
+        auth_token = auth_header.split(" ")[1]
+    else:
+        auth_token = ''
+    return auth_token
 
 def token_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        auth_header = request.headers.get('Authorization')
-        if auth_header:
-            auth_token = auth_header.split(" ")[1]
-        else:
-            auth_token = ''
+        auth_token = extract_token()
         if auth_token:
             resp = decode_auth_token(auth_token)
             if not isinstance(resp, str):
@@ -58,11 +79,7 @@ def token_required(func):
 def admin_required(func):
     @wraps(func)
     def decorate(*args, **kwargs):
-        auth_header = request.headers.get('Authorization')
-        if auth_header:
-            auth_token = auth_header.split(" ")[1]
-        else:
-            auth_token = ''
+        auth_token = extract_token()
         if auth_token:
             resp = decode_auth_token(auth_token)
             if not isinstance(resp, str):
@@ -87,22 +104,3 @@ def admin_required(func):
             }
             return make_response(jsonify(responseObject)), 401
     return decorate
-
-
-def generate_auth_token(user_id):
-    """
-    Generates the auth token string
-    """
-    try:
-        payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-            'iat': datetime.datetime.utcnow(),
-            'sub': user_id
-        }
-        return jwt.encode(
-            payload,
-            app.config.get('SECRET_KEY'),
-            algorithm='HS256'
-        )
-    except Exception as e:
-        return e
