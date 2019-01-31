@@ -148,12 +148,19 @@ class PatchRedflagLocationAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.edit_incident(flag_id, 'location', data['location'])
-            return jsonify({
-                "status": 201,
-                "data": [{"id": flag_id,
-                          "message": "Updated red-flag record's location"
-                          }]}), 201
+            my_item = db_name.created_by(flag_id, current_identity())
+            if my_item:
+                db_name.edit_incident(flag_id, 'location', data['location'])
+                return jsonify({
+                    "status": 201,
+                    "data": [{"id": flag_id,
+                              "message": "Updated red-flag record's location"
+                              }]}), 201
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "You don't have the rights to edit this incident."
+                    }), 400
 
         # this code will run if the red-flag doesn't exist
         return jsonify({"error": 404,
@@ -189,12 +196,19 @@ class PatchRedflagCommentAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.edit_incident(flag_id, 'comment', data['comment'])
-            return jsonify({
-                "status": 201,
-                "data": [{"id": flag_id,
-                          "message": "Updated red-flag record's comment"
-                          }]}), 201
+            my_item = db_name.created_by(flag_id, current_identity())
+            if my_item:
+                db_name.edit_incident(flag_id, 'comment', data['comment'])
+                return jsonify({
+                    "status": 201,
+                    "data": [{"id": flag_id,
+                              "message": "Updated red-flag record's comment"
+                              }]}), 201
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "You don't have the rights to edit this incident."
+                }), 400
 
         # this code will run if the red-flag doesn't exist
         return jsonify({"error": 404,

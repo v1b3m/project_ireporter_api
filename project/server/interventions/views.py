@@ -86,7 +86,7 @@ class CreateInterventionsAPI(MethodView):
                             }), 400
 
         # return if request has no missing data
-        incident_id = db_name.create_incident(created_by=data['created_by'], type=data['type'],
+        incident_id = db_name.create_incident(created_by=current_identity(), type=data['type'],
                                               location=data['location'], comment=data['comment'],
                                               videos="a.mp4", images="a.jpg")
         return jsonify({"status": 201,
@@ -153,13 +153,20 @@ class DeleteInterventionsAPI(MethodView):
         # check if the record exists and delete the record
         red_flag = db_name.get_incident(intervention_id)
         if red_flag:
-            db_name.delete_incident(intervention_id, current_identity())
-            return jsonify({"status": 200,
-                            "data": [{
-                                "id": intervention_id,
-                                "message": 'intervention record has been deleted'
-                            }]
-                            }), 200
+            my_item = db_name.created_by(intervention_id, current_identity())
+            if my_item:
+                db_name.delete_incident(intervention_id, current_identity())
+                return jsonify({"status": 200,
+                                "data": [{
+                                    "id": intervention_id,
+                                    "message": 'intervention record has been deleted'
+                                }]
+                                }), 200
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "You don't have the rights to delete this incident."
+                    }), 400
         # will run if the record doesn't exist
         return jsonify({
             "status": 404,

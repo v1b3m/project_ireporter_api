@@ -214,5 +214,4 @@ class DatabaseConnection:
 
 if __name__ == '__main__':
     db_name = DatabaseConnection()
-    # db_name.delete_incident(4345, 15193)
     
