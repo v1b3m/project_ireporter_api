@@ -4,7 +4,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 from flasgger import swag_from
 
-from project.server.auth.helpers import token_required, admin_required
+from project.server.auth.helpers import token_required, admin_required,current_identity
 from project.server.validation.validators import (missing_data,
                                                   string_data, wrong_status_data, valid_create_data)
 
@@ -82,7 +82,7 @@ class CreateRedflagsAPI(MethodView):
                             }), 400
 
         # return if request has no missing data
-        incident_id = db_name.create_incident(created_by=data['created_by'], type=data['type'],
+        incident_id = db_name.create_incident(created_by=current_identity(), type=data['type'],
                                               location=data['location'], comment=data['comment'],
                                               videos="a.mp4", images="a.jpg")
         return jsonify({"status": 201,
@@ -97,14 +97,22 @@ class DeleteRedflagsAPI(MethodView):
     @swag_from('../docs/delete_flag.yml')
     def delete(self, flag_id):
         """ This will delete a red-flag specified by id """
+
         # check if the record exists and delete the record
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.delete_incident(flag_id)
-            return jsonify({"status": 200,
-                            "data": [{"id": flag_id,
-                                      "message": 'redflag record has been deleted'
-                                      }]}), 200
+            my_item = db_name.created_by(flag_id, current_identity())
+            if my_item:
+                db_name.delete_incident(flag_id, current_identity())
+                return jsonify({"status": 200,
+                                "data": [{"id": flag_id,
+                                          "message": 'redflag record has been deleted'
+                                          }]}), 200
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "You don't have the rights to delete this incident."
+                    }), 400
         # will run if the record doesn't exist
         return jsonify({"status": 404,
                         "message": "Oops, looks like the record doesn't exist."
@@ -140,12 +148,19 @@ class PatchRedflagLocationAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.edit_incident(flag_id, 'location', data['location'])
-            return jsonify({
-                "status": 201,
-                "data": [{"id": flag_id,
-                          "message": "Updated red-flag record's location"
-                          }]}), 201
+            my_item = db_name.created_by(flag_id, current_identity())
+            if my_item:
+                db_name.edit_incident(flag_id, 'location', data['location'])
+                return jsonify({
+                    "status": 201,
+                    "data": [{"id": flag_id,
+                              "message": "Updated red-flag record's location"
+                              }]}), 201
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "You don't have the rights to edit this incident."
+                    }), 400
 
         # this code will run if the red-flag doesn't exist
         return jsonify({"error": 404,
@@ -181,12 +196,19 @@ class PatchRedflagCommentAPI(MethodView):
         # check if record exists
         red_flag = db_name.get_incident(flag_id)
         if red_flag:
-            db_name.edit_incident(flag_id, 'comment', data['comment'])
-            return jsonify({
-                "status": 201,
-                "data": [{"id": flag_id,
-                          "message": "Updated red-flag record's comment"
-                          }]}), 201
+            my_item = db_name.created_by(flag_id, current_identity())
+            if my_item:
+                db_name.edit_incident(flag_id, 'comment', data['comment'])
+                return jsonify({
+                    "status": 201,
+                    "data": [{"id": flag_id,
+                              "message": "Updated red-flag record's comment"
+                              }]}), 201
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "You don't have the rights to edit this incident."
+                }), 400
 
         # this code will run if the red-flag doesn't exist
         return jsonify({"error": 404,
@@ -222,7 +244,7 @@ class UpdateStatusAPI(MethodView):
             return jsonify({
                 "status": 201,
                 "data": [{"id": flag_id,
-                          "message": "​Updated red-flag record status"
+                          "message": "Updated red-flag record status"
                           }]}), 201
 
         # this code will run if the red-flag doesn't exist

@@ -104,3 +104,8 @@ def admin_required(func):
             }
             return make_response(jsonify(responseObject)), 401
     return decorate
+
+def current_identity():
+    """ This function will return the id of the current user """
+    user_id = decode_auth_token(extract_token())
+    return user_id

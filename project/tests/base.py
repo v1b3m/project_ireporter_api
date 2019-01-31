@@ -14,15 +14,12 @@ class BaseTestCase(TestCase):
     def setUp(self):
         self.db_name = DatabaseConnection()
 
-        user_id = self.db_name.create_user(firstname='benjamin', lastname='mayanja',
-                                           othernames='', username='v1b3m', email='tes1t@test.com',
-                                           password='1234456', phone_number='2309908')
         self.input_data = {"location": "0.96, 1.23",
-                           "created_by": user_id, "type": "red-flag",
+                            "type": "red-flag",
                            "comment": "I am the greatest"
                            }
         self.intervention_data = {"location": "0.96, 1.23",
-                                  "created_by": user_id, "type": "intervention",
+                                  "type": "intervention",
                                   "comment": "I am the greatest"
                                   }
 
