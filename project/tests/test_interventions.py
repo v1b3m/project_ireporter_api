@@ -130,7 +130,6 @@ class TestRedflags(BaseTestCase):
         # create input_data with missing data
         input_data = {
             "location": {"lat": "0.96", "long": "1.23"},
-            "created_by": "Benjamin"
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
@@ -171,7 +170,7 @@ class TestRedflags(BaseTestCase):
         # integer location
         input_data = {
             "location": 3,
-            "created_by": 12, "type": "intervention",
+            "type": "intervention",
             "comment": "I am the greatest"
         }
         response = add_intervention(self, headers, input_data)
@@ -182,7 +181,7 @@ class TestRedflags(BaseTestCase):
         # integer redflag type
         input_data = {
             "location": "0.12, 3.44",
-            "created_by": 12, "type": 4,
+            "type": 4,
             "comment": "I am the greatest"
         }
         response = add_intervention(self, headers, input_data)
@@ -193,23 +192,12 @@ class TestRedflags(BaseTestCase):
         # integer comment in request
         input_data = {
             "location": "0.12, 3.44",
-            "created_by": 12, "type": "red-flag",
+            "type": "red-flag",
             "comment": 34
         }
         response = add_intervention(self, headers, input_data)
         data = json.loads(response.data)
         self.assertIn('comment must be', data['error'])
-        self.assertTrue(len(data) == 2)
-
-        # request containing created_by as a string
-        input_data = {
-            "location": "0.12, 3.44",
-            "created_by": "me", "type": "red-flag",
-            "comment": "This is a new comment"
-        }
-        response = add_intervention(self, headers, input_data)
-        data = json.loads(response.data)
-        self.assertIn('created_by must be', data['error'])
         self.assertTrue(len(data) == 2)
 
     def test_delete_intervention_when_record_is_not_there(self):
