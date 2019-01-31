@@ -41,6 +41,7 @@ class DatabaseConnection:
             query = """
                     CREATE TABLE IF NOT EXISTS incidents (
                         incident_id SERIAL PRIMARY KEY,
+                        title varchar(256) NOT NULL,
                         created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         created_by int,
                         type varchar(16) NOT NULL,
@@ -115,11 +116,11 @@ class DatabaseConnection:
 
     def create_incident(self, **kwargs):
         try:
-            query = """INSERT INTO incidents (created_by, type, location,
-                    images, videos, comment) VALUES (%s, %s, %s, %s, %s, %s)
+            query = """INSERT INTO incidents (title, created_by, type, location,
+                    images, videos, comment) VALUES (%s, %s, %s, %s, %s, %s, %s)
                     RETURNING incident_id"""
-            self.cursor.execute(query, (kwargs['created_by'], kwargs['type'],
-                kwargs['location'], kwargs['images'],
+            self.cursor.execute(query, (kwargs['title'], kwargs['created_by'],
+                kwargs['type'], kwargs['location'], kwargs['images'],
                 kwargs['videos'], kwargs['comment']))
             incident_id = self.cursor.fetchone()
             if incident_id:
