@@ -51,8 +51,8 @@ def wrong_status_data(data):
         return "Status data not found"
     elif not string_data(data['status']):
         return 'status must be a string'
-    elif data['status'] not in ['​under investigation', 'rejected', 'resolved']:
-        return "status can only be `​under investigation`,`rejected` or `resolved`"
+    elif data['status'] not in ['under investigation', 'rejected', 'resolved']:
+        return "status can only be `under investigation`,`rejected` or `resolved`"
     return None
 
 def wrong_type_data(data):
@@ -65,8 +65,7 @@ def wrong_type_data(data):
 
 def valid_create_data(data):
     """ This will verify data required to create an incident """
-    if ('created_by' not in data or 'type' not in data or
-            'comment' not in data or 'location' not in data):
+    if ('type' not in data or 'comment' not in data or 'location' not in data):
         return "Some Information is missing from the request"
     elif validate_add_redflag_data(data):
         return validate_add_redflag_data(data)
@@ -75,7 +74,6 @@ def valid_create_data(data):
 def validate_add_redflag_data(data):
     """ This function will be used to
         validate input_data """
-    errors = {}
     try:
         if missing_data(data, 'location'):
             raise TypeError(missing_data(data, 'location'))
@@ -83,8 +81,6 @@ def validate_add_redflag_data(data):
             raise TypeError(wrong_type_data(data))
         if missing_data(data, 'comment'):
             raise TypeError(missing_data(data, 'comment'))
-        if not number_data(data['created_by']):
-            raise TypeError("created_by must be an integer")
     except (TypeError, ValueError) as error:
         return str(error)
     return None

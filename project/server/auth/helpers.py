@@ -15,7 +15,7 @@ def generate_auth_token(user_id):
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5000),
             'iat': datetime.datetime.utcnow(),
             'sub': user_id
         }
@@ -104,3 +104,8 @@ def admin_required(func):
             }
             return make_response(jsonify(responseObject)), 401
     return decorate
+
+def current_identity():
+    """ This function will return the id of the current user """
+    user_id = decode_auth_token(extract_token())
+    return user_id

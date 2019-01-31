@@ -3,7 +3,7 @@ from db import DatabaseConnection
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from project.server.auth.helpers import token_required, admin_required
+from project.server.auth.helpers import token_required, admin_required, current_identity
 from project.server.validation.validators import valid_create_data, wrong_status_data
 from flasgger import swag_from
 
@@ -131,7 +131,7 @@ class UpdateStatusAPI(MethodView):
                 "status": 201,
                 "data": [{
                     "id": intervention_id,
-                    "message": "​Updated intervention record status"
+                    "message": "Updated intervention record status"
                 }]
             }), 201
 
@@ -153,7 +153,7 @@ class DeleteInterventionsAPI(MethodView):
         # check if the record exists and delete the record
         red_flag = db_name.get_incident(intervention_id)
         if red_flag:
-            db_name.delete_incident(intervention_id)
+            db_name.delete_incident(intervention_id, current_identity())
             return jsonify({"status": 200,
                             "data": [{
                                 "id": intervention_id,

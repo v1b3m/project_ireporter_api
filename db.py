@@ -139,12 +139,20 @@ class DatabaseConnection:
         except Exception as e:
             pprint(e)
 
-    def delete_incident(self, id):
+    def delete_incident(self, id, created_by):
         try:
-            query = "DELETE FROM incidents WHERE incident_id = %d" % id
-            self.cursor.execute(query)
+            query = """DELETE FROM incidents WHERE incident_id = %s
+                    AND created_by = %s
+                    """
+            self.cursor.execute(query, (id, created_by))
         except Exception as e:
             pprint(e)
+
+    def created_by(self, id, user_id):
+        query = """SELECT * FROM incidents WHERE incident_id = %s
+                    AND created_by = %s"""
+        self.cursor.execute(query, (id, user_id))
+        return self.cursor.fetchone()
 
     def get_incident(self, id):
         try:
@@ -206,4 +214,5 @@ class DatabaseConnection:
 
 if __name__ == '__main__':
     db_name = DatabaseConnection()
+    # db_name.delete_incident(4345, 15193)
     

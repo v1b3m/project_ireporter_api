@@ -1,8 +1,6 @@
 
-from project.server.app import create_app
+from project.server import app
 import os
-
-app = create_app()
 
 app_settings = os.getenv(
     'APP_SETTINGS',
