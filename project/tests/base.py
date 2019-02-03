@@ -15,11 +15,11 @@ class BaseTestCase(TestCase):
         self.db_name = DatabaseConnection()
 
         self.input_data = {"location": "0.96, 1.23",
-                            "type": "red-flag",
+                            "title": "A new red-flag",
                            "comment": "I am the greatest"
                            }
         self.intervention_data = {"location": "0.96, 1.23",
-                                  "type": "intervention",
+                                  "title": "A new intervention",
                                   "comment": "I am the greatest"
                                   }
 

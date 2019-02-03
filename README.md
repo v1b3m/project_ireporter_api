@@ -28,9 +28,7 @@ Feel free to check it out at your own convenience
 Note that all API endpoints use json formatted data. An example is given below for the POST endpoint:
 ```javascript
 {
-    "status": "Approved", 
     "location": {"lat": "0.96", "long": "1.23"}, 
-    "createdBy": "Benjamin", 
     "type": "red-flag", 
     "comment": "I am the greatest"
 }

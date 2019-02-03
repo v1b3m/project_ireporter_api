@@ -55,17 +55,17 @@ def wrong_status_data(data):
         return "status can only be `under investigation`,`rejected` or `resolved`"
     return None
 
-def wrong_type_data(data):
+def wrong_title_data(data):
     """ This will verify type data """
-    if not string_data(data['type']):
-        return "type must be a string"
-    elif data['type'] not in ['red-flag', 'intervention']:
-        return "types can only be `red-flag` or `intervention`"
+    if 'title' not in data:
+        return "Title data not found"
+    elif not string_data(data['title']):
+        return "title must be a string"
     return None
 
 def valid_create_data(data):
     """ This will verify data required to create an incident """
-    if ('type' not in data or 'comment' not in data or 'location' not in data):
+    if ('title' not in data or 'comment' not in data or 'location' not in data):
         return "Some Information is missing from the request"
     elif validate_add_redflag_data(data):
         return validate_add_redflag_data(data)
@@ -77,8 +77,8 @@ def validate_add_redflag_data(data):
     try:
         if missing_data(data, 'location'):
             raise TypeError(missing_data(data, 'location'))
-        if wrong_type_data(data):
-            raise TypeError(wrong_type_data(data))
+        if wrong_title_data(data):
+            raise TypeError(wrong_title_data(data))
         if missing_data(data, 'comment'):
             raise TypeError(missing_data(data, 'comment'))
     except (TypeError, ValueError) as error:

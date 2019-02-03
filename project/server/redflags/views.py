@@ -82,9 +82,9 @@ class CreateRedflagsAPI(MethodView):
                             }), 400
 
         # return if request has no missing data
-        incident_id = db_name.create_incident(created_by=current_identity(), type=data['type'],
+        incident_id = db_name.create_incident(created_by=current_identity(), title=data['title'],
                                               location=data['location'], comment=data['comment'],
-                                              videos="a.mp4", images="a.jpg")
+                                              type="red-flag", videos="a.mp4", images="a.jpg")
         return jsonify({"status": 201,
                         "data": [{"id": incident_id,
                                   "message": "Created red-flag record"

@@ -86,9 +86,9 @@ class CreateInterventionsAPI(MethodView):
                             }), 400
 
         # return if request has no missing data
-        incident_id = db_name.create_incident(created_by=current_identity(), type=data['type'],
+        incident_id = db_name.create_incident(created_by=current_identity(), type="intervention",
                                               location=data['location'], comment=data['comment'],
-                                              videos="a.mp4", images="a.jpg")
+                                              title=data['title'], videos="a.mp4", images="a.jpg")
         return jsonify({"status": 201,
                         "data": [{
                             "id": incident_id,
