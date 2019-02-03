@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    <title>My Profile</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+                <header>
+                    <div class="navbar" id="mynavbar">                                                  
+                            <a href="../index.html" class="active">Home</a>
+                            <a href="redflag.html">Red Flag</a>
+                            <a href="intervention.html">Intervention</a>
+                            <a href="myrecords.html">My Records</a>                    
+                            <a class="rightnav" href="profile.html">Profile</a>
+                            <a class="rightnav" href="signin.html">Logout</a>
+                            <a href="javascript:void(0);" style="font-size:15px;" class="icon" 
+                            onclick="makeResponsive()">&#9776;</a>                                                      
+                    </div>
+                </header>
+        </div><!-- header -->
+
+        <div class="content">
+            <div class="section group">
+	            <div class="col col-1-of-2">
+	                <table>
+                        <thead>
+                            <tr id="profile-pic">
+                                <th><img id="myAvatar" src="images/myAvatar.png" alt="profile pic" style="width: 260px; height: 240px;"></th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="friends">
+                                <td style="text-align: center"></i><a href=""><i class="fa fa-check"></i>Following </a> </td>
+                            </tr>
+                            <tr id="message">
+                                <td style="text-align: center"  ><a href=""><i class="fa fa-envelope"></i> Message</a> </td>
+                            </tr>
+                            <tr>
+                                <td><h1>Benjamin Mayanja</h1></td>
+                            </tr>
+                            <tr>
+                                <td><h4>Developer at Andela Uganda</h4></td>
+                            </tr>
+                            <tr>
+                                <td>I'm not your ordinary guy, I do quantam physics when bored. When I 
+                                    feel scared, I watch horrors to calm me down. I've murdered 2003 
+                                    mosquitoes, 13 venomous snakes, and tamed a polar bear. I've spent 
+                                    a week on just water while performing at 200% capacity. Just saying,I just might be your next boss. <br>
+                                <b>Discaimer:</b> I'm just kidding</td>
+                            </tr>
+                            <table>
+                                <thead>
+
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Status:</td>
+                                        <td><button id="active-button">Active</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>User Rating:</td>
+                                        <td>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star"></span>
+                                            <span class="fa fa-star"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Member Since:</td>
+                                        <td>06-Jul-2002</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                        </tbody>
+                    </table>
+	            </div>
+	            <div class="col col-2-of-2">                
+	                <div id="about" style="overflow-x: auto;">
+                        <table>
+                        <thead>
+                            <tr>
+                                <th colspan="3";><h2><i class="fa fa-user-circle"></i> ABOUT</h2></th>
+                                <th><i class="fa fa-edit"></i><a href="">Edit profile</a>  </th>
+                            </tr>                
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>First Name:</td>
+                                <td>Benjamin</td>
+                                <td>Last Name:</td>
+                                <td>Mayanja</td>
+                            </tr>
+                            <tr>
+                                <td>Username:</td>
+                                <td>v1b3m</td>
+                                <td>Email:</td>
+                                <td>vibenjamin6@gmail.com</td>
+                            </tr>
+                            <tr>
+                                <td>City:</td>
+                                <td>Kampala</td>
+                                <td>Country:</td>
+                                <td>Uganda</td>
+                            </tr>
+                            <tr>
+                                <td>Occupation:</td>
+                                <td>Engineer</td>
+                                <td>Phone:</td>
+                                <td>(+256)-703-755-919</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div><!-- about-->
+
+                    <div id="contributions" style="overflow-x:auto;">
+                        <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4"><h2><i class="fa fa-trophy"></i> CONTRIBUTIONS</h2></th>
+                            </tr>                
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Resolved redflags:</td>
+                                <td>20</td>
+                                <td>Resolved Interventions:</td>
+                                <td>13</td>
+                            </tr>
+                            <tr>
+                                <td>Pending redflags:</td>
+                                <td>05</td>
+                                <td>Pending Interventions:</td>
+                                <td>07</td>
+                            </tr>
+                            <tr>
+                                <td>Rejected redflags:</td>
+                                <td>02</td>
+                                <td>Rejected Interventions:</td>
+                                <td>03  </td>
+                            </tr>
+                            <tr>
+                                <td>Percentage success rate:</td>
+                                <td>75%</td>
+                                <td>Percentage failure rate:</td>
+                                <td>32%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div><!-- contributions -->
+
+                    <div id="activity">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th><h2><i class="fa fa-list-alt"></i> ACTIVITY</h2></H2></th>
+                            </tr>                    
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Change your profile pic</td>
+                            </tr>
+                            <tr>
+                                <td>Added new redflag</td>
+                            </tr>
+                            <tr>
+                                <td>Changed your settings</td>
+                            </tr>
+                            <tr>
+                                <td>Changed your user profile details.</td>
+                            </tr>
+                            <tr>
+                                <td>Added new Intervention records.</td>
+                            </tr>
+                            <tr>
+                                <td>Changed profile pic.</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                        <p id="see-all"><a href="">See all activities.</a></p>
+                        
+                    </div><!-- activity-->
+	            </div>
+            </div>  
+        </div><!-- content -->
+
+        <div id="footer">
+            <footer>
+                    <div class="section group">
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-map-marker footer-icon" aria-hidden="true"></i>
+                            <h3>WHERE TO FIND US</h3>
+                            <p>23 Madison Avenue</p>
+                            <p>Valet ,Kampala</p>
+                            <p>12324, UG</p>
+
+                        </div>
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-envelope footer-icon" aria-hidden="true"></i>
+                            <h3>WE STILL USE EMAIL</h3>
+                            <p>vijdkfh@ireporter.com</p>
+                            <p>iuriiu@ireporter.net</p>
+                        </div>
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-phone footer-icon" aria-hidden="true"></i>
+                            <h3>FOR THOSE WITH CREDIT</h3>
+                            <p>Phone: (+256)-7924-323</p>
+                            <p>Mobile: (+256)-232-2343</p>
+                            <p>Fax: (+256)-123-121</p>
+                        </div>
+                        <div class="col col-2-of-3">
+                            <p><i class="fa fa-facebook footer-icon" aria-hidden="true"></i></p>
+                            <p><i class="fa fa-twitter footer-icon" aria-hidden="true"></i></p>
+                            <p><i class="fa fa-instagram footer-icon" aria-hidden="true"></i></p>                            
+                        </div>
+                    </div>
+            </footer>            
+        </div><!-- footer -->
+            
+    </div>
+    
+</body>
+<script src="js/script.js"></script>
+</html>
