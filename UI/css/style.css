@@ -394,13 +394,13 @@ footer h3 {
 .alert {
     display: none;
     padding: 20px;
-    background-color: #80d4ff;
-    color: white;
+    background-color: #b3e6ff;
+    color: #1a1a1a;
 }
 
 .closebtn {
     margin-left: 15px;
-    color: white;
+    color: #1a1a1a;
     font-weight: bold;
     float: right;
     font-size: 22px;
@@ -410,6 +410,6 @@ footer h3 {
 }
 
 .closebtn:hover {
-    color: black;
+    color: white;
 }
 
