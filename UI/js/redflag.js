@@ -24,9 +24,9 @@ function createRedflag(event) {
     .then((response) => response.json())
     .then((data) => {
         if (data.status == 201){
-            window.location.reload
+            window.location.reload()
             info.parentElement.style.display='block';
-            info.textContent = ""+data.message;
+            info.textContent = ""+data.data[0].message;
 
         } else {
             info.parentElement.style.display='block';
