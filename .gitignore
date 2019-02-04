@@ -31,3 +31,6 @@ ireporter.log*
 htmlcov
 
 tmp
+
+project
+.coveragerc
