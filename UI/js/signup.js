@@ -12,7 +12,7 @@ function registerNewUser(event) {
     let phone_number = document.getElementById('phone_number')
     let password = document.getElementById('password')
 
-    // let info = document.getElementById('info')
+    let info = document.getElementById('info-messages')
     let token = localStorage.getItem('token')
 
     fetch(url, {
@@ -32,11 +32,12 @@ function registerNewUser(event) {
     .then((response) => response.json())
     .then((data) => {
         if (data.status == 201){
-            window.location.replace('./index.html')
+            window.location.replace('./signin.html')
         } else {
-
+            info.parentElement.style.display='block';
+            info.textContent = ""+data.error;
         }
         console.log(data)
     })
-    .catch((err) =>console.log(err))
+    .catch((err) => console.log(err), info.textContent = 'An unknown error has occured! Please try again.')
 }
