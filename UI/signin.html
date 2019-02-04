@@ -27,6 +27,10 @@
     </div><!-- header -->
 
         <div class="content">
+            <div class="alert" >
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong id="info-messages"></strong>
+            </div>
             <div class="section group">
                 <div class="col col-1-of-3">                
                 </div>
@@ -34,14 +38,14 @@
                     <h1 class="form-label">SIGN IN</h1>
                     <p>We clearly missed you. Welcome back.</p>
                     <hr>                    
-                    <form id="registration-form" action="">
+                    <form id="login-form" action="">
                         <div class="row">
                         <div class="col-25">
                             <label for="email"><b>Email:</b></label>
                         </div>
                         <div class="col-75">
-                            <input type="text" placeholder="Enter Email / Username" name="" 
-                            required><br><br>
+                            <input type="text" placeholder="Enter Email" name="" 
+                            id="email" required><br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -49,8 +53,8 @@
                             <label for="email"><b>Password:</b></label>
                         </div>
                         <div class="col-75">
-                            <input type="text" placeholder="Enter Password" name="" 
-                            required><br><br>
+                            <input type="password" placeholder="Enter Password" name="" 
+                            id="password" required><br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -106,4 +110,5 @@
 
 </body>
 <script src="js/responsive.js"></script>
+<script src="js/signin.js"></script>
 </html>
