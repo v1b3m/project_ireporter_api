@@ -35,13 +35,58 @@
                     <hr>
                     <p>Already have an iReporter account? <a href="signin.html"> Sign In Here</a> </p>
                     <form id="registration-form" action="">
-                        <div class="row">
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="firstname"><b>Firstname:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Firstname" name="" 
+                            id="firstname" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="lastname"><b>Lastname:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Lastname" name="" 
+                            id="lastname" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="othernames"><b>Othernames:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Othernames" name="" 
+                            id="othernames" ><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="username"><b>Username:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Username" name="" 
+                            id="username" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-25">
                             <label for="email"><b>Email:</b></label>
                         </div>
                         <div class="col-75">
                             <input type="text" placeholder="Enter Email" name="" 
-                            required><br><br>
+                            id = "email" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="phone_number"><b>Phone:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Phone Number" name="" 
+                            id="phone_number" required><br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -50,7 +95,7 @@
                         </div>
                         <div class="col-75">
                             <input type="text" placeholder="Enter Password" name="" 
-                            required><br><br>
+                            id="password" required><br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -117,4 +162,5 @@
     
 </body>
 <script src="js/responsive.js"></script>
+<script src="js/signup.js"></script>
 </html>
