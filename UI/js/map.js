@@ -1,11 +1,4 @@
-function makeResponsive() {
-    var i = document.getElementById("mynavbar");
-    if (i.className == "navbar") {
-        i.className += " responsive";
-    } else {
-        i.className = "navbar";
-    }
-}
+
 
 function initMap() {
     var myLatlng = {lat: 0.347596, lng: 32.582520};
