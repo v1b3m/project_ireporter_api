@@ -1,4 +1,5 @@
-document.getElementById('red-flag-form').addEventListener('submit', createRedflag)
+var frm = document.getElementById('red-flag-form')
+frm.addEventListener('submit', createRedflag)
 
 const url = 'https://andelaireporterapp.herokuapp.com/api/v2/red-flags'
 
@@ -24,10 +25,10 @@ function createRedflag(event) {
     .then((response) => response.json())
     .then((data) => {
         if (data.status == 201){
-            window.location.reload()
+            frm.reset()
             info.parentElement.style.display='block';
             info.textContent = ""+data.data[0].message;
-
+            return false;
         } else {
             info.parentElement.style.display='block';
             info.textContent = ""+data.error;
