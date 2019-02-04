@@ -16,9 +16,9 @@
         <div class="header">
             <header>
                 <div class="navbar" id="mynavbar">                                                  
-                        <a href="../index.html" >Home</a>
-                        <a href="redflag.html" class="active">Red Flag</a>
-                        <a href="intervention.html">Intervention</a>
+                        <a href="index.html" >Home</a>
+                        <a href="redflag.html" class="active">+Red Flag</a>
+                        <a href="intervention.html">+Intervention</a>
                         <a href="myrecords.html">My Records</a>                    
                         <a class="rightnav" href="profile.html">Profile</a>
                         <a class="rightnav" href="signin.html">Logout</a>
@@ -30,15 +30,19 @@
 
         <div class="content">
             <h2>CREATE A REDFLAG RECORD HERE</h2>
+            <div class="alert" >
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong id="info-messages"></strong>
+            </div>
             <div class="form-container">
-                <form id="" action="">
+                <form id="red-flag-form" action="">
                     <div class="row">
                         <div class="col-25">
                             <label for="what"><b>What issue do you want to report?</b></label>
                         </div>
                         <div class="col-75">
                             <input type="text" placeholder="E.g Corrupt government officer e.t.c" name="" 
-                            required><br><br>
+                            id="title" required><br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -46,8 +50,8 @@
                             <label for="how"><b>Please give a little more detail</b></label>
                         </div>
                         <div class="col-75">
-                            <textarea name="" id="" cols="37" rows="10" 
-                            placeholder="A brief explanation of the incident"></textarea>
+                            <textarea name="" cols="37" rows="10" 
+                            id="comment" placeholder="A brief explanation of the incident"></textarea>
                             <br><br>
                         </div>
                     </div>
@@ -57,7 +61,7 @@
                         </div>
                         <div class="col-75">
                             <input type="text" placeholder="Location of incident" name="" 
-                            required><br><br>
+                            id="location" required><br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -80,7 +84,7 @@
                         </div>
                     <div class="row">
                         <div class="col-25">
-                            <label for="where"><b>Who was involved in the incident?</b></label>
+                            <label for="who"><b>Who was involved in the incident?</b></label>
                         </div>
                         <div class="col-75">
                             <input type="text" placeholder="Name any involved individuals" name="psw-repeat" 
@@ -140,4 +144,5 @@
 </body>
 <script src="js/responsive.js"></script>
 <script src="js/map.js"></script>
+<script src="js/redflag.js"></script>
 </html>

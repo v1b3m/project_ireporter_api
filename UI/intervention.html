@@ -16,9 +16,9 @@
         <div class="header">
             <header>
                 <div class="navbar" id="mynavbar">                                                  
-                        <a href="../index.html" >Home</a>
-                        <a href="redflag.html">Red Flag</a>
-                        <a href="intervention.html" class="active">Intervention</a>
+                        <a href="index.html" >Home</a>
+                        <a href="redflag.html">+Red Flag</a>
+                        <a href="intervention.html" class="active">+Intervention</a>
                         <a href="myrecords.html">My Records</a>                    
                         <a class="rightnav" href="profile.html">Profile</a>
                         <a class="rightnav" href="signin.html">Logout</a>
@@ -30,15 +30,19 @@
 
         <div class="content">
             <h2>CREATE AN INTERVENTION RECORD HERE</h2>
+            <div class="alert" >
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong id="info-messages"></strong>
+            </div>
             <div class="form-container">
-                <form id="" action="">
+                <form id="intervention-form" action="">
                     <div class="row">
                         <div class="col-25">
                             <label for="what"><b>What issue do you want to report?</b></label>
                         </div>
                         <div class="col-75">
                             <input type="text" placeholder="E.g Badly damaged Road or building e.t.c" name="" 
-                            required><br><br>
+                            id="title" required><br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -46,7 +50,7 @@
                             <label for="how"><b>Please give a little more detail</b></label>
                         </div>
                         <div class="col-75">
-                            <textarea name="" id="" cols="37" rows="10" 
+                            <textarea name="" cols="37" rows="10" id="comment"
                             placeholder="How bad is the situation on site?"></textarea>
                             <br><br>
                         </div>
@@ -56,8 +60,8 @@
                             <label for="where"><b>Where did it happen?</b></label>
                         </div>
                         <div class="col-75">
-                            <input id="xyz" type="text" placeholder="Location of incident" name="" 
-                            required><br><br>
+                            <input type="text" placeholder="Location of incident" name="" 
+                            id="location" required><br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -133,4 +137,5 @@
 </body>
 <script src="js/responsive.js"></script>
 <script src="js/map.js"></script>
+<script src="js/intervention.js"></script>
 </html>
