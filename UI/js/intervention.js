@@ -24,12 +24,15 @@ function createIncident(event) {
     })
     .then((response) => response.json())
     .then((data) => {
-        if (data.status == 201){
+        if (data.status === 201){
             frm.reset()
             info.parentElement.style.display='block';
             info.textContent = ""+data.data[0].message;
             return false;
-        } else {
+        } else if(data.status === 'fail'){
+            window.location.replace('./signin.html')
+        } 
+        else {
             info.parentElement.style.display='block';
             info.textContent = ""+data.error;
         }

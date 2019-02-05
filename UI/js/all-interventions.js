@@ -38,7 +38,10 @@ function getInterventions() {
 
                 tableBody.appendChild(newRow)
             }
-        } else {
+        } else if(data.status === 'fail'){
+            window.location.replace('./signin.html')
+        }
+         else {
             info.parentElement.style.display='block';
             info.textContent = ""+data.error;
         }

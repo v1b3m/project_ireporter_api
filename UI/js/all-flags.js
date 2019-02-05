@@ -12,7 +12,7 @@ function getFlags() {
     })
     .then((response) => response.json())
     .then((data) => {
-        if(data.status == 200) {
+        if(data.status === 200) {
             for(let flag of data.data){
                 newRow = document.createElement('tr')
 
@@ -38,7 +38,10 @@ function getFlags() {
 
                 tableBody.appendChild(newRow)
             }
-        } else {
+        } else if(data.status === 'fail'){
+            window.location.replace('./signin.html')
+        }
+        else {
             info.parentElement.style.display='block';
             info.textContent = ""+data.error;
         }

@@ -29,7 +29,10 @@ function createRedflag(event) {
             info.parentElement.style.display='block';
             info.textContent = ""+data.data[0].message;
             return false;
-        } else {
+        } else if(data.status === 'fail'){
+            window.location.replace('./signin.html')
+        }
+         else {
             info.parentElement.style.display='block';
             info.textContent = ""+data.error;
         }
