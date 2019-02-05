@@ -17,6 +17,8 @@
                     <div class="navbar" id="mynavbar">                           
                             <a href="index.html" >Home</a>
                             <a href="admin.html" class="active" >Admin</a>
+                            <a href="newflags.html">New Red-flags</a>
+                            <a href="newinterventions.html">New Interventions</a>
                             <a href="rejected.html">Rejected</a>
                             <a href="accepted.html">Accepted</a>
                             <a href="pending.html" >Ignored</a>
@@ -29,21 +31,24 @@
 
         <div class="content">
             <h2>ALL REDFLAGS AND INTERVENTIONS.</h2>
+            <div class="alert" >
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong id="info-messages"></strong>
+            </div>
             <div style="overflow: auto">
-                <table>
+                <table id="incidents-table">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Record</th>
                         <th>Type</th>
-                        <th>Created</th>
+                        <th>Created On</th>
                         <th>Accept</th>
                         <th>Reject</th>
-                        <th>Ignore</th>
                     </tr>                    
                 </thead>
                 <tbody>
-                        <tr>
+                        <!-- <tr>
                             <td>1</td>
                             <td>Corrupt LC1 chairman</td>
                             <td>Red Flag</td>
@@ -225,7 +230,7 @@
                             <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
                             <td><a href=""><i class="fa fa-bookmark-o" 
                                 aria-hidden="true"></i></a></td></td>
-                        </tr>
+                        </tr> -->
                 </tbody>
                 
             </table> 
@@ -270,4 +275,5 @@
     
 </body>
 <script src="js/responsive.js"></script>
+<script src="js/all-flags.js"></script>
 </html>
