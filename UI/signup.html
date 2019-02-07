@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    <title>Sign Up</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <header>
+                <div class="navbar" id="mynavbar">                                                  
+                        <a href="index.html" class="active">Home</a>
+                        <a href="contact.html">Help</a>                                            
+                        <a class="rightnav" href="signin.html">Sign In</a>                        
+                        <a href="javascript:void(0);" style="font-size:15px;" class="icon" 
+                        onclick="makeResponsive()">&#9776;</a>                                                      
+                </div>
+            </header>
+        </div><!-- header -->
+
+        <div class="content">
+            <div class="alert" >
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong id="info-messages"></strong>
+            </div>
+            <div class="section group">
+                <div class="col col-1-of-3">                
+                </div>
+                <div class="col col-1-of-3">
+                    <h1 class="form-label">SIGN UP</h1>
+                    <p>You are just 60 seconds away from getting an iReporter account</p>
+                    <hr>
+                    <p>Already have an iReporter account? <a href="signin.html"> Sign In Here</a> </p>
+                    <form id="registration-form" action="">
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="firstname"><b>Firstname:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Firstname" name="" 
+                            id="firstname" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="lastname"><b>Lastname:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Lastname" name="" 
+                            id="lastname" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="othernames"><b>Othernames:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Othernames" name="" 
+                            id="othernames" ><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="username"><b>Username:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Username" name="" 
+                            id="username" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="email"><b>Email:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="Enter Email" name="" 
+                            id = "email" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="phone_number"><b>Phone:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="text" placeholder="XXX-XXX-XXXX" name="" 
+                            id="phone_number" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="password"><b>Password:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="password" placeholder="Enter Password" name="" 
+                            id="password" required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="Repeat password"><b>Repeat Password:</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="password" placeholder="Repeat Password" name="" 
+                            required><br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="checkbox" checked="checked" name="remember" 
+                        style="margin-bottom:15px"> Remember me
+                    </div>
+                    <div class="row">
+                        <p>By creating an account you agree to our <a href="#" 
+                        style="color:dodgerblue">Terms & Privacy</a>.</p>
+                    </div>
+                    <div class="row">
+                        <input type="submit" value="Submit">
+                    </div>
+                    </form>
+                </div>
+                <div class="col col-1-of-3">                
+                </div>
+            </div><!--section group-->                       
+        </div><!-- content -->
+
+        <div id="footer">
+            <footer>
+                    <div class="section group">
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-map-marker footer-icon" aria-hidden="true"></i>
+                            <h3>WHERE TO FIND US</h3>
+                            <p>23 Madison Avenue</p>
+                            <p>Valet ,Kampala</p>
+                            <p>12324, UG</p>
+
+                        </div>
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-envelope footer-icon" aria-hidden="true"></i>
+                            <h3>WE STILL USE EMAIL</h3>
+                            <p>vijdkfh@ireporter.com</p>
+                            <p>iuriiu@ireporter.net</p>
+                        </div>
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-phone footer-icon" aria-hidden="true"></i>
+                            <h3>FOR THOSE WITH CREDIT</h3>
+                            <p>Phone: (+256)-7924-323</p>
+                            <p>Mobile: (+256)-232-2343</p>
+                            <p>Fax: (+256)-123-121</p>
+                        </div>
+                        <div class="col col-2-of-3">
+                            <p><i class="fa fa-facebook footer-icon" aria-hidden="true"></i></p>
+                            <p><i class="fa fa-twitter footer-icon" aria-hidden="true"></i></p>
+                            <p><i class="fa fa-instagram footer-icon" aria-hidden="true"></i></p>                            
+                        </div>
+                    </div>
+            </footer>            
+        </div><!-- footer -->
+            
+    </div>
+    
+</body>
+<script src="js/responsive.js"></script>
+<script src="js/signup.js"></script>
+</html>
