@@ -10,7 +10,7 @@ function createIncident(event) {
     let comment = document.getElementById('comment')
 
     let info = document.getElementById('info-messages')
-    let token = localStorage.getItem('token')
+    let token = sessionStorage.getItem('token')
 
     fetch(url, {
         method: 'POST',

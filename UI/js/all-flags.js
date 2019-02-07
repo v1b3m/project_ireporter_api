@@ -1,5 +1,5 @@
 const url = 'https://andelaireporterapp.herokuapp.com/api/v2/red-flags'
-var token = localStorage.getItem('token')
+var token = sessionStorage.getItem('token')
 let info = document.getElementById('info-messages')
 
 function getFlags() {

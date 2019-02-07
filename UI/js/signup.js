@@ -13,7 +13,7 @@ function registerNewUser(event) {
     let password = document.getElementById('password')
 
     let info = document.getElementById('info-messages')
-    let token = localStorage.getItem('token')
+    let token = sessionStorage.getItem('token')
 
     fetch(url, {
         method: 'POST',
