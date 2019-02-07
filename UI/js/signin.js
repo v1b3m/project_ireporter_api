@@ -8,7 +8,7 @@ function loginUser(event) {
     let password = document.getElementById('password')
 
     let info = document.getElementById('info-messages')
-    let token = localStorage.getItem('token')
+    let token = sessionStorage.getItem('token')
 
     fetch(url, {
         method: 'POST',
@@ -23,7 +23,7 @@ function loginUser(event) {
     .then((data) => {
         if (data.status == 200) {
             window.location.replace('./index.html')
-            localStorage.setItem('token', data.data[0].token)
+            sessionStorage.setItem('token', data.data[0].token)
         } else {
             info.parentElement.style.display='block';
             info.textContent = ""+data.error;
