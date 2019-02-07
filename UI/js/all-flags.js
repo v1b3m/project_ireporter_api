@@ -1,8 +1,8 @@
-const url = 'https://andelaireporterapp.herokuapp.com/api/v2/red-flags'
 var token = sessionStorage.getItem('token')
 let info = document.getElementById('info-messages')
 
-function getFlags() {
+function getIncidents(incident_type) {
+    const url = 'https://andelaireporterapp.herokuapp.com/api/v2/'.concat(incident_type)
     let tableBody = document.querySelector('#incidents-table > tbody')
 
     fetch (url, {
@@ -46,8 +46,6 @@ function getFlags() {
     })
     .catch((err) => console.log(err), info.textContent = 'An unknown error has occured! Please try again.')
 }
-
-getFlags()
 
 var modal = document.querySelector(".modal");
 var closeButton = document.querySelector(".close-button");
