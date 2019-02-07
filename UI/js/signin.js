@@ -28,7 +28,6 @@ function loginUser(event) {
             info.parentElement.style.display='block';
             info.textContent = ""+data.error;
         }
-        console.log(data.error)
     })
     .catch((err) => console.log(err), info.textContent = 'An unknown error has occured! Please try again.')
 }
