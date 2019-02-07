@@ -1,5 +1,5 @@
 const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions'
-var token = localStorage.getItem('token')
+let token = sessionStorage.getItem('token')
 let info = document.getElementById('info-messages')
 
 function getInterventions() {
@@ -19,7 +19,7 @@ function getInterventions() {
                 flagId = document.createElement('td')
                 flagId.textContent = flag.incident_id
                 title = document.createElement('td')
-                title.textContent = flag.title
+                title.innerHTML = '<a href="javascript:void(0);" onclick="getIncident('+flag.incident_id+'); toggleModal();">'+flag.title+'</a>'
                 flagType = document.createElement('td')
                 flagType.textContent = flag.type 
                 createdOn = document.createElement('td')
@@ -48,3 +48,12 @@ function getInterventions() {
 }
 
 getInterventions()
+
+var modal = document.querySelector(".modal");
+var closeButton = document.querySelector(".close-button");
+
+function toggleModal() {
+    modal.classList.toggle("show-modal");
+}
+
+closeButton.addEventListener("click", toggleModal);
