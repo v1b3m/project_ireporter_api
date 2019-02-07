@@ -1,6 +1,6 @@
 
 function isLoggedIn(){
-    var token = localStorage.getItem('token')
+    var token = sessionStorage.getItem('token')
     if (token == null || token === '') {
         window.location.replace('./signin.html')
     }
