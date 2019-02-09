@@ -15,10 +15,15 @@ function myIncidents(){
     })
     .then((response) => response.json())
     .then((data) => {
-        console.log(data)
+        var table = ''
+        if(data.length == 0){
+            table = `<h1>Hello, ${username}</h1>
+                        <h2>Your incidents will be displayed here</h2>
+                        <h3>Go on to +Red Flags and +Interventions to create a new incident</h3>`
+        }
         if (data) {
             console.log("hey")
-            var table = ''
+            
             data.forEach(element => {
                 table += 
                 `
@@ -41,6 +46,7 @@ function myIncidents(){
             my_div.innerHTML = table;
         }
     })
+    .catch((err) => console.log(err), info.textContent = 'An unknown error has occured! Please try again.')
 }
 
 function myStats(){
@@ -55,10 +61,9 @@ function myStats(){
     })
     .then((response) => response.json())
     .then((data) => {
-        console.log(data)
         if (data) {
             avatar = data.gravatar
-            avatar = avatar.concat('70')
+            avatar = avatar.concat(70)
             username = data.username
         }
     })
