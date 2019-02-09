@@ -1,3 +1,4 @@
+/* global sessionStorage, window */
 
 function isLoggedIn() {
   const token = sessionStorage.getItem('token');

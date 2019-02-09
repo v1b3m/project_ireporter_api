@@ -1,3 +1,5 @@
+/* global document, sessionStorage, fetch */
+
 const frm = document.getElementById('intervention-form');
 const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions';
 

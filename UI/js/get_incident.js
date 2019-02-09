@@ -1,3 +1,4 @@
+/* global document, fetch */
 
 function getIncident(incidentId) {
   const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions/'.concat(incidentId);

@@ -1,3 +1,5 @@
+/* global document, sessionStorage, window, fetch */
+
 const signOut = document.getElementById('logout');
 const url = 'https://andelaireporterapp.herokuapp.com/auth/logout';
 

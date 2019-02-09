@@ -1,5 +1,6 @@
-const frm = document.getElementById('red-flag-form')
+/* global document, sessionStorage, fetch */
 
+const frm = document.getElementById('red-flag-form');
 
 const url = 'https://andelaireporterapp.herokuapp.com/api/v2/red-flags'
 
@@ -15,7 +16,7 @@ function createRedflag(event) {
   fetch(url, {
     method: 'POST',
     mode: 'cors',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer '+ token },
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+ token },
     body: JSON.stringify({
       title: title.value,
       location: location.value,

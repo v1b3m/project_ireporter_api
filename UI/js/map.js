@@ -1,3 +1,4 @@
+/* global document, window, google */
 
 function initMap() {
   const myLatlng = { lat: 0.347596, lng: 32.582520 };
@@ -13,24 +14,24 @@ function initMap() {
     draggable: true,
   });
 
-  map.addListener('center_changed', function() {
+  map.addListener('center_changed', () => {
     // 3 seconds after the center of the map has changed, pan back to the
     // marker.
-    window.setTimeout(function() {
+    window.setTimeout(() => {
       map.panTo(marker.getPosition());
     }, 3000);
   });
 
-  marker.addListener('click', function() {
-  map.setZoom(8);
-  map.setCenter(marker.getPosition());
+  marker.addListener('click', () => {
+    map.setZoom(8);
+    map.setCenter(marker.getPosition());
   });
 
-  google.maps.event.addListener(marker, 'dragend', function(evt) {
+  google.maps.event.addListener(marker, 'dragend', (evt) => {
     document.getElementById('xyz').innerHTML = '<h3>Marker dropped: Current Latitude: ' + evt.latLng.lat().toFixed(3) + ' Current Longitude: ' + evt.latLng.lng().toFixed(3) + '</h3>';
   });
 
-  google.maps.event.addListener(marker, 'dragstart', function(evt) {
+  google.maps.event.addListener(marker, 'dragstart', () => {
     document.getElementById('xyz').innerHTML = '<h3>Currently dragging marker...</h3>';
   });
 }
