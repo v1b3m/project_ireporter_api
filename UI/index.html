@@ -7,7 +7,7 @@
     <link rel="stylesheet" 
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
-
+    <link rel="stylesheet" href="css/popup.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/loggedin.js"></script>
     <title>Welcome Home</title>
@@ -30,6 +30,10 @@
 
 
         <div class="content">
+                <div class="alert" >
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong id="info-messages"></strong>
+                </div>
                 
                 <div class="section group">
                     <div class="col col-1-of-3">
@@ -52,6 +56,61 @@
                             
                     </div>
             </div><!-- section group-->
+            
+            <div class="modal">
+                    <div class="modal-content">
+                        <span class="close-button">×</span>
+                        <div style="overflow: auto">
+                            <table id="incident-table">
+                                <thead>
+                                    <!-- <col width="300">
+                                    <col width="600"> -->
+                                    <tr>
+                                        <th colspan="2"; id="t-head"></th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Title:</td>
+                                        <td id="title"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Created On:</td>
+                                        <td id="created-on"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Created By</td>
+                                        <td id="author"> </td>
+                                    </tr>
+                                    <tr >
+                                        <td>Type:</td>
+                                        <td id="type"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Location:</td>
+                                        <td id="coords"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status:</td>
+                                        <td id="inc-status"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Comment:</td>
+                                        <td id="comment"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Images</td>
+                                        <td id="images"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Video</td>
+                                        <td id="videos"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
         </div><!-- content -->
             
         <div id="footer">
@@ -90,5 +149,6 @@
     
 </body>
 <script src="js/responsive.js"></script>
+<script src="js/get_incident.js"></script>
 <script src="js/my-incidents.js"></script>
 </html>
