@@ -36,7 +36,8 @@ function myIncidents(){
                         <td>
                             <a href="profile.html">
                             ${ username } </a>
-                            added <b>${element.type} # ${element.incident_id }</b> on ${element.created_on}
+                            added <a href='javascript:void(0);' onclick='getIncident(${element.incident_id}); toggleModal();'>
+                            <b>${element.type} # ${element.incident_id }</b></a> on ${element.created_on}
                             <br>
                             ${ element.title }
                         </td>
@@ -71,3 +72,12 @@ function myStats(){
 
 myStats()
 myIncidents()
+
+var modal = document.querySelector(".modal");
+var closeButton = document.querySelector(".close-button");
+
+function toggleModal() {
+    modal.classList.toggle("show-modal");
+}
+
+closeButton.addEventListener("click", toggleModal);
