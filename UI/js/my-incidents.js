@@ -30,11 +30,11 @@ function myIncidents(){
                 <table class="table table-hover">
                     <tr>
                         <td width="70px">
-                            <a href="#">
+                            <a href="profile.html">
                             <img src="${avatar}" /></a>
                         </td>
                         <td>
-                            <a href="#">
+                            <a href="profile.html">
                             ${ username } </a>
                             added <b>${element.type} # ${element.incident_id }</b> on ${element.created_on}
                             <br>
