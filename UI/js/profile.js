@@ -1,38 +1,37 @@
-var token = sessionStorage.getItem('token')
-let info = document.getElementById('info-messages')
+const token = sessionStorage.getItem('token');
+const info = document.getElementById('info-messages');
 
-function myProfile(){
-    const url = 'https://andelaireporterapp.herokuapp.com/user'
+function myProfile() {
+  const url = 'https://andelaireporterapp.herokuapp.com/user';
 
-    fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}
-
-    })
-    .then((response) => response.json())
+  fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }
+  })
+    .then(response => response.json())
     .then((data) => {
-        profilePic = document.getElementById('profile-pic')
-        avatar = data.gravatar.concat(128)
-        profilePic.innerHTML = '<img id="myAvatar" src="'+avatar+'" alt="profile pic">'
-        username = document.getElementById('username')
-        username.innerHTML = data.username
-        username = document.getElementById('user')
-        username.innerHTML = data.username
-        firstname = document.getElementById('firstname')
-        firstname.innerHTML = data.firstname
-        lastname = document.getElementById('lastname')
-        lastname.textContent = data.lastname
-        registered = document.getElementById('registered')
-        registered.textContent = data.registered
-        email = document.getElementById('email')
-        email.textContent = data.email
-        othernames = document.getElementById('othernames')
-        othernames.textContent = data.othernames
-        phone = document.getElementById('phone')
-        phone.textContent = data.phone_number
+      const profilePic = document.getElementById('profile-pic');
+      const avatar = data.gravatar.concat(128);
+      profilePic.innerHTML = '<img id="myAvatar" src="'+avatar+'" alt="profile pic">';
+      const username = document.getElementById('username');
+      username.innerHTML = data.username;
+      const user = document.getElementById('user');
+      user.innerHTML = data.username;
+      const firstname = document.getElementById('firstname');
+      firstname.innerHTML = data.firstname;
+      const lastname = document.getElementById('lastname');
+      lastname.textContent = data.lastname;
+      const registered = document.getElementById('registered');
+      registered.textContent = data.registered;
+      const email = document.getElementById('email');
+      email.textContent = data.email;
+      const othernames = document.getElementById('othernames');
+      othernames.textContent = data.othernames;
+      const phone = document.getElementById('phone');
+      phone.textContent = data.phone_number;
     })
-    .catch((err) => console.log(err), info.textContent = 'An unknown error has occured! Please try again.')
+    .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
 }
 
 function myStats(){
