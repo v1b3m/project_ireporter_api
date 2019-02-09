@@ -371,10 +371,15 @@ td#edit-item {
     background-color: #f2f2f2
 }
 
+.col-3-of-3 {
+    width: 66.13%;
+    background-color: #f2f2f2;
+}
+
 /*  GO FULL WIDTH BELOW 600 PIXELS */
 @media only screen and (max-width: 600px) {
 	.col {  margin: 1% 0 1% 0%; }
-	.col-2-of-3, .col-1-of-3, .col-1-of-2, .col-2-of-2 { 
+	.col-2-of-3, .col-1-of-3, .col-1-of-2, .col-2-of-2, .col-3-of-3 { 
         width: 100%; }
 }
 
