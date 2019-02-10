@@ -21,8 +21,12 @@ function loginUser(event) {
     .then(response => response.json())
     .then((data) => {
       if (data.status === 200) {
-        window.location.replace('./index.html');
         sessionStorage.setItem('token', data.data[0].token);
+        if (document.getElementById('is_admin').checked) {
+          window.location.replace('./admin.html');
+        } else {
+          window.location.replace('./index.html');
+        }
       } else {
         info.parentElement.style.display = 'block';
         info.textContent = data.error;
