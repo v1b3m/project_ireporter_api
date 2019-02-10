@@ -16,7 +16,11 @@ function getIncident(incidentId) {
         const flagId = document.getElementById('t-head');
         flagId.textContent = `Incident #${data.data[0].incident_id}`;
         const editIncident = document.getElementById('edit');
-        editIncident.innerHTML = `<a href='edit.html?id=${data.data[0].incident_id}'>Edit this incident</a>`;
+        editIncident.innerHTML = `<a href="edit.html?
+          &id=${data.data[0].incident_id}
+          &location=${data.data[0].location}
+          &comment=${data.data[0].comment}
+          &title=${data.data[0].title}">Edit this incident</a>`;
         const title = document.getElementById('title');
         title.textContent = data.data[0].title;
         const flagType = document.getElementById('type');
