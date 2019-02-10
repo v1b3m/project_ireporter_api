@@ -1,22 +1,24 @@
 /* global document, fetch */
 
+// eslint-disable-next-line no-unused-vars
 function getIncident(incidentId) {
   const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions/'.concat(incidentId);
 
   fetch(url, {
     method: 'GET',
     mode: 'cors',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }
+    // eslint-disable-next-line no-undef
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
   })
     .then(response => response.json())
     .then((data) => {
       if (data.status === 200) {
         const flagId = document.getElementById('t-head');
-        flagId.textContent = 'Incident ' + data.data[0].incident_id;
+        flagId.textContent = `Incident ${data.data[0].incident_id}`;
         const title = document.getElementById('title');
         title.textContent = data.data[0].title;
         const flagType = document.getElementById('type');
-        flagType.textContent = data.data[0].type; 
+        flagType.textContent = data.data[0].type;
         const createdOn = document.getElementById('created-on');
         createdOn.textContent = data.data[0].created_on;
         const createdBy = document.getElementById('author');

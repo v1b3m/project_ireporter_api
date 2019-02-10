@@ -10,7 +10,7 @@ function logoutUser() {
   fetch(url, {
     method: 'POST',
     mode: 'cors',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+token },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
   })
     .then(response => response.json())
     .then((data) => {
@@ -22,6 +22,7 @@ function logoutUser() {
         info.textContent = data.error;
       }
     })
+    // eslint-disable-next-line no-console
     .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
 }
 

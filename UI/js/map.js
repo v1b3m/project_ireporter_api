@@ -9,7 +9,7 @@ function initMap() {
   });
   const marker = new google.maps.Marker({
     position: myLatlng,
-    map: map,
+    map,
     title: 'Click to zoom',
     draggable: true,
   });
@@ -28,7 +28,7 @@ function initMap() {
   });
 
   google.maps.event.addListener(marker, 'dragend', (evt) => {
-    document.getElementById('xyz').innerHTML = '<h3>Marker dropped: Current Latitude: ' + evt.latLng.lat().toFixed(3) + ' Current Longitude: ' + evt.latLng.lng().toFixed(3) + '</h3>';
+    document.getElementById('xyz').innerHTML = `<h3>Marker dropped: Current Latitude: ${evt.latLng.lat().toFixed(3)} Current Longitude: ${evt.latLng.lng().toFixed(3)}</h3>`;
   });
 
   google.maps.event.addListener(marker, 'dragstart', () => {

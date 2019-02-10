@@ -25,7 +25,7 @@ function getIncidents(incidentType) {
           const flagId = document.createElement('td');
           flagId.textContent = flag.incident_id;
           const title = document.createElement('td');
-          title.innerHTML = '<a href="javascript:void(0);" onclick="getIncident('+flag.incident_id+'); toggleModal();">'+flag.title+'</a>';
+          title.innerHTML = `<a href="javascript:void(0);" onclick="getIncident(${flag.incident_id}); toggleModal();">${flag.title}</a>`;
           const flagType = document.createElement('td');
           flagType.textContent = flag.type;
           const createdOn = document.createElement('td');

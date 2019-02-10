@@ -9,13 +9,13 @@ function myProfile() {
   fetch(url, {
     method: 'GET',
     mode: 'cors',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
   })
     .then(response => response.json())
     .then((data) => {
       const profilePic = document.getElementById('profile-pic');
       const avatar = data.gravatar.concat(128);
-      profilePic.innerHTML = '<img id="myAvatar" src="'+avatar+'" alt="profile pic">';
+      profilePic.innerHTML = `<img id="myAvatar" src="${avatar}" alt="profile pic">`;
       const username = document.getElementById('username');
       username.innerHTML = data.username;
       const user = document.getElementById('user');
@@ -33,6 +33,7 @@ function myProfile() {
       const phone = document.getElementById('phone');
       phone.textContent = data.phone_number;
     })
+    // eslint-disable-next-line no-console
     .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
 }
 
@@ -42,7 +43,7 @@ function myStats() {
   fetch(url, {
     method: 'GET',
     mode: 'cors',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
   })
     .then(response => response.json())
     .then((data) => {
@@ -59,16 +60,18 @@ function myStats() {
       const rejectedInterventions = document.getElementById('rejected_interventions');
       rejectedInterventions.textContent = data.rejected_interventions;
       const percentSuccess = document.getElementById('percentage_success');
-      percentSuccess.textContent = data.percentage_success+'%';
+      percentSuccess.textContent = `${data.percentage_success}%`;
       const percentFailure = document.getElementById('percent_failure');
-      percentFailure.textContent = data.percentage_failure+'%';
+      percentFailure.textContent = `${data.percentage_failure}%`;
       const rating = document.getElementById('rating');
       const stars = data.rating;
 
       let output = '';
+      // eslint-disable-next-line no-plusplus
       for (let star = 0; star < stars; star++) {
         output += '<span class="fa fa-star checked"></span>';
       }
+      // eslint-disable-next-line no-plusplus
       for (let blanks = 0; blanks < 5 - stars; blanks++) {
         output += '<span class="fa fa-star"></span>';
       }

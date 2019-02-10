@@ -12,7 +12,7 @@ function loginUser(event) {
   fetch(url, {
     method: 'POST',
     mode: 'cors',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+token },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({
       email: email.value,
       password: password.value,

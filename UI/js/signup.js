@@ -17,7 +17,7 @@ function registerNewUser(event) {
   fetch(url, {
     method: 'POST',
     mode: 'cors',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+token },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({
       username: username.value,
       email: email.value,
@@ -33,10 +33,11 @@ function registerNewUser(event) {
       if (data.status === 201) {
         window.location.replace('./signin.html');
       } else {
-        info.parentElement.style.display='block';
-        info.textContent = ''+data.error;
+        info.parentElement.style.display = 'block';
+        info.textContent = `${data.error}`;
       }
     })
+    // eslint-disable-next-line no-console
     .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
 }
 
