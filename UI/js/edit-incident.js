@@ -1,0 +1,1 @@
+let params = new URL(location.href).searchParams;
