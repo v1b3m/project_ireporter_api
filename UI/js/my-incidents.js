@@ -44,6 +44,9 @@ function myIncidents() {
                 </table>`;
         });
         myDiv.innerHTML = table;
+      } else {
+        info.parentElement.style.display = 'block';
+        info.textContent = `${data.error}`;
       }
     })
     // eslint-disable-next-line no-console
