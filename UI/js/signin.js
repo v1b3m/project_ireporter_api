@@ -28,6 +28,7 @@ function loginUser(event) {
         info.textContent = data.error;
       }
     })
+    // eslint-disable-next-line no-console
     .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
 }
 
