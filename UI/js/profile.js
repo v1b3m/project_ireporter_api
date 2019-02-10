@@ -1,81 +1,84 @@
-var token = sessionStorage.getItem('token')
-let info = document.getElementById('info-messages')
+/* global document, sessionStorage, fetch */
 
-function myProfile(){
-    const url = 'https://andelaireporterapp.herokuapp.com/user'
+const token = sessionStorage.getItem('token');
+const info = document.getElementById('info-messages');
 
-    fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}
+function myProfile() {
+  const url = 'https://andelaireporterapp.herokuapp.com/user';
 
-    })
-    .then((response) => response.json())
+  fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+  })
+    .then(response => response.json())
     .then((data) => {
-        profilePic = document.getElementById('profile-pic')
-        avatar = data.gravatar.concat(128)
-        profilePic.innerHTML = '<img id="myAvatar" src="'+avatar+'" alt="profile pic">'
-        username = document.getElementById('username')
-        username.innerHTML = data.username
-        username = document.getElementById('user')
-        username.innerHTML = data.username
-        firstname = document.getElementById('firstname')
-        firstname.innerHTML = data.firstname
-        lastname = document.getElementById('lastname')
-        lastname.textContent = data.lastname
-        registered = document.getElementById('registered')
-        registered.textContent = data.registered
-        email = document.getElementById('email')
-        email.textContent = data.email
-        othernames = document.getElementById('othernames')
-        othernames.textContent = data.othernames
-        phone = document.getElementById('phone')
-        phone.textContent = data.phone_number
+      const profilePic = document.getElementById('profile-pic');
+      const avatar = data.gravatar.concat(128);
+      profilePic.innerHTML = `<img id="myAvatar" src="${avatar}" alt="profile pic">`;
+      const username = document.getElementById('username');
+      username.innerHTML = data.username;
+      const user = document.getElementById('user');
+      user.innerHTML = data.username;
+      const firstname = document.getElementById('firstname');
+      firstname.innerHTML = data.firstname;
+      const lastname = document.getElementById('lastname');
+      lastname.textContent = data.lastname;
+      const registered = document.getElementById('registered');
+      registered.textContent = data.registered;
+      const email = document.getElementById('email');
+      email.textContent = data.email;
+      const othernames = document.getElementById('othernames');
+      othernames.textContent = data.othernames;
+      const phone = document.getElementById('phone');
+      phone.textContent = data.phone_number;
     })
-    .catch((err) => console.log(err), info.textContent = 'An unknown error has occured! Please try again.')
+    // eslint-disable-next-line no-console
+    .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
 }
 
-function myStats(){
-    const url = 'https://andelaireporterapp.herokuapp.com/user/stats'
+function myStats() {
+  const url = 'https://andelaireporterapp.herokuapp.com/user/stats';
 
-    fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}
-
-    })
-    .then((response) => response.json())
+  fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+  })
+    .then(response => response.json())
     .then((data) => {
-        resolvedFlags = document.getElementById('resolved-flags')
-        resolvedFlags.textContent = data.resolved_flags
-        resolvedInterventions = document.getElementById('resolved_interventions')
-        resolvedInterventions.textContent = data.resolved_interventions
-        pendingFlags = document.getElementById('pending_flags')
-        pendingFlags.textContent = data.pending_flags
-        pendingInterventions = document.getElementById('pending_interventions')
-        pendingInterventions.textContent = data.pending_interventions
-        rejectedFlags = document.getElementById('rejected_flags')
-        rejectedFlags.textContent = data.rejected_flags
-        rejectedInterventions = document.getElementById('rejected_interventions')
-        rejectedInterventions.textContent = data.rejected_interventions
-        percentSuccess = document.getElementById('percentage_success')
-        percentSuccess.textContent = data.percentage_success+'%'
-        percentFailure = document.getElementById('percent_failure')
-        percentFailure.textContent = data.percentage_failure+'%'
-        rating = document.getElementById('rating')
-        stars = data.rating
+      const resolvedFlags = document.getElementById('resolved-flags');
+      resolvedFlags.textContent = data.resolved_flags;
+      const resolvedInterventions = document.getElementById('resolved_interventions');
+      resolvedInterventions.textContent = data.resolved_interventions;
+      const pendingFlags = document.getElementById('pending_flags');
+      pendingFlags.textContent = data.pending_flags;
+      const pendingInterventions = document.getElementById('pending_interventions');
+      pendingInterventions.textContent = data.pending_interventions;
+      const rejectedFlags = document.getElementById('rejected_flags');
+      rejectedFlags.textContent = data.rejected_flags;
+      const rejectedInterventions = document.getElementById('rejected_interventions');
+      rejectedInterventions.textContent = data.rejected_interventions;
+      const percentSuccess = document.getElementById('percentage_success');
+      percentSuccess.textContent = `${data.percentage_success}%`;
+      const percentFailure = document.getElementById('percent_failure');
+      percentFailure.textContent = `${data.percentage_failure}%`;
+      const rating = document.getElementById('rating');
+      const stars = data.rating;
 
-        output =''
-        for(let star=0; star < stars; star++) {
-            output += '<span class="fa fa-star checked"></span>'
-        }
-        for(let blanks=0; blanks < 5 - stars; blanks++) {
-            output += '<span class="fa fa-star"></span>'
-        }
+      let output = '';
+      // eslint-disable-next-line no-plusplus
+      for (let star = 0; star < stars; star++) {
+        output += '<span class="fa fa-star checked"></span>';
+      }
+      // eslint-disable-next-line no-plusplus
+      for (let blanks = 0; blanks < 5 - stars; blanks++) {
+        output += '<span class="fa fa-star"></span>';
+      }
 
-        rating.innerHTML = output
-    })
+      rating.innerHTML = output;
+    });
 }
 
-myProfile()
-myStats()
+myProfile();
+myStats();

@@ -1,39 +1,42 @@
-var frm = document.getElementById('red-flag-form')
-frm.addEventListener('submit', createRedflag)
+/* global document, sessionStorage, fetch */
 
-const url = 'https://andelaireporterapp.herokuapp.com/api/v2/red-flags'
+const frm = document.getElementById('red-flag-form');
+
+const url = 'https://andelaireporterapp.herokuapp.com/api/v2/red-flags';
 
 function createRedflag(event) {
-    event.preventDefault()
-    let title = document.getElementById('title')
-    let location = document.getElementById('location')
-    let comment = document.getElementById('comment')
+  event.preventDefault();
+  const title = document.getElementById('title');
+  const location = document.getElementById('location');
+  const comment = document.getElementById('comment');
 
-    let info = document.getElementById('info-messages')
-    let token = sessionStorage.getItem('token')
+  const info = document.getElementById('info-messages');
+  const token = sessionStorage.getItem('token');
 
-    fetch(url, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer '+ token},
-        body: JSON.stringify({
-            title: title.value,
-            location: location.value,
-            comment: comment.value
-        })
-    })
-    .then((response) => response.json())
+  fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      title: title.value,
+      location: location.value,
+      comment: comment.value,
+    }),
+  })
+    .then(response => response.json())
+    // eslint-disable-next-line consistent-return
     .then((data) => {
-        if (data.status == 201){
-            frm.reset()
-            info.parentElement.style.display='block';
-            info.textContent = ""+data.data[0].message;
-            return false;
-        } else {
-            info.parentElement.style.display='block';
-            info.textContent = ""+data.error;
-        }
-        console.log(data)
+      if (data.status === 201) {
+        frm.reset();
+        info.parentElement.style.display = 'block';
+        info.textContent = `${data.data[0].message}`;
+        return false;
+      }
+      info.parentElement.style.display = 'block';
+      info.textContent = `${data.error}`;
     })
-    .catch((err) => console.log(err), info.textContent = 'An unknown error has occured! Please try again.')
+    // eslint-disable-next-line no-console
+    .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
 }
+
+frm.addEventListener('submit', createRedflag);

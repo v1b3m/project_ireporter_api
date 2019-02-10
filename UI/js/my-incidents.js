@@ -1,32 +1,31 @@
-var token = sessionStorage.getItem('token')
-let info = document.getElementById('info-messages')
-var avatar;
-var username;
+/* global document, sessionStorage, fetch */
 
-function myIncidents(){
-    const url = 'https://andelaireporterapp.herokuapp.com/user/incidents'
-    let my_div = document.getElementById('my_items')
+const token = sessionStorage.getItem('token');
+const info = document.getElementById('info-messages');
+let avatar = '';
+let username = '';
 
-    fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}
+function myIncidents() {
+  const url = 'https://andelaireporterapp.herokuapp.com/user/incidents';
+  const myDiv = document.getElementById('my_items');
 
-    })
-    .then((response) => response.json())
+  fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+  })
+    .then(response => response.json())
     .then((data) => {
-        var table = ''
-        if(data.length == 0){
-            table = `<h1>Hello, ${username}</h1>
-                        <h2>Your incidents will be displayed here</h2>
-                        <h3>Go on to +Red Flags and +Interventions to create a new incident</h3>`
-        }
-        if (data) {
-            console.log("hey")
-            
-            data.forEach(element => {
-                table += 
-                `
+      let table = '';
+      if (data.length === 0) {
+        table = `<h1>Hello, ${username}</h1>
+                  <h2>Your incidents will be displayed here</h2>
+                  <h3>Go on to +Red Flags and +Interventions to create a new incident</h3>`;
+      }
+      if (data) {
+        data.forEach((element) => {
+          table
+                += `
                 <table class="table table-hover">
                     <tr>
                         <td width="70px">
@@ -35,49 +34,49 @@ function myIncidents(){
                         </td>
                         <td>
                             <a href="profile.html">
-                            ${ username } </a>
+                            ${username} </a>
                             added <a href='javascript:void(0);' onclick='getIncident(${element.incident_id}); toggleModal();'>
-                            <b>${element.type} # ${element.incident_id }</b></a> on ${element.created_on}
+                            <b>${element.type} # ${element.incident_id}</b></a> on ${element.created_on}
                             <br>
-                            ${ element.title }
+                            ${element.title}
                         </td>
                     </tr>
                 </table>`;
-            });                                            
-            my_div.innerHTML = table;
-        }
+        });
+        myDiv.innerHTML = table;
+      }
     })
-    .catch((err) => console.log(err), info.textContent = 'An unknown error has occured! Please try again.')
+    // eslint-disable-next-line no-console
+    .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
 }
 
-function myStats(){
-    const url = 'https://andelaireporterapp.herokuapp.com/user'
-    let my_div = document.getElementById('my_items')
+function myStats() {
+  const url = 'https://andelaireporterapp.herokuapp.com/user';
 
-    fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}
-
-    })
-    .then((response) => response.json())
+  fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+  })
+    .then(response => response.json())
     .then((data) => {
-        if (data) {
-            avatar = data.gravatar
-            avatar = avatar.concat(70)
-            username = data.username
-        }
-    })
+      if (data) {
+        avatar = data.gravatar;
+        avatar = avatar.concat(70);
+        // eslint-disable-next-line prefer-destructuring
+        username = data.username;
+      }
+    });
 }
 
-myStats()
-myIncidents()
+myStats();
+myIncidents();
 
-var modal = document.querySelector(".modal");
-var closeButton = document.querySelector(".close-button");
+const modal = document.querySelector('.modal');
+const closeButton = document.querySelector('.close-button');
 
 function toggleModal() {
-    modal.classList.toggle("show-modal");
+  modal.classList.toggle('show-modal');
 }
 
-closeButton.addEventListener("click", toggleModal);
+closeButton.addEventListener('click', toggleModal);
