@@ -7,10 +7,9 @@
     <link rel="stylesheet" 
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
-    <link rel="stylesheet" href="css/popup.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/loggedin.js"></script>
-    <title>Welcome Home</title>
+    <title>Edit Incident</title>
 </head>
 <body>
     <div class="container">
@@ -36,66 +35,54 @@
                 </div>
                 
                 <div class="section group">
+                    <div class="col col-1-of-3">                
+                    </div>
                     <div class="col col-1-of-3">
-                    </div>
-                    <div class="col col-3-of-3" id="my_items">
-                            
-                    </div>
-            </div><!-- section group-->
-            
-            <div class="modal">
-                    <div class="modal-content">
-                        <span class="close-button">×</span>
-                        <div style="overflow: auto">
-                            <table id="incident-table">
-                                <thead>
-                                    <tr>
-                                        <th id="t-head"></th>
-                                        <th id="edit"></th>
-                                    </tr> 
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Title:</td>
-                                        <td id="title"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Created On:</td>
-                                        <td id="created-on"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Created By</td>
-                                        <td id="author"> </td>
-                                    </tr>
-                                    <tr >
-                                        <td>Type:</td>
-                                        <td id="type"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Location:</td>
-                                        <td id="coords"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Status:</td>
-                                        <td id="inc-status"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Comment:</td>
-                                        <td id="comment"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Images</td>
-                                        <td id="images"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Video</td>
-                                        <td id="videos"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <h1 class="form-label">EDIT INCIDENT</h1>
+                        <form id="edit-form" action="">
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="incident_id"><b>Incident Id:</b></label>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" placeholder="" name="" 
+                                id="incident_id" required><br><br>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="lastname"><b>Title:</b></label>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" placeholder="" name="" 
+                                id="title" required><br><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="location"><b>Location:</b></label>
+                            </div>
+                            <div class="col-75">
+                                <input type="text" placeholder="" name="" 
+                                id="location" ><br><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="comment"><b>Comment:</b></label>
+                            </div>
+                            <div class="col-75">
+                                <textarea name="" id="comment" cols="30" rows="30"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <input type="submit" value="Submit">
+                        </div>
+                        </form>
                     </div>
-                </div>
+                    <div class="col col-1-of-3">                
+                    </div>
+                </div><!--section group-->
         </div><!-- content -->
             
         <div id="footer">
@@ -134,5 +121,5 @@
     
 </body>
 <script src="js/responsive.js"></script>
-<script src="js/get_incident.js"></script>
+<script src="js/edit-incident.js"></script>
 </html>
