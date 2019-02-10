@@ -1,4 +1,4 @@
-/* global document, sessionStorage, fetch */
+/* global document, sessionStorage, window, fetch */
 
 const token = sessionStorage.getItem('token');
 const info = document.getElementById('info-messages');
@@ -17,6 +17,9 @@ function getIncidents(incidentType) {
   })
     .then(response => response.json())
     .then((data) => {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
       if (data.status === 200) {
         data.data.forEach((flag) => {
         // })

@@ -14,6 +14,9 @@ function logoutUser() {
   })
     .then(response => response.json())
     .then((data) => {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
       if (data.status === 200) {
         window.location.replace('./signin.html');
         sessionStorage.clear();
