@@ -28,11 +28,12 @@ function initMap() {
   });
 
   google.maps.event.addListener(marker, 'dragend', (evt) => {
-    document.getElementById('xyz').innerHTML = `<h3>Marker dropped: Current Latitude: ${evt.latLng.lat().toFixed(3)} Current Longitude: ${evt.latLng.lng().toFixed(3)}</h3>`;
+    document.getElementById('location').value = `Lat: ${evt.latLng.lat().toFixed(3)}, Long: ${evt.latLng.lng().toFixed(3)}`;
+    document.getElementById('xyz').innerHTML = 'Move the marker to get longitude and latitude of location';
   });
 
   google.maps.event.addListener(marker, 'dragstart', () => {
-    document.getElementById('xyz').innerHTML = '<h3>Currently dragging marker...</h3>';
+    document.getElementById('xyz').innerHTML = 'Currently dragging marker...';
   });
 }
 
