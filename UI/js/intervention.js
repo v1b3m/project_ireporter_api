@@ -1,4 +1,4 @@
-/* global document, sessionStorage, fetch */
+/* global document, window, sessionStorage, fetch */
 
 const frm = document.getElementById('intervention-form');
 const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions';
@@ -25,6 +25,9 @@ function createIncident(event) {
     .then(response => response.json())
     // eslint-disable-next-line consistent-return
     .then((data) => {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
       if (data.status === 201) {
         frm.reset();
         info.parentElement.style.display = 'block';

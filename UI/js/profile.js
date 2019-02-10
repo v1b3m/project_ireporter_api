@@ -1,4 +1,4 @@
-/* global document, sessionStorage, fetch */
+/* global document, window,  sessionStorage, fetch */
 
 const token = sessionStorage.getItem('token');
 const info = document.getElementById('info-messages');
@@ -13,25 +13,28 @@ function myProfile() {
   })
     .then(response => response.json())
     .then((data) => {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
       const profilePic = document.getElementById('profile-pic');
-      const avatar = data.gravatar.concat(128);
+      const avatar = data.data.gravatar.concat(128);
       profilePic.innerHTML = `<img id="myAvatar" src="${avatar}" alt="profile pic">`;
       const username = document.getElementById('username');
-      username.innerHTML = data.username;
+      username.innerHTML = data.data.username;
       const user = document.getElementById('user');
-      user.innerHTML = data.username;
+      user.innerHTML = data.data.username;
       const firstname = document.getElementById('firstname');
-      firstname.innerHTML = data.firstname;
+      firstname.innerHTML = data.data.firstname;
       const lastname = document.getElementById('lastname');
-      lastname.textContent = data.lastname;
+      lastname.textContent = data.data.lastname;
       const registered = document.getElementById('registered');
-      registered.textContent = data.registered;
+      registered.textContent = data.data.registered;
       const email = document.getElementById('email');
-      email.textContent = data.email;
+      email.textContent = data.data.email;
       const othernames = document.getElementById('othernames');
-      othernames.textContent = data.othernames;
+      othernames.textContent = data.data.othernames;
       const phone = document.getElementById('phone');
-      phone.textContent = data.phone_number;
+      phone.textContent = data.data.phone_number;
     })
     // eslint-disable-next-line no-console
     .catch(err => console.log(err), info.textContent = 'An unknown error has occured! Please try again.');
@@ -48,23 +51,23 @@ function myStats() {
     .then(response => response.json())
     .then((data) => {
       const resolvedFlags = document.getElementById('resolved-flags');
-      resolvedFlags.textContent = data.resolved_flags;
+      resolvedFlags.textContent = data.data.resolved_flags;
       const resolvedInterventions = document.getElementById('resolved_interventions');
-      resolvedInterventions.textContent = data.resolved_interventions;
+      resolvedInterventions.textContent = data.data.resolved_interventions;
       const pendingFlags = document.getElementById('pending_flags');
-      pendingFlags.textContent = data.pending_flags;
+      pendingFlags.textContent = data.data.pending_flags;
       const pendingInterventions = document.getElementById('pending_interventions');
-      pendingInterventions.textContent = data.pending_interventions;
+      pendingInterventions.textContent = data.data.pending_interventions;
       const rejectedFlags = document.getElementById('rejected_flags');
-      rejectedFlags.textContent = data.rejected_flags;
+      rejectedFlags.textContent = data.data.rejected_flags;
       const rejectedInterventions = document.getElementById('rejected_interventions');
-      rejectedInterventions.textContent = data.rejected_interventions;
+      rejectedInterventions.textContent = data.data.rejected_interventions;
       const percentSuccess = document.getElementById('percentage_success');
-      percentSuccess.textContent = `${data.percentage_success}%`;
+      percentSuccess.textContent = `${data.data.percentage_success}%`;
       const percentFailure = document.getElementById('percent_failure');
-      percentFailure.textContent = `${data.percentage_failure}%`;
+      percentFailure.textContent = `${data.data.percentage_failure}%`;
       const rating = document.getElementById('rating');
-      const stars = data.rating;
+      const stars = data.data.rating;
 
       let output = '';
       // eslint-disable-next-line no-plusplus

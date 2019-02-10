@@ -1,4 +1,4 @@
-/* global document, sessionStorage, fetch */
+/* global document, window, sessionStorage, fetch */
 
 const token = sessionStorage.getItem('token');
 const info = document.getElementById('info-messages');
@@ -17,13 +17,16 @@ function myIncidents() {
     .then(response => response.json())
     .then((data) => {
       let table = '';
-      if (data.length === 0) {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
+      if (data.data.length === 0) {
         table = `<h1>Hello, ${username}</h1>
                   <h2>Your incidents will be displayed here</h2>
                   <h3>Go on to +Red Flags and +Interventions to create a new incident</h3>`;
       }
-      if (data) {
-        data.forEach((element) => {
+      if (data.data) {
+        data.data.forEach((element) => {
           table
                 += `
                 <table class="table table-hover">
@@ -64,10 +67,13 @@ function myStats() {
     .then(response => response.json())
     .then((data) => {
       if (data) {
-        avatar = data.gravatar;
+        if (data.status === 401) {
+          window.location.replace('./signin.html');
+        }
+        avatar = data.data.gravatar;
         avatar = avatar.concat(70);
         // eslint-disable-next-line prefer-destructuring
-        username = data.username;
+        username = data.data.username;
       }
     });
 }

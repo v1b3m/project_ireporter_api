@@ -34,6 +34,9 @@ function editLocation(id, coord) {
   })
     .then(response => response.json())
     .then((data) => {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
       if (data.status !== 201) {
         info.parentElement.style.display = 'block';
         info.textContent = `${data.error}`;

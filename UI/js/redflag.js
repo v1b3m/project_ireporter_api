@@ -1,4 +1,4 @@
-/* global document, sessionStorage, fetch */
+/* global document, window, sessionStorage, fetch */
 
 const frm = document.getElementById('red-flag-form');
 
@@ -26,6 +26,9 @@ function createRedflag(event) {
     .then(response => response.json())
     // eslint-disable-next-line consistent-return
     .then((data) => {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
       if (data.status === 201) {
         frm.reset();
         info.parentElement.style.display = 'block';

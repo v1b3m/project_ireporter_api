@@ -1,4 +1,4 @@
-/* global document, fetch */
+/* global document, window, fetch */
 
 // eslint-disable-next-line no-unused-vars
 function getIncident(incidentId) {
@@ -12,6 +12,9 @@ function getIncident(incidentId) {
   })
     .then(response => response.json())
     .then((data) => {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
       if (data.status === 200) {
         const flagId = document.getElementById('t-head');
         flagId.textContent = `Incident #${data.data[0].incident_id}`;
