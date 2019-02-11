@@ -6,6 +6,31 @@ const modal = document.querySelector('.modal');
 const closeButton = document.querySelector('.close-button');
 
 // eslint-disable-next-line no-unused-vars
+function editStatus(id, status) {
+  console.log(`${id} ${status}`);
+  const url = `https://andelaireporterapp.herokuapp.com/api/v2/red-flags/${id}/status`;
+  fetch(url, {
+    method: 'PATCH',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      status,
+    }),
+  })
+    .then(response => response.json())
+    .then((data) => {
+      if (data.status === 401) {
+        window.location.replace('./signin.html');
+      }
+      if (data.status !== 201) {
+        info.parentElement.style.display = 'block';
+        info.textContent = `${data.error}`;
+      }
+    });
+}
+
+
+// eslint-disable-next-line no-unused-vars
 function getIncidents(incidentType) {
   const url = 'https://andelaireporterapp.herokuapp.com/api/v2/'.concat(incidentType);
   const tableBody = document.querySelector('#incidents-table > tbody');
@@ -22,30 +47,33 @@ function getIncidents(incidentType) {
       }
       if (data.status === 200) {
         data.data.forEach((flag) => {
-        // })
-        // for(const flag of data.data) {
-          const newRow = document.createElement('tr');
-          const flagId = document.createElement('td');
-          flagId.textContent = flag.incident_id;
-          const title = document.createElement('td');
-          title.innerHTML = `<a href="javascript:void(0);" onclick="getIncident(${flag.incident_id}); toggleModal();">${flag.title}</a>`;
-          const flagType = document.createElement('td');
-          flagType.textContent = flag.type;
-          const createdOn = document.createElement('td');
-          createdOn.textContent = flag.created_on;
-          const accept = document.createElement('td');
-          accept.innerHTML = '<a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a>';
-          const reject = document.createElement('td');
-          reject.innerHTML = '<a href=""><i class="fa fa-ban" aria-hidden="true"></i></a>';
+          if (flag.status === 'under investigation') {
+            const newRow = document.createElement('tr');
+            const flagId = document.createElement('td');
+            flagId.textContent = flag.incident_id;
+            const title = document.createElement('td');
+            title.innerHTML = `<a href="javascript:void(0);" onclick="getIncident(${flag.incident_id}); toggleModal();">${flag.title}</a>`;
+            const flagType = document.createElement('td');
+            flagType.textContent = flag.type;
+            const createdOn = document.createElement('td');
+            createdOn.textContent = flag.created_on;
+            const accept = document.createElement('td');
+            accept.innerHTML = `<a href="javascript:void(0);" onclick="editStatus(${flag.incident_id}, 'resolved');"><i class="fa fa-check-square-o" aria-hidden="true"></i></a>`;
+            const reject = document.createElement('td');
+            reject.innerHTML = `<a href="javascript:void(0);" onclick="editStatus(${flag.incident_id}, 'rejected');"><i class="fa fa-ban" aria-hidden="true"></i></a>`;
 
-          newRow.appendChild(flagId);
-          newRow.appendChild(title);
-          newRow.appendChild(flagType);
-          newRow.appendChild(createdOn);
-          newRow.appendChild(accept);
-          newRow.appendChild(reject);
+            newRow.appendChild(flagId);
+            newRow.appendChild(title);
+            newRow.appendChild(flagType);
+            newRow.appendChild(createdOn);
+            newRow.appendChild(accept);
+            newRow.appendChild(reject);
 
-          tableBody.appendChild(newRow);
+            tableBody.appendChild(newRow);
+          } else {
+            info.parentElement.style.display = 'block';
+            info.textContent = 'No new incidents have been created';
+          }
         });
       } else {
         info.parentElement.style.display = 'block';

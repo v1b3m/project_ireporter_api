@@ -41,6 +41,13 @@ function editLocation(id, coord) {
         info.parentElement.style.display = 'block';
         info.textContent = `${data.error}`;
       }
+
+      if (data.status === 201) {
+        info.parentElement.style.display = 'block';
+        info.textContent = `${data.message}`;
+      }
+      info.parentElement.style.display = 'block';
+      info.textContent = `${data.message}`;
     });
 }
 
