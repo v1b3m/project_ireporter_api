@@ -9,6 +9,7 @@
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <script src="js/loggedin.js"></script>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/popup.css">
     <title>My Records</title>
 </head>
 <body>
@@ -20,9 +21,8 @@
                         <a href="newflags.html">New Red-flags</a>
                         <a href="newinterventions.html">New Interventions</a>
                         <a href="rejected.html">Rejected</a>
-                        <a href="accepted.html" class="active">Accepted</a>
-                        <a href="pending.html" >Pending</a>
-                        <a class="rightnav" href="profile.html">Profile</a>
+                        <a href="accepted.html" class="active">Resolved</a>
+                        <a class="rightnav" href="javascript:void(0);" id="logout">Logout</a>
                         <a href="javascript:void(0);" style="font-size:15px;" class="icon" 
                         onclick="makeResponsive()">&#9776;</a>
                 </header>
@@ -30,145 +30,78 @@
 
         <div class="content">
             <h2>ACCEPTED REDFLAGS / INTERVENTIONS</h2>
-            <div style="overflow: auto">
-                <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Record</th>
-                        <th>Type</th>
-                        <th>Created</th>
-                        <th>Accept</th>
-                        <th>Reject</th>
-                        <th>Ignore</th>
-                    </tr>                    
-                </thead>
-                <tbody>
+                <div class="alert" >
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong id="info-messages"></strong>
+                </div>
+                <div style="overflow: auto">
+                    <table id="incidents-table">
+                    <thead>
                         <tr>
-                            <td>1</td>
-                            <td>Corrupt LC1 chairman</td>
-                            <td>Red Flag</td>
-                            <td>Nov-12-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>22</td>
-                            <td>Badly damaged bridge</td>
-                            <td>Intervention</td>
-                            <td>Oct-09-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>15</td>
-                            <td>Corrupt Police Officer</td>
-                            <td>Red Flag</td>
-                            <td>Jun-12-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>56</td>
-                            <td>Dangerous Corner</td>
-                            <td>Intervention</td>
-                            <td>May-1-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>17</td>
-                            <td>Flooded Road</td>
-                            <td>Intervention</td>
-                            <td>Nov-12-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>22</td>
-                            <td>Badly damaged bridge</td>
-                            <td>Intervention</td>
-                            <td>Oct-09-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>15</td>
-                            <td>Corrupt Police Officer</td>
-                            <td>Red Flag</td>
-                            <td>Jun-12-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>22</td>
-                            <td>Badly damaged bridge</td>
-                            <td>Intervention</td>
-                            <td>Oct-09-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>15</td>
-                            <td>Corrupt Police Officer</td>
-                            <td>Red Flag</td>
-                            <td>Jun-12-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>56</td>
-                            <td>Dangerous Corner</td>
-                            <td>Intervention</td>
-                            <td>May-1-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>56</td>
-                            <td>Dangerous Corner</td>
-                            <td>Intervention</td>
-                            <td>May-1-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                        <tr>
-                            <td>19</td>
-                            <td>Medicine Theft</td>
-                            <td>Red Flag</td>
-                            <td>Jan-02-2018</td>
-                            <td><a href=""><i class="fa fa-check-square-o" 
-                                aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-ban" aria-hidden="true"></i></a></td>
-                            <td><a href=""><i class="fa fa-bookmark-o" 
-                                aria-hidden="true"></i></a></td></td>
-                        </tr>
-                </tbody>
-                
-            </table> 
-            </div>
+                            <th>ID</th>
+                            <th>Record</th>
+                            <th>Type</th>
+                            <th>Created On</th>
+                            <th>Created By</th>
+                        </tr>                    
+                    </thead>
+                    <tbody></tbody>                
+                </table> 
+                </div>
+                <div class="modal">
+                    <div class="modal-content">
+                        <span class="close-button">×</span>
+                        <div style="overflow: auto">
+                            <table id="incident-table">
+                                <thead>
+                                    <col width="100">
+                                    <col width="200">
+                                    <tr>
+                                        <th colspan="2"; id="t-head"></th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Title:</td>
+                                        <td id="title"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Created On:</td>
+                                        <td id="created-on"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Created By</td>
+                                        <td id="author"> </td>
+                                    </tr>
+                                    <tr >
+                                        <td>Type:</td>
+                                        <td id="type"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Location:</td>
+                                        <td id="coords"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status:</td>
+                                        <td id="inc-status"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Comment:</td>
+                                        <td id="comment"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Images</td>
+                                        <td id="images"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Video</td>
+                                        <td id="videos"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
               
         </div><!-- content -->
 
@@ -210,4 +143,9 @@
 </body>
 <script src="js/responsive.js"></script>
 <script src="js/logout.js"></script>
+<script src="js/edited_incidents.js"></script>
+<script>
+    getEditedIncidents('red-flags', 'resolved');
+    getEditedIncidents('interventions', 'resolved');
+</script>
 </html>
