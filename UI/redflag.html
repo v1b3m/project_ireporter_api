@@ -35,7 +35,7 @@
                 <strong id="info-messages"></strong>
             </div>
             <div class="form-container">
-                <form id="red-flag-form" action="">
+                <form id="red-flag-form" action="" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-25">
                             <label for="what"><b>What issue do you want to report?</b></label>
@@ -50,7 +50,7 @@
                             <label for="how"><b>Please give a little more detail</b></label>
                         </div>
                         <div class="col-75">
-                            <textarea name="" cols="37" rows="10" 
+                            <textarea name="comment" cols="37" rows="10" 
                             id="comment" placeholder="A brief explanation of the incident"></textarea>
                             <br><br>
                         </div>
@@ -60,7 +60,7 @@
                             <label for="where"><b>Where did it happen?</b></label>
                         </div>
                         <div class="col-75">
-                            <input type="text" placeholder="Location of incident" name="" 
+                            <input type="text" placeholder="Location of incident" name="location" 
                             id="location" required><br><br>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                                 <label for="where"><b>When did this incident happen?</b></label>
                             </div>
                             <div class="col-75">
-                                <input type="text" placeholder="dd-mm-yyyy" name="psw-repeat" 
+                                <input type="text" placeholder="dd-mm-yyyy" name="date" 
                                 required><br><br>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             <label for="who"><b>Who was involved in the incident?</b></label>
                         </div>
                         <div class="col-75">
-                            <input type="text" placeholder="Name any involved individuals" name="psw-repeat" 
+                            <input type="text" placeholder="Name any involved individuals" name="involved" 
                             required><br><br>
                         </div>
                     </div>
@@ -97,8 +97,11 @@
                                 <b>Please attach any evidence linked to the incident</b></label>
                         </div>
                         <div class="col-75">
-                            <input type="file" placeholder="">
+                            <input type="file" name="image" id="image" onchange="imagePreview(event)">
                         </div>
+                    </div>
+                    <div class="row">
+                        <img src="" id="thumbnail" alt="image" srcset="">
                     </div>
                     <div class="row">
                         <input type="submit" value="Submit">
@@ -146,4 +149,5 @@
 <script src="js/map.js"></script>
 <script src="js/redflag.js"></script>
 <script src="js/logout.js"></script>
+<script src="js/preview.js"></script>
 </html>

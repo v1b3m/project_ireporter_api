@@ -35,7 +35,7 @@
                 <strong id="info-messages"></strong>
             </div>
             <div class="form-container">
-                <form id="intervention-form" action="">
+                <form id="intervention-form" action="" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-25">
                             <label for="what"><b>What issue do you want to report?</b></label>
@@ -88,8 +88,11 @@
                                 <b>Please attach any evidence linked to the incident</b></label>
                         </div>
                         <div class="col-75">
-                            <input type="file" placeholder="">
+                            <input type="file" name="image" id="image" onchange="imagePreview(event)">
                         </div>
+                    </div>
+                    <div class="row">
+                        <img src="" id="thumbnail" alt="image" srcset="">
                     </div>
                     <div class="row">
                         <input type="submit" value="Submit">
@@ -136,7 +139,9 @@
     
 </body>
 <script src="js/responsive.js"></script>
+<script src="js/preview.js"></script>
 <script src="js/map.js"></script>
 <script src="js/intervention.js"></script>
 <script src="js/logout.js"></script>
+
 </html>

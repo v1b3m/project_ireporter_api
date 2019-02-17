@@ -41,7 +41,8 @@ function getIncident(incidentId) {
         const comment = document.getElementById('comment');
         comment.textContent = data.data[0].comment;
         const images = document.getElementById('images');
-        images.textContent = data.data[0].images;
+        images.innerHTML = `<a href="./viewfile.html?
+          &filename=${data.data[0].images}">${data.data[0].images}</a>`;
         const videos = document.getElementById('videos');
         videos.textContent = data.data[0].videos;
       }
