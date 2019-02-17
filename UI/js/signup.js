@@ -1,6 +1,6 @@
 /* global document, sessionStorage, window, fetch */
-// const url = 'https://andelaireporterapp.herokuapp.com/auth/register';
-const url = 'http://127.0.0.1:5000/auth/register';
+const url = 'https://andelaireporterapp.herokuapp.com/auth/register';
+// const url = 'http://127.0.0.1:5000/auth/register';
 
 
 function registerNewUser(event) {

@@ -1,7 +1,7 @@
 /* global document, sessionStorage, window, fetch */
 
-// const url = 'https://andelaireporterapp.herokuapp.com/auth/login';
-const url = 'http://127.0.0.1:5000/auth/login';
+const url = 'https://andelaireporterapp.herokuapp.com/auth/login';
+// const url = 'http://127.0.0.1:5000/auth/login';
 
 function loginUser(event) {
   event.preventDefault();
