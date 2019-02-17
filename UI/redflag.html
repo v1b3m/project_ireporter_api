@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <img src="" id="thumbnail" style="width: 20%; margin-top: 10px;" alt="image" srcset="">
+                        <img src="" id="thumbnail" alt="image" srcset="">
                     </div>
                     <div class="row">
                         <input type="submit" value="Submit">
@@ -149,10 +149,5 @@
 <!-- <script src="js/map.js"></script> -->
 <script src="js/redflag.js"></script>
 <script src="js/logout.js"></script>
-<script>
-    var imagePreview = function(event) {
-      var thumbnail = document.getElementById('thumbnail');
-      thumbnail.src = URL.createObjectURL(event.target.files[0]);
-    };
-</script>
+<script src="js/preview.js"></script>
 </html>

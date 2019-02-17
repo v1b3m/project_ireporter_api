@@ -427,3 +427,9 @@ footer h3 {
     color: white;
 }
 
+#thumbnail {
+    display: none;
+    width: 20%; 
+    margin-top: 10px;
+}
+
