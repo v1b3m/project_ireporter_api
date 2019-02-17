@@ -1,7 +1,8 @@
 /* global document, window, sessionStorage, fetch */
 
 const frm = document.getElementById('intervention-form');
-const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions';
+// const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions';
+const url = 'http://127.0.0.1:5000/api/v2/interventions';
 
 function createIncident(event) {
   event.preventDefault();

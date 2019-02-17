@@ -23,7 +23,8 @@ function fillForm() {
 fillForm();
 
 function editLocation(id, coord) {
-  const url = `https://andelaireporterapp.herokuapp.com/api/v2/red-flags/${id}/location`;
+  // const url = `https://andelaireporterapp.herokuapp.com/api/v2/red-flags/${id}/location`;
+  const url = `http://127.0.0.1:5000/api/v2/red-flags/${id}/location`;
   fetch(url, {
     method: 'PATCH',
     mode: 'cors',
@@ -52,7 +53,8 @@ function editLocation(id, coord) {
 }
 
 function editComment(id, comment) {
-  const url = `https://andelaireporterapp.herokuapp.com/api/v2/red-flags/${id}/comment`;
+  // const url = `https://andelaireporterapp.herokuapp.com/api/v2/red-flags/${id}/comment`;
+  const url = `http://127.0.0.1:5000/api/v2/red-flags/${id}/comment`;
   fetch(url, {
     method: 'PATCH',
     mode: 'cors',

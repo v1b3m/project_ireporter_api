@@ -2,7 +2,8 @@
 
 // eslint-disable-next-line no-unused-vars
 function getIncident(incidentId) {
-  const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions/'.concat(incidentId);
+  // const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions/'.concat(incidentId);
+  const url = 'http://127.0.0.1:5000/api/v2/interventions/'.concat(incidentId);
 
   fetch(url, {
     method: 'GET',

@@ -6,7 +6,8 @@ let avatar = '';
 let username = '';
 
 function myIncidents() {
-  const url = 'https://andelaireporterapp.herokuapp.com/user/incidents';
+  // const url = 'https://andelaireporterapp.herokuapp.com/user/incidents';
+  const url = 'http://127.0.0.1:5000/user/incidents';
   const myDiv = document.getElementById('my_items');
 
   fetch(url, {
@@ -57,7 +58,8 @@ function myIncidents() {
 }
 
 function myStats() {
-  const url = 'https://andelaireporterapp.herokuapp.com/user';
+  // const url = 'https://andelaireporterapp.herokuapp.com/user';
+  const url = 'http://127.0.0.1:5000/user';
 
   fetch(url, {
     method: 'GET',
