@@ -6,7 +6,6 @@ const info = document.getElementById('info-messages');
 
 // Image handler
 function imageHandler(incidentId) {
-  // const url = `http:127.0.0.1:5000/addimage/${incidentId}`;
   const url = `https://andelaireporterapp.herokuapp.com/addimage/${incidentId}`;
   // eslint-disable-next-line no-undef
   const formData = new FormData();
@@ -39,7 +38,6 @@ function createRedflag(event) {
   const location = document.getElementById('location');
   const comment = document.getElementById('comment');
   const url = 'https://andelaireporterapp.herokuapp.com/api/v2/red-flags';
-  // const url = 'http://127.0.0.1:5000/api/v2/red-flags';
 
   fetch(url, {
     method: 'POST',
