@@ -1,16 +1,43 @@
 /* global document, window, sessionStorage, fetch */
 
 const frm = document.getElementById('intervention-form');
-const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions';
+const token = sessionStorage.getItem('token');
+const info = document.getElementById('info-messages');
+
+// Image handler
+function imageHandler(incidentId) {
+  const url = `https://andelaireporterapp.herokuapp.com/addimage/${incidentId}`;
+  // eslint-disable-next-line no-undef
+  const formData = new FormData();
+  const input = document.querySelector("input[type='file']");
+  formData.append('file', input.files[0]);
+
+  if (input.files[0] !== undefined) {
+    fetch(url, {
+      method: 'POST',
+      body: formData,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(response => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+          // eslint-disable-next-line no-console
+          console.log(data);
+        } else {
+          info.parentElement.style.display = 'block';
+          info.textContent = `${data.error}`;
+        }
+      });
+  }
+}
+
 
 function createIncident(event) {
   event.preventDefault();
   const title = document.getElementById('title');
   const location = document.getElementById('location');
   const comment = document.getElementById('comment');
-
-  const info = document.getElementById('info-messages');
-  const token = sessionStorage.getItem('token');
+  const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions';
 
   fetch(url, {
     method: 'POST',
@@ -29,9 +56,12 @@ function createIncident(event) {
         window.location.replace('./signin.html');
       }
       if (data.status === 201) {
-        frm.reset();
+        // eslint-disable-next-line prefer-destructuring
+        const id = data.data[0].id;
+        imageHandler(id);
         info.parentElement.style.display = 'block';
         info.textContent = `${data.data[0].message}`;
+        frm.reset();
         return false;
       }
       info.parentElement.style.display = 'block';

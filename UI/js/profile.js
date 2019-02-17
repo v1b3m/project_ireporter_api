@@ -5,7 +5,6 @@ const info = document.getElementById('info-messages');
 
 function myProfile() {
   const url = 'https://andelaireporterapp.herokuapp.com/user';
-  // const url = 'http://127.0.0.1:5000/user';
 
   fetch(url, {
     method: 'GET',
@@ -43,7 +42,6 @@ function myProfile() {
 
 function myStats() {
   const url = 'https://andelaireporterapp.herokuapp.com/user/stats';
-  // const url = 'http://127.0.0.1:5000/user/stats';
 
   fetch(url, {
     method: 'GET',
