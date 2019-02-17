@@ -43,8 +43,8 @@ function myIncidents() {
                             <b>${element.type} # ${element.incident_id}</b></a> on ${element.created_on}
                             <br>
                             ${element.title}
-                        </td>
-                    </tr>
+                        </td>                        
+                    </tr>                
                 </table>`;
         });
         myDiv.innerHTML = table;
