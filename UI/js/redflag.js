@@ -9,7 +9,7 @@ function imageHandler(incidentId) {
   const url = `https://andelaireporterapp.herokuapp.com/addimage/${incidentId}`;
   // eslint-disable-next-line no-undef
   const formData = new FormData();
-  const input = document.querySelector("input[type='file']");
+  const input = document.querySelector('#upload-image');
   formData.append('file', input.files[0]);
 
   if (input.files[0] !== undefined) {
