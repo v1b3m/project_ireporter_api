@@ -5,16 +5,23 @@ const token = sessionStorage.getItem('token');
 const info = document.getElementById('info-messages');
 
 // Image handler
-function imageHandler(incidentId) {
-  const url = `https://andelaireporterapp.herokuapp.com/addimage/${incidentId}`;
+function fileHandler(type, incidentId) {
+  const url = `https://andelaireporterapp.herokuapp.com/${type}/${incidentId}`;
   // eslint-disable-next-line no-undef
   const formData = new FormData();
-  const input = document.querySelector("input[type='file']");
+  let input = '';
+  if (type === 'addimage') {
+    input = document.querySelector('#upload-image');
+  } else {
+    input = document.querySelector('#upload-video');
+  }
+
   formData.append('file', input.files[0]);
 
   if (input.files[0] !== undefined) {
     fetch(url, {
       method: 'POST',
+      mode: 'cors',
       body: formData,
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -30,7 +37,6 @@ function imageHandler(incidentId) {
       });
   }
 }
-
 
 function createIncident(event) {
   event.preventDefault();
@@ -57,10 +63,12 @@ function createIncident(event) {
       }
       if (data.status === 201) {
         // eslint-disable-next-line prefer-destructuring
-        const id = data.data[0].id;
-        imageHandler(id);
         info.parentElement.style.display = 'block';
         info.textContent = `${data.data[0].message}`;
+        // eslint-disable-next-line prefer-destructuring
+        const id = data.data[0].id;
+        fileHandler('addimage', id);
+        fileHandler('addvideo', id);
         frm.reset();
         return false;
       }

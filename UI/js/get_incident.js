@@ -44,7 +44,8 @@ function getIncident(incidentId) {
         images.innerHTML = `<a href="./viewfile.html?
           &filename=${data.data[0].images}">${data.data[0].images}</a>`;
         const videos = document.getElementById('videos');
-        videos.textContent = data.data[0].videos;
+        videos.innerHTML = `<a href="./getvideo.html?
+          &filename=${data.data[0].videos}">${data.data[0].videos}</a>`;
       }
     });
 }

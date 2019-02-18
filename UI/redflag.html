@@ -94,10 +94,19 @@
                     <div class="col">
                         <div class="col-25">
                             <label for="evidence">
-                                <b>Please attach any evidence linked to the incident</b></label>
+                                <b>Please attach any photo evidence linked to the incident if any.</b></label>
                         </div>
                         <div class="col-75">
-                            <input type="file" name="image" id="image" onchange="imagePreview(event)">
+                            <input type="file" name="image" id="upload-image" onchange="imagePreview(event)">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="col-25">
+                            <label for="evidence">
+                                <b>Please attach any video evidence linked to the incident if any.</b></label>
+                        </div>
+                        <div class="col-75">
+                            <input type="file" name="video" id="upload-video" >
                         </div>
                     </div>
                     <div class="row">
