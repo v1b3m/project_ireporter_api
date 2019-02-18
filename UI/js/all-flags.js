@@ -7,7 +7,7 @@ const closeButton = document.querySelector('.close-button');
 
 // eslint-disable-next-line no-unused-vars
 function editStatus(id, status) {
-  const url = `http://127.0.0.1:5000/api/v2/red-flags/${id}/status`;
+  const url = `https://andelaireporterapp.herokuapp.com/api/v2/red-flags/${id}/status`;
   fetch(url, {
     method: 'PATCH',
     mode: 'cors',
@@ -31,7 +31,7 @@ function editStatus(id, status) {
 
 // eslint-disable-next-line no-unused-vars
 function getIncidents(incidentType) {
-  const url = 'http://127.0.0.1:5000/api/v2/'.concat(incidentType);
+  const url = 'https://andelaireporterapp.herokuapp.com/api/v2/'.concat(incidentType);
   const tableBody = document.querySelector('#incidents-table > tbody');
 
   fetch(url, {

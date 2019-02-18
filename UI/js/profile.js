@@ -4,7 +4,7 @@ const token = sessionStorage.getItem('token');
 const info = document.getElementById('info-messages');
 
 function myProfile() {
-  const url = 'http://127.0.0.1:5000/user';
+  const url = 'https://andelaireporterapp.herokuapp.com/user';
 
   fetch(url, {
     method: 'GET',
@@ -41,7 +41,7 @@ function myProfile() {
 }
 
 function myStats() {
-  const url = 'http://127.0.0.1:5000/user/stats';
+  const url = 'https://andelaireporterapp.herokuapp.com/user/stats';
 
   fetch(url, {
     method: 'GET',
