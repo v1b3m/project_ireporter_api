@@ -2,7 +2,7 @@
 
 // eslint-disable-next-line no-unused-vars
 function getIncident(incidentId) {
-  const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions/'.concat(incidentId);
+  const url = 'http://127.0.0.1:5000/api/v2/interventions/'.concat(incidentId);
 
   fetch(url, {
     method: 'GET',
@@ -44,7 +44,8 @@ function getIncident(incidentId) {
         images.innerHTML = `<a href="./viewfile.html?
           &filename=${data.data[0].images}">${data.data[0].images}</a>`;
         const videos = document.getElementById('videos');
-        videos.textContent = data.data[0].videos;
+        videos.innerHTML = `<a href="./getvideo.html?
+          &filename=${data.data[0].videos}">${data.data[0].videos}</a>`;
       }
     });
 }

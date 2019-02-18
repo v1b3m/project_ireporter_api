@@ -4,7 +4,7 @@ const info = document.getElementById('info-messages');
 
 // eslint-disable-next-line no-unused-vars
 function getEditedIncidents(incidentType, newStatus) {
-  const url = 'https://andelaireporterapp.herokuapp.com/api/v2/'.concat(incidentType);
+  const url = 'http://127.0.0.1:5000/api/v2/'.concat(incidentType);
   const tableBody = document.querySelector('#incidents-table > tbody');
 
   fetch(url, {

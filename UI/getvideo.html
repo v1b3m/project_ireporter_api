@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="css/popup.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/loggedin.js"></script>
+    <title>View Image</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <header>
+                <div class="navbar" id="mynavbar">                                                  
+                        <a href="index.html" class="active">Home</a>
+                        <a href="redflag.html">+Red-flag</a>
+                        <a href="intervention.html">+Intervention</a>
+                        <a class="rightnav" href="javascript:void(0);" id="logout">Logout</a>
+                        <a class="rightnav" href="profile.html">Profile</a>
+                        <a href="javascript:void(0);" style="font-size:15px;" class="icon"
+                        onclick="makeResponsive()">&#9776;</a>                          
+                </div>
+            </header>
+        </div><!-- header -->
+
+
+        <div class="content">
+                <div class="alert" >
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong id="info-messages"></strong>
+                </div>
+                
+                <div>
+                    <video width="852" height="480" id="video" controls></video> 
+                </div>
+        </div><!-- content -->
+            
+        <div id="footer">
+            <footer>
+                    <div class="section group">
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-map-marker footer-icon" aria-hidden="true"></i>
+                            <h3>WHERE TO FIND US</h3>
+                            <p>23 Madison Avenue</p>
+                            <p>Valet ,Kampala</p>
+                            <p>12324, UG</p>
+
+                        </div>
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-envelope footer-icon" aria-hidden="true"></i>
+                            <h3>WE STILL USE EMAIL</h3>
+                            <p>vijdkfh@ireporter.com</p>
+                            <p>iuriiu@ireporter.net</p>
+                        </div>
+                        <div class="col col-2-of-3">
+                            <i class="fa fa-phone footer-icon" aria-hidden="true"></i>
+                            <h3>FOR THOSE WITH CREDIT</h3>
+                            <p>Phone: (+256)-7924-323</p>
+                            <p>Mobile: (+256)-232-2343</p>
+                            <p>Fax: (+256)-123-121</p>
+                        </div>
+                        <div class="col col-2-of-3">                            
+                            <p><i class="fa fa-facebook footer-icon" aria-hidden="true"></i></p>
+                            <p><i class="fa fa-twitter footer-icon" aria-hidden="true"></i></p>
+                            <p><i class="fa fa-instagram footer-icon" aria-hidden="true"></i></p>                            
+                        </div>
+                    </div>
+            </footer>            
+        </div><!-- footer -->            
+    </div><!--container-->
+    
+</body>
+<script src="js/responsive.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/getvideo.js"></script>
+<script>
+    // getImage()
+</script>
+</html>

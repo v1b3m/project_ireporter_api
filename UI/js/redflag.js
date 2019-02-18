@@ -5,16 +5,23 @@ const token = sessionStorage.getItem('token');
 const info = document.getElementById('info-messages');
 
 // Image handler
-function imageHandler(incidentId) {
-  const url = `https://andelaireporterapp.herokuapp.com/addimage/${incidentId}`;
+function fileHandler(type, incidentId) {
+  const url = `http://127.0.0.1:5000/${type}/${incidentId}`;
   // eslint-disable-next-line no-undef
   const formData = new FormData();
-  const input = document.querySelector('#upload-image');
+  let input = '';
+  if (type === 'addimage') {
+    input = document.querySelector('#upload-image');
+  } else {
+    input = document.querySelector('#upload-video');
+  }
+
   formData.append('file', input.files[0]);
 
   if (input.files[0] !== undefined) {
     fetch(url, {
       method: 'POST',
+      mode: 'cors',
       body: formData,
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -37,7 +44,7 @@ function createRedflag(event) {
   const title = document.getElementById('title');
   const location = document.getElementById('location');
   const comment = document.getElementById('comment');
-  const url = 'https://andelaireporterapp.herokuapp.com/api/v2/red-flags';
+  const url = 'http://127.0.0.1:5000/api/v2/red-flags';
 
   fetch(url, {
     method: 'POST',
@@ -60,7 +67,8 @@ function createRedflag(event) {
         info.textContent = `${data.data[0].message}`;
         // eslint-disable-next-line prefer-destructuring
         const id = data.data[0].id;
-        imageHandler(id);
+        fileHandler('addimage', id);
+        fileHandler('addvideo', id);
         frm.reset();
         return false;
       }

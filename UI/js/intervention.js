@@ -6,7 +6,7 @@ const info = document.getElementById('info-messages');
 
 // Image handler
 function imageHandler(incidentId) {
-  const url = `https://andelaireporterapp.herokuapp.com/addimage/${incidentId}`;
+  const url = `http://127.0.0.1:5000/addimage/${incidentId}`;
   // eslint-disable-next-line no-undef
   const formData = new FormData();
   const input = document.querySelector("input[type='file']");
@@ -37,7 +37,7 @@ function createIncident(event) {
   const title = document.getElementById('title');
   const location = document.getElementById('location');
   const comment = document.getElementById('comment');
-  const url = 'https://andelaireporterapp.herokuapp.com/api/v2/interventions';
+  const url = 'http://127.0.0.1:5000/api/v2/interventions';
 
   fetch(url, {
     method: 'POST',
