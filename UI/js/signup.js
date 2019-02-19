@@ -15,7 +15,7 @@ function registerNewUser(event) {
   const info = document.getElementById('info-messages');
   const token = sessionStorage.getItem('token');
 
-  if (password === repeat) {
+  if (password.value === repeat.value) {
     fetch(url, {
       method: 'POST',
       mode: 'cors',
